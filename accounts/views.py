@@ -4,8 +4,15 @@ from django.contrib.auth.models import User
 from django.http import Http404
 from .models import CustomUser
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
+
+@login_required(login_url='accounts:login', redirect_field_name='next')
+def profile(request):
+
+    return render(request, 'accounts/pages/teste.html', {
+    })
 
 def register_view(request):
 
@@ -75,4 +82,13 @@ def login_create(request):
         else:
             messages.error(request, 'Senha ou usuário inválido')
 
+    return redirect(reverse('accounts:login'))
+
+
+@login_required(login_url='accounts:login', redirect_field_name='next')
+def logout_view(request):
+    if not request.POST:
+        return Http404
+
+    logout(request)
     return redirect(reverse('accounts:login'))

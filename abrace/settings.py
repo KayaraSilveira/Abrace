@@ -55,7 +55,9 @@ ROOT_URLCONF = 'abrace.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            BASE_DIR / 'base_templates'
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

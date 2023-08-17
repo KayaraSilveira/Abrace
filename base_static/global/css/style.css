@@ -3,3 +3,14 @@
 * {
     font-family: 'Montserrat', sans-serif;
 }
+
+nav {
+    background-color: #7CBFD8;
+    font-weight: 600;
+}
+
+.btn {
+    font-weight: 600;
+    border-radius: 25px;
+    padding: 5px 25px;
+}
