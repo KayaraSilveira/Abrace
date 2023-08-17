@@ -1,0 +1,26 @@
+# Arquivos temporários
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ambientes virtuais
+venv/
+*.venv/
+pip-selfcheck.json
+
+# Arquivos de configuração
+db.sqlite3
+*.log
+*.pot
+
+# Arquivos gerados por ferramentas
+*.pyc
+*.swp
+*.swo
+
+# Arquivos estáticos coletados
+staticfiles/
+
+# Diretório de mídia (upload de arquivos)
+media/
