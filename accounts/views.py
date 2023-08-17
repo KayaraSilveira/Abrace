@@ -7,11 +7,13 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
+from django.utils.decorators import method_decorator
+from django.views import View
 
 @login_required(login_url='accounts:login', redirect_field_name='next')
 def profile(request):
 
-    return render(request, 'accounts/pages/teste.html', {
+    return render(request, 'accounts/pages/profile.html', {
     })
 
 def register_view(request):
@@ -92,3 +94,28 @@ def logout_view(request):
 
     logout(request)
     return redirect(reverse('accounts:login'))
+
+
+@method_decorator(
+    login_required(login_url='accounts:login', redirect_field_name='next'),
+    name='dispatch'
+)
+class ProfileDetail(View):
+
+    def render_template(self, profile):
+        return render(
+            self.request,
+            'accounts/pages/profile.html',
+            context={
+                'profile': profile,
+                'profile_page': True,
+                'profile_tab': True,
+            }
+        )
+
+    def get(self, request):
+
+        profile = CustomUser.objects.get(pk=request.user.pk)
+        return self.render_template(profile)
+
+    

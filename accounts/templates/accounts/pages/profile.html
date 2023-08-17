@@ -1,0 +1,45 @@
+{% extends 'global/base.html' %}
+
+{% block title %}Perfil{% endblock title %}
+
+{% block content %}
+<div class="container">
+    {% include 'accounts/partials/nav-profile.html' %}
+
+    <div class="row my-5">
+        <div class="col-10 row">
+            <h1 class="col-2">Foto</h1>
+            <h2 class="col-10">{{profile.first_name}} {{profile.last_name}}</h2>
+        </div>
+        <div class="col-2">
+            <a class="btn btn-info">Editar</a>
+        </div>
+    </div>
+
+    <div class="row my-2 profile-detail">
+        <div class="col-7">
+            <div class="my-3">
+                <label class="form-label">Nome</label>
+                <div class="form-control">{{profile.first_name}}</div>
+            </div>
+            <div class="my-3">
+                <label class="form-label">Sobrenome</label>
+                <div class="form-control">{{profile.last_name}}</div>
+            </div>
+            <div class="my-3">
+                <label class="form-label">Email</label>
+                <div class="form-control">{{profile.email}}</div>
+            </div>
+            <div class="my-3">
+                <label class="form-label">Senha</label>
+                <div class="form-control">**********</div>
+            </div>
+        </div>
+        <div class="col-4">
+            <h3>Categorias</h3>
+        </div>
+    </div>
+
+</div>
+
+{% endblock content %}
