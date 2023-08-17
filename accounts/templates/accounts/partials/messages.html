@@ -1,0 +1,45 @@
+
+{% if messages %}
+
+<!-- Toastr -->
+<script type="text/javascript">
+    toastr.options = {
+        "closeButton": true,
+        "debug": false,
+        "progressBar": true,
+        "preventDuplicates": true,
+        //"positionClass": "toast-top-right",
+        "positionClass": "toast-bottom-center",
+        "onclick": null,
+        "showDuration": "400",
+        "hideDuration": "1000",
+        "timeOut": "5000",
+        "extendedTimeOut": "2000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        //"showMethod": "fadeIn",
+        //"hideMethod": "fadeOut"
+        "showMethod": "slideDown",
+        "hideMethod": "slideUp"
+    };
+</script>
+
+<script type="text/javascript">
+    {% for message in messages %}
+
+            {% if message.level == DEFAULT_MESSAGE_LEVELS.DEBUG %}
+                toastr.warning('{{ message |linebreaksbr }}', 'DEBUG');
+            {% elif message.level == DEFAULT_MESSAGE_LEVELS.INFO %}
+                toastr.info('{{ message |linebreaksbr }}');
+            {% elif message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+                toastr.success('{{ message |linebreaksbr }}');
+
+            {% elif message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}
+                toastr.warning('{{ message |linebreaksbr }}');
+            {% elif message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                toastr.error('{{ message |linebreaksbr }}');
+            {% endif %}
+
+    {% endfor %}
+</script>
+{% endif %}

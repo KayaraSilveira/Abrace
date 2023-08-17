@@ -1,0 +1,86 @@
+.accounts-page {
+    background: linear-gradient(to right, #CDFFD8, #94B9FF);
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+.row-container {
+    min-height: 100vh;
+}
+
+.row-container>div {
+    padding: 50px 100px;
+}
+
+h1 {
+   font-weight: 700;
+   font-size: 50px;
+}
+
+h5 {
+    font-weight: 600;
+   font-size: 20px;
+}
+
+a {
+    color: inherit;
+}
+
+.form-column {
+    background-color: rgba(84, 84, 84, 0.1);
+}
+
+.accounts-page form label {
+    text-transform: uppercase;
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.accounts-page form input {
+    background-color: rgba(255, 255, 255, 0.3);
+    border: none;
+    border-radius: 20px;
+    font-size: 18px;
+}
+
+.accounts-page form button {
+    background-color: #58B3CC;
+    color: white;
+    font-weight: 700;
+    padding: 15px 50px;
+    border: none;
+    border-radius: 25px;
+    margin: 25px auto;
+    display: block;
+    width: 200px;
+}
+
+.toast-success {
+    background-color: #4CAF50;
+    color: #fff;
+}
+
+.toast-error {
+    background-color: #FF5733;
+    color: #fff;
+}
+
+/* Estilos para a lista de erros */
+ul.errorlist {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    color: #FF5733; /* Cor para os erros de formulário */
+}
+
+/* Estilos para cada item da lista de erros */
+ul.errorlist li {
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+/* Estilos para os campos de entrada com erros */
+.form-control.has-error {
+    border-color: #FF5733; /* Cor da borda para campos com erros */
+}
