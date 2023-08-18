@@ -80,7 +80,6 @@ def login_create(request):
             if request.session.get('login_form_data') is not None:
                 del (request.session['login_form_data'])
                 return redirect(reverse('accounts:profile'))
-                return render(request, 'accounts/pages/teste.html')
 
         else:
             messages.error(request, 'Senha ou usuário inválido')
