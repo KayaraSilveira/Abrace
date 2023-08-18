@@ -79,6 +79,7 @@ def login_create(request):
             login(request, authenticated_user)
             if request.session.get('login_form_data') is not None:
                 del (request.session['login_form_data'])
+                return redirect(reverse('accounts:profile'))
                 return render(request, 'accounts/pages/teste.html')
 
         else:
