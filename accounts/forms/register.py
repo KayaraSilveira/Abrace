@@ -14,6 +14,12 @@ class RegisterForm(ModelForm):
         self.fields['cpf'].widget.attrs.update({'class': 'form-control cpf-input', 'required':'required'})
         self.fields['first_name'].widget.attrs.update({'class': 'form-control', 'required':'required'})
         self.fields['last_name'].widget.attrs.update({'class': 'form-control', 'required':'required'})
+        self.fields['birth_date'] = forms.DateField(
+            label='Data de nascimento *',
+            widget=forms.DateInput(attrs={'class': 'form-control', 'required': 'required'})
+        )
+        # TODO adicionar outros campos do user e arrumar date input format que vai p/ html
+
         self.fields['email'].widget.attrs.update({'class': 'form-control', 'required':'required'})
         self.fields['password'] = forms.CharField(
             label='Senha *',
@@ -27,6 +33,7 @@ class RegisterForm(ModelForm):
             'cpf',
             'first_name',
             'last_name',
+            'birth_date',
             'email',
             'password',
         ]
