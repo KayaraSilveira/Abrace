@@ -43,6 +43,7 @@ def register_create(request):
         user.save()
         del (request.session['register_form_data'])
         messages.success(request, 'A conta foi criada com sucesso')
+        # TODO redirecionar para profile inves de login
         return redirect('accounts:login')
     
     messages.error(request, 'Erro ao criar conta')
