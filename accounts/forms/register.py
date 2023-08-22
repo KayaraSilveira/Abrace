@@ -14,12 +14,15 @@ class RegisterForm(ModelForm):
         self.fields['cpf'].widget.attrs.update({'class': 'form-control cpf-input', 'required':'required'})
         self.fields['first_name'].widget.attrs.update({'class': 'form-control', 'required':'required'})
         self.fields['last_name'].widget.attrs.update({'class': 'form-control', 'required':'required'})
+        self.fields['city'].widget.attrs.update({'class': 'form-control', 'required':'required'})
+        self.fields['state'].widget.attrs.update({'class': 'form-control', 'required':'required'})
+        self.fields['country'].widget.attrs.update({'class': 'form-control', 'required':'required'})
+        self.fields['zipcode'].widget.attrs.update({'class': 'form-control', 'required':'required'})
         self.fields['birth_date'] = forms.DateField(
             label='Data de nascimento *',
-            widget=forms.DateInput(attrs={'class': 'form-control', 'required': 'required'})
+            widget=forms.DateInput(attrs={'class': 'form-control', 'required': 'required', 'type': 'date'})
         )
-        # TODO adicionar outros campos do user e arrumar date input format que vai p/ html
-
+        
         self.fields['email'].widget.attrs.update({'class': 'form-control', 'required':'required'})
         self.fields['password'] = forms.CharField(
             label='Senha *',
@@ -33,6 +36,10 @@ class RegisterForm(ModelForm):
             'cpf',
             'first_name',
             'last_name',
+            'city',
+            'state',
+            'country',
+            'zipcode',
             'birth_date',
             'email',
             'password',
@@ -41,6 +48,11 @@ class RegisterForm(ModelForm):
             'cpf': 'cpf *',
             'first_name': 'Nome *',
             'last_name': 'Sobrenome *',
+            'city': 'Cidade *',
+            'state': 'Estado *',
+            'country': 'País *',
+            'zipcode': 'CEP *',
+            'birth_date': 'Data de nascimento *',
             'email': 'E-mail *',
             'password': 'Senha *'
         }
