@@ -17,7 +17,6 @@ class CustomUser(AbstractUser):
     birth_date = models.DateField(auto_now=False, auto_now_add=False)
 
     profile_picture = models.ImageField(upload_to='user/profile/%Y/%m/%d/')
-    # TODO Configurar upload de imagens no settings
 
     categories = models.ManyToManyField(Category, related_name='user_categories')
 
