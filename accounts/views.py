@@ -43,8 +43,16 @@ def register_create(request):
         user.save()
         del (request.session['register_form_data'])
         messages.success(request, 'A conta foi criada com sucesso')
-        # TODO redirecionar para profile inves de login
-        return redirect('accounts:login')
+
+        authenticated_user = authenticate(
+            username=user.email,
+            password=form.cleaned_data.get('password', ''),
+        )
+
+        if authenticated_user is not None:
+            login(request, authenticated_user)
+        
+            return redirect(reverse('accounts:profile'))
     
     messages.error(request, 'Erro ao criar conta')
 
@@ -86,7 +94,6 @@ def login_create(request):
             messages.error(request, 'Senha ou usuário inválido')
 
     return redirect(reverse('accounts:login'))
-
 
 @login_required(login_url='accounts:login', redirect_field_name='next')
 def logout_view(request):
