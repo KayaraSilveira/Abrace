@@ -22,7 +22,7 @@ class RegisterForm(ModelForm):
             label='Data de nascimento *',
             widget=forms.DateInput(attrs={'class': 'form-control', 'required': 'required', 'type': 'date'})
         )
-        
+
         self.fields['email'].widget.attrs.update({'class': 'form-control', 'required':'required'})
         self.fields['password'] = forms.CharField(
             label='Senha *',
@@ -33,6 +33,7 @@ class RegisterForm(ModelForm):
     class Meta:
         model = CustomUser
         fields = [
+            'profile_picture',
             'cpf',
             'first_name',
             'last_name',
@@ -45,6 +46,7 @@ class RegisterForm(ModelForm):
             'password',
         ]
         labels = {
+            'profile_picture': 'Foto de Perfil',
             'cpf': 'cpf *',
             'first_name': 'Nome *',
             'last_name': 'Sobrenome *',
