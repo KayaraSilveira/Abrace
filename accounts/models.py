@@ -29,3 +29,17 @@ class CustomUser(AbstractUser):
         self.username = self.cpf
         super(CustomUser, self).save(*args, **kwargs)
 
+class Review(models.Model):
+    review_id = models.UUIDField(auto_created=True, primary_key=True, unique=True)
+    review_body = models.TextField(max_length=200)
+    review_value = models.ValueRange(1,5)
+    created_at = models.DateTimeField(auto_now=True)
+
+    reviewed_user = models.ForeignKey(CustomUser, related_name='reviwed_user', on_delete=models.CASCADE)
+    author_user = models.ForeignKey(CustomUser, related_name='author_user', on_delete=models.CASCADE)
+
+    # TODO Criar chave estrangeira do projeto
+    # TODO Faz sentido manter um id pra review ou utilizar reviewed_user + author_user + project_id + inteiro iterativo?
+
+    def __str__(self):
+        return self.review_id
