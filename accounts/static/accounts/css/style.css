@@ -37,10 +37,14 @@ a {
     font-weight: 600;
 }
 
-.accounts-page form input {
+.accounts-page form .form-control {
     background-color: rgba(255, 255, 255, 0.3);
     border: none;
     border-radius: 20px;
+    font-size: 18px;
+}
+
+.accounts-page form .form-control-file {
     font-size: 18px;
 }
 

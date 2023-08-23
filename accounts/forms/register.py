@@ -11,13 +11,14 @@ class RegisterForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields['profile_picture'].widget.attrs.update({'class': 'form-control-file', 'required':'required'})
         self.fields['cpf'].widget.attrs.update({'class': 'form-control cpf-input', 'required':'required'})
         self.fields['first_name'].widget.attrs.update({'class': 'form-control', 'required':'required'})
         self.fields['last_name'].widget.attrs.update({'class': 'form-control', 'required':'required'})
         self.fields['city'].widget.attrs.update({'class': 'form-control', 'required':'required'})
         self.fields['state'].widget.attrs.update({'class': 'form-control', 'required':'required'})
         self.fields['country'].widget.attrs.update({'class': 'form-control', 'required':'required'})
-        self.fields['zipcode'].widget.attrs.update({'class': 'form-control', 'required':'required'})
+        self.fields['zipcode'].widget.attrs.update({'class': 'form-control cep-input', 'required':'required'})
         self.fields['birth_date'] = forms.DateField(
             label='Data de nascimento *',
             widget=forms.DateInput(attrs={'class': 'form-control', 'required': 'required', 'type': 'date'})
