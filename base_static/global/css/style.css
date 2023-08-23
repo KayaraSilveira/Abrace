@@ -4,6 +4,16 @@
     font-family: 'Montserrat', sans-serif;
 }
 
+.toast-success {
+    background-color: #4CAF50;
+    color: #fff;
+}
+
+.toast-error {
+    background-color: #FF5733;
+    color: #fff;
+}
+
 nav {
     background-color: #7CBFD8;
     font-weight: 600;
@@ -46,4 +56,10 @@ nav {
     border-radius: 20px;
     font-size: 18px;
     width: 80%;
+}
+
+.profile-img {
+    border-radius: 50%;
+    width: 150px;
+    height: 110px;
 }

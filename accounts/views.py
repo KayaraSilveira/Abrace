@@ -34,7 +34,7 @@ def register_create(request):
 
     request.session['register_form_data'] = POST
 
-    form = RegisterForm(POST)
+    form = RegisterForm(POST, request.FILES)
 
     if form.is_valid():
 

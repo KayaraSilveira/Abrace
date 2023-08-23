@@ -6,10 +6,10 @@
 <div class="container">
     {% include 'accounts/partials/nav-profile.html' %}
 
-    <div class="row my-5">
-        <div class="col-10 row">
-            <h1 class="col-2">Foto</h1>
-            <h2 class="col-10">{{profile.first_name}} {{profile.last_name}}</h2>
+    <div class="row my-5 align-items-center ">
+        <div class="col-10 row align-items-center justify-content-between">
+            <img class="profile-img" src="{{ profile.profile_picture.url }}" alt="Imagem de Perfil">
+            <h2 class="col-9">{{profile.first_name}} {{profile.last_name}}</h2>
         </div>
         <div class="col-2">
             <a class="btn btn-info">Editar</a>
@@ -19,12 +19,20 @@
     <div class="row my-2 profile-detail">
         <div class="col-7">
             <div class="my-3">
-                <label class="form-label">Nome</label>
-                <div class="form-control">{{profile.first_name}}</div>
+                <label class="form-label">Cep</label>
+                <div class="form-control">{{profile.zipcode}}</div>
             </div>
             <div class="my-3">
-                <label class="form-label">Sobrenome</label>
-                <div class="form-control">{{profile.last_name}}</div>
+                <label class="form-label">UF</label>
+                <div class="form-control">{{profile.state}}</div>
+            </div>
+            <div class="my-3">
+                <label class="form-label">Cidade</label>
+                <div class="form-control">{{profile.city}}</div>
+            </div>
+            <div class="my-3">
+                <label class="form-label">Data de Nascimento</label>
+                <div class="form-control">{{profile.birth_date}}</div>
             </div>
             <div class="my-3">
                 <label class="form-label">Email</label>
