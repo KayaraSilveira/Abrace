@@ -9,14 +9,14 @@ class Category(models.Model):
         return self.title
 
 class CustomUser(AbstractUser):
-    cpf = models.CharField(max_length=14, unique=True)  
-    city = models.CharField(max_length=50)
-    state = models.CharField(max_length=50)
-    country = models.CharField(max_length=50)
-    zipcode = models.CharField(max_length=50)
-    birth_date = models.DateField(auto_now=False, auto_now_add=False)
+    cpf = models.CharField(max_length=14, unique=True, blank=True, default='')  
+    city = models.CharField(max_length=50, blank=True, default='')
+    state = models.CharField(max_length=50, blank=True, default='')
+    country = models.CharField(max_length=50, blank=True, default='')
+    zipcode = models.CharField(max_length=50, blank=True, default='')
+    birth_date = models.DateField(auto_now=False, auto_now_add=False, null=True, blank=True)
 
-    profile_picture = models.ImageField(upload_to='user/profile/%Y/%m/%d/')
+    profile_picture = models.ImageField(upload_to='user/profile/%Y/%m/%d/', null=True, blank=True)
 
     categories = models.ManyToManyField(Category, related_name='user_categories')
 
@@ -26,7 +26,8 @@ class CustomUser(AbstractUser):
         return self.email  
     
     def save(self, *args, **kwargs):
-        self.username = self.cpf
+        if self.cpf:
+            self.username = self.cpf
         super(CustomUser, self).save(*args, **kwargs)
 
 class Review(models.Model):
