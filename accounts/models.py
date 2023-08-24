@@ -31,20 +31,21 @@ class CustomUser(AbstractUser):
             self.username = self.cpf
         super(CustomUser, self).save(*args, **kwargs)
 
-        img = Image.open(self.profile_picture.path)
+        if self.profile_picture:
+            img = Image.open(self.profile_picture.path)
 
-        min_dim = min(img.width, img.height)
-        left = (img.width - min_dim) // 2
-        top = (img.height - min_dim) // 2
-        right = (img.width + min_dim) // 2
-        bottom = (img.height + min_dim) // 2
+            min_dim = min(img.width, img.height)
+            left = (img.width - min_dim) // 2
+            top = (img.height - min_dim) // 2
+            right = (img.width + min_dim) // 2
+            bottom = (img.height + min_dim) // 2
 
-        img = img.crop((left, top, right, bottom))
+            img = img.crop((left, top, right, bottom))
 
-        new_size = (200, 200) 
-        img = img.resize(new_size, Image.LANCZOS)
+            new_size = (200, 200) 
+            img = img.resize(new_size, Image.LANCZOS)
 
-        img.save(self.profile_picture.path)
+            img.save(self.profile_picture.path)
 
 
 class Review(models.Model):
