@@ -2,7 +2,7 @@ from django.shortcuts import redirect, render
 from .forms import RegisterForm, LoginForm
 from django.contrib.auth.models import User
 from django.http import Http404
-from .models import CustomUser
+from .models import CustomUser, Category
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
@@ -110,7 +110,7 @@ def logout_view(request):
 )
 class ProfileDetail(View):
 
-    def render_template(self, profile):
+    def render_template(self, profile, categories):
         return render(
             self.request,
             'accounts/pages/profile.html',
@@ -118,12 +118,15 @@ class ProfileDetail(View):
                 'profile': profile,
                 'profile_page': True,
                 'profile_tab': True,
+                'categories': categories,
             }
         )
 
     def get(self, request):
 
         profile = CustomUser.objects.get(pk=request.user.pk)
-        return self.render_template(profile)
+        categories = Category.objects.all()
+
+        return self.render_template(profile, categories)
 
     

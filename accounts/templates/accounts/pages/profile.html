@@ -44,7 +44,18 @@
             </div>
         </div>
         <div class="col-4">
-            <h3>Categorias</h3>
+            <label class="d-block form-label text-center">Categorias</label>
+            <div class="category-box">
+            {% for category in categories %}
+                <div class="category-profile">
+                {% if category in profile.categories.all %}
+                    <i class="fa-solid fa-square-check"></i> {{ category }}
+                {% else %}
+                    <i class="fa-regular fa-square"></i> {{ category }}
+                {% endif %}
+                </div>
+            {% endfor %}
+            </div>
         </div>
     </div>
 

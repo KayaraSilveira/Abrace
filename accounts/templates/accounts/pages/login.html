@@ -16,7 +16,10 @@
 <body class="accounts-page">
 
     <div class="row row-container">
-        <div class="col-6 d-flex flex-column justify-content-center">
+        <div class="col-6 d-flex flex-column justify-content-center text-column">
+            <div class="text-center mb-3">
+                <img src="{% static 'global/img/logo.png' %}" alt="Abrace">
+            </div>
             <h1>Já tem uma conta? <br>
                 Faça o login.</h1>
             <h5>Ainda não é registrado? <a href="{% url 'accounts:register' %}">Cadastre-se</a></h5>
@@ -24,12 +27,12 @@
                 ABRACE é um iniciativa sem fins lucrativos, visando a aproximação de pessoas a projetos voluntários.
             </p>
         </div>
-        <div class="col-6 form-column">
+        <div class="col-6 form-column d-flex flex-column justify-content-center">
             <h2>Login</h2>
             <form action="{% url 'accounts:login_create' %}" method="POST" >
                 {% csrf_token %}
                 {% for field in form %}
-                    <div class="form-group">
+                    <div class="form-group mb-4">
                         <label class="form-label" for="{{ field.id_for_label }}">{{field.label}}</label>
                          {{field}}
             
@@ -38,7 +41,7 @@
                         </div>
                     </div>
                 {% endfor %}
-                <div class="form-group-submit">
+                <div class="form-group-submit mt-5">
                     <button type="submit">Login</button>
                 </div>
             </form>
