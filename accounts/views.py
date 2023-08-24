@@ -1,5 +1,5 @@
 from django.shortcuts import redirect, render
-from .forms import RegisterForm, LoginForm
+from .forms import RegisterForm, LoginForm, EditProfileForm, ProfileCategoriesForm
 from django.contrib.auth.models import User
 from django.http import Http404
 from .models import CustomUser, Category
@@ -129,4 +129,66 @@ class ProfileDetail(View):
 
         return self.render_template(profile, categories)
 
+@method_decorator(
+    login_required(login_url='accounts:login', redirect_field_name='next'),
+    name='dispatch'
+) 
+class ProfileEdit(View):
+
+    def render_template(self, form, categories):
+        return render(
+            self.request,
+            'accounts/pages/edit_profile.html',
+            context={
+                'form': form,
+                'form_categories': categories,
+                'profile_page': True,
+                'profile_tab': True,
+            }
+        )
+
+    def get(self, request):
+
+        profile = CustomUser.objects.get(pk=request.user.pk)
+        form = EditProfileForm(instance=profile)
+        categories = ProfileCategoriesForm(instance=profile)
+
+        return self.render_template(form, categories)
+
+    def post(self, request):
+
+        profile = CustomUser.objects.get(pk=request.user.pk)
+
+        form = EditProfileForm(
+            data=request.POST or None,
+            files=request.FILES or None,
+            instance=profile, 
+        )
+
+        if form.is_valid():
+
+            form.save()
+
+            messages.success(request, 'O perfil foi alterado com sucesso!')
+            return redirect(reverse('accounts:profile'))
+
+        categories = ProfileCategoriesForm(instance=profile)
+        messages.error(request, 'Há campos incorretos no formulário')
+        return self.render_template(form, categories)
+
+
+def save_categories(request):
+    if not request.POST:
+        raise Http404
+
+    profile = CustomUser.objects.get(pk=request.user.pk)
+
+    form = ProfileCategoriesForm(
+            data=request.POST or None,
+            instance=profile, 
+        )
     
+    form.save()
+
+    messages.success(request, 'As preferências foram alteradas com sucesso!')
+    return redirect(reverse('accounts:profile'))

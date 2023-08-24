@@ -81,11 +81,15 @@ nav {
     margin-bottom: 10px;
 }
 
-.profile-detail .category-profile input:hover {
-    background-color: inherit;
-    color: inherit;
-}
-
  .category-profile i {
     margin-right: 5px;
+ }
+
+ #id_categories>div {
+    margin-bottom: 10px;
+ }
+
+ .category-box-edit {
+    max-height: fit-content;
+    overflow-y: hidden;
  }

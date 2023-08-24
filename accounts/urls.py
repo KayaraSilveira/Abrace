@@ -11,4 +11,6 @@ urlpatterns = [
     path('login/create/', views.login_create, name='login_create'),
     path('logout', views.logout_view, name='logout'),
     path('profile/', views.ProfileDetail.as_view(), name='profile'),
+    path('profile/edit', views.ProfileEdit.as_view(), name='profile_edit'),
+    path('profile/edit/categories', views.save_categories, name='save_categories'),
 ]
