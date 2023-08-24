@@ -1,8 +1,11 @@
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin
-from .models import CustomUser
+from .models import CustomUser, Category
 
-class CustomUserAdmin(UserAdmin):
+class CustomUserAdmin(admin.ModelAdmin):
+    pass
+
+class CategoryAdmin(admin.ModelAdmin):
     pass
 
 admin.site.register(CustomUser, CustomUserAdmin)
+admin.site.register(Category, CategoryAdmin)

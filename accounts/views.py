@@ -1,14 +1,15 @@
 from django.shortcuts import redirect, render
-from .forms import RegisterForm, LoginForm
+from .forms import RegisterForm, LoginForm, EditProfileForm, ProfileCategoriesForm
 from django.contrib.auth.models import User
 from django.http import Http404
-from .models import CustomUser
+from .models import CustomUser, Category
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
 from django.utils.decorators import method_decorator
 from django.views import View
+from projects.models import Project
 
 @login_required(login_url='accounts:login', redirect_field_name='next')
 def profile(request):
@@ -34,7 +35,7 @@ def register_create(request):
 
     request.session['register_form_data'] = POST
 
-    form = RegisterForm(POST)
+    form = RegisterForm(POST, request.FILES)
 
     if form.is_valid():
 
@@ -43,8 +44,16 @@ def register_create(request):
         user.save()
         del (request.session['register_form_data'])
         messages.success(request, 'A conta foi criada com sucesso')
-        # TODO redirecionar para profile inves de login
-        return redirect('accounts:login')
+
+        authenticated_user = authenticate(
+            username=user.email,
+            password=form.cleaned_data.get('password', ''),
+        )
+
+        if authenticated_user is not None:
+            login(request, authenticated_user)
+        
+            return redirect(reverse('accounts:profile'))
     
     messages.error(request, 'Erro ao criar conta')
 
@@ -87,7 +96,6 @@ def login_create(request):
 
     return redirect(reverse('accounts:login'))
 
-
 @login_required(login_url='accounts:login', redirect_field_name='next')
 def logout_view(request):
     if not request.POST:
@@ -103,12 +111,38 @@ def logout_view(request):
 )
 class ProfileDetail(View):
 
-    def render_template(self, profile):
+    def render_template(self, profile, categories):
         return render(
             self.request,
             'accounts/pages/profile.html',
             context={
                 'profile': profile,
+                'profile_page': True,
+                'profile_tab': True,
+                'categories': categories,
+            }
+        )
+
+    def get(self, request):
+
+        profile = CustomUser.objects.get(pk=request.user.pk)
+        categories = Category.objects.all()
+
+        return self.render_template(profile, categories)
+
+@method_decorator(
+    login_required(login_url='accounts:login', redirect_field_name='next'),
+    name='dispatch'
+) 
+class ProfileEdit(View):
+
+    def render_template(self, form, categories):
+        return render(
+            self.request,
+            'accounts/pages/edit_profile.html',
+            context={
+                'form': form,
+                'form_categories': categories,
                 'profile_page': True,
                 'profile_tab': True,
             }
@@ -117,6 +151,70 @@ class ProfileDetail(View):
     def get(self, request):
 
         profile = CustomUser.objects.get(pk=request.user.pk)
-        return self.render_template(profile)
+        form = EditProfileForm(instance=profile)
+        categories = ProfileCategoriesForm(instance=profile)
 
+        return self.render_template(form, categories)
+
+    def post(self, request):
+
+        profile = CustomUser.objects.get(pk=request.user.pk)
+
+        form = EditProfileForm(
+            data=request.POST or None,
+            files=request.FILES or None,
+            instance=profile, 
+        )
+
+        if form.is_valid():
+
+            form.save()
+
+            messages.success(request, 'O perfil foi alterado com sucesso!')
+            return redirect(reverse('accounts:profile'))
+
+        categories = ProfileCategoriesForm(instance=profile)
+        messages.error(request, 'Há campos incorretos no formulário')
+        return self.render_template(form, categories)
+
+def save_categories(request):
+    if not request.POST:
+        raise Http404
+
+    profile = CustomUser.objects.get(pk=request.user.pk)
+
+    form = ProfileCategoriesForm(
+            data=request.POST or None,
+            instance=profile, 
+        )
     
+    form.save()
+
+    messages.success(request, 'As preferências foram alteradas com sucesso!')
+    return redirect(reverse('accounts:profile'))
+
+
+@method_decorator(
+    login_required(login_url='accounts:login', redirect_field_name='next'),
+    name='dispatch'
+)
+class MyProjectsList(View):
+
+    def render_template(self, projects, profile):
+        return render(
+            self.request,
+            'accounts/pages/my_projects.html',
+            context={
+                'projects': projects,
+                'profile_page': True,
+                'project_tab': True,
+                'profile': profile,
+            }
+        )
+
+    def get(self, request):
+
+        profile = CustomUser.objects.get(pk=request.user.pk)
+        projects = Project.objects.filter(owner=profile)
+
+        return self.render_template(projects, profile)

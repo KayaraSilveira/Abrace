@@ -58,3 +58,6 @@ Para executar o servidor é só usar o comando:
 ```
 python manage.py runserver
 ```
+
+**OBS**
+O Login no django admin é feito com Email e senha

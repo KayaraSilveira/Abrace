@@ -16,7 +16,10 @@
 <body class="accounts-page">
 
     <div class="row row-container">
-        <div class="col-6 d-flex flex-column justify-content-center">
+        <div class="col-6 d-flex flex-column justify-content-center text-column">
+            <div class="text-center mb-3">
+                <img src="{% static 'global/img/logo.png' %}" alt="Abrace">
+            </div>
             <h1>Crie uma nova conta.</h1>
             <h5>Já é registrado? <a href="{% url 'accounts:login' %}">Login</a></h5>
             <p>
@@ -24,7 +27,7 @@
             </p>
         </div>
         <div class="col-6 form-column">
-            <form action="{% url 'accounts:register_create' %}" method="POST" >
+            <form action="{% url 'accounts:register_create' %}" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 {% for field in form %}
                     <div class="form-group">
@@ -50,7 +53,8 @@
 
     <script>
         $(document).ready(function () {
-            $('.cpf-input').mask('000.000.000-00'); 
+            $('.cpf-input').mask('000.000.000-00');
+            $('.cep-input').mask('00000-000'); 
         });
     </script>
 

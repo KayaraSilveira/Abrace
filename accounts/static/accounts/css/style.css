@@ -17,6 +17,13 @@ h1 {
    font-size: 50px;
 }
 
+h2 {
+    font-weight: 700;
+    color: white;
+    font-size: 40px;
+    margin-bottom: 80px;
+}
+
 h5 {
     font-weight: 600;
    font-size: 20px;
@@ -30,6 +37,14 @@ a {
     background-color: rgba(84, 84, 84, 0.1);
 }
 
+.accounts-page .text-column {
+    max-height: 100vh;
+}
+
+.accounts-page a:hover {
+    color: #58B3CC;
+}
+
 .accounts-page form label {
     text-transform: uppercase;
     color: white;
@@ -37,10 +52,14 @@ a {
     font-weight: 600;
 }
 
-.accounts-page form input {
+.accounts-page form .form-control {
     background-color: rgba(255, 255, 255, 0.3);
     border: none;
     border-radius: 20px;
+    font-size: 18px;
+}
+
+.accounts-page form .form-control-file {
     font-size: 18px;
 }
 

@@ -1,0 +1,29 @@
+{% extends 'global/base.html' %}
+
+{% block title %}Projeto{% endblock title %}
+
+{% block content %}
+<div class="container">
+        <div class="my-2">
+            <h1 class="my-3">Projeto</h1>
+            <form></form>
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                {% for field in form %}
+                    <div class="my-3">
+                        <label class="form-label" for="{{ field.id_for_label }}">{{field.label}}</label>
+                        {{field}}
+                        <div class="error-list">
+                            {{field.errors}}
+                        </div>
+                    </div>
+                {% endfor %}
+                <div class="form-group-submit text-center my-4">
+                    <button class="btn btn-info" type="submit">Salvar Projeto</button>
+                </div>
+            </form>
+        </div>
+
+</div>
+
+{% endblock content %}

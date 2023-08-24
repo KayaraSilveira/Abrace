@@ -4,6 +4,20 @@
     font-family: 'Montserrat', sans-serif;
 }
 
+.toast-success {
+    background-color: #4CAF50;
+    color: #fff;
+}
+
+.toast-error {
+    background-color: #FF5733;
+    color: #fff;
+}
+
+.logo {
+    max-width: 50px;
+}
+
 nav {
     background-color: #7CBFD8;
     font-weight: 600;
@@ -47,3 +61,64 @@ nav {
     font-size: 18px;
     width: 80%;
 }
+
+.profile-img {
+    border-radius: 50%;
+    width: 150px;
+    height: 110px;
+}
+
+.category-box {
+    background-color: #ECECEC;
+    padding: 25px;
+    border-radius: 15px;
+    max-height: 300px;
+    overflow-y: scroll;
+}
+
+.category-profile {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+ .category-profile i {
+    margin-right: 5px;
+ }
+
+ #id_categories>div {
+    margin-bottom: 10px;
+ }
+
+ .category-box-edit {
+    max-height: fit-content;
+    overflow-y: hidden;
+ }
+
+ .profile-project-box {
+    background-color: #d6d7d8;
+    padding: 25px;
+    border-radius: 15px;
+    width: 32%;
+ }
+
+ .profile-project-cover {
+    max-width: 100%;
+    border-radius: 15px;
+ }
+
+ .profile-project-box h3 {
+    font-size: 18px;
+ }
+
+ .profile-project-box p {
+    margin-bottom: 0;
+    font-weight: 500;
+ }
+
+ i.owner {
+    color: rgb(173, 25, 25);
+ }
+
+ i.member {
+    color: rgb(40, 122, 65);
+ }
