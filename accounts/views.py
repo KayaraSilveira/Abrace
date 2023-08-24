@@ -9,6 +9,7 @@ from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
 from django.utils.decorators import method_decorator
 from django.views import View
+from projects.models import Project
 
 @login_required(login_url='accounts:login', redirect_field_name='next')
 def profile(request):
@@ -176,7 +177,6 @@ class ProfileEdit(View):
         messages.error(request, 'Há campos incorretos no formulário')
         return self.render_template(form, categories)
 
-
 def save_categories(request):
     if not request.POST:
         raise Http404
@@ -192,3 +192,29 @@ def save_categories(request):
 
     messages.success(request, 'As preferências foram alteradas com sucesso!')
     return redirect(reverse('accounts:profile'))
+
+
+@method_decorator(
+    login_required(login_url='accounts:login', redirect_field_name='next'),
+    name='dispatch'
+)
+class MyProjectsList(View):
+
+    def render_template(self, projects, profile):
+        return render(
+            self.request,
+            'accounts/pages/my_projects.html',
+            context={
+                'projects': projects,
+                'profile_page': True,
+                'project_tab': True,
+                'profile': profile,
+            }
+        )
+
+    def get(self, request):
+
+        profile = CustomUser.objects.get(pk=request.user.pk)
+        projects = Project.objects.filter(owner=profile)
+
+        return self.render_template(projects, profile)

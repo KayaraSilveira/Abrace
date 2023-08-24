@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from PIL import Image
 
 
 class Category(models.Model):
@@ -29,6 +30,22 @@ class CustomUser(AbstractUser):
         if self.cpf:
             self.username = self.cpf
         super(CustomUser, self).save(*args, **kwargs)
+
+        img = Image.open(self.profile_picture.path)
+
+        min_dim = min(img.width, img.height)
+        left = (img.width - min_dim) // 2
+        top = (img.height - min_dim) // 2
+        right = (img.width + min_dim) // 2
+        bottom = (img.height + min_dim) // 2
+
+        img = img.crop((left, top, right, bottom))
+
+        new_size = (200, 200) 
+        img = img.resize(new_size, Image.LANCZOS)
+
+        img.save(self.profile_picture.path)
+
 
 class Review(models.Model):
     review_id = models.UUIDField(auto_created=True, primary_key=True, unique=True)

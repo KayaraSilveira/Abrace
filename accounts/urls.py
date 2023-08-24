@@ -13,4 +13,5 @@ urlpatterns = [
     path('profile/', views.ProfileDetail.as_view(), name='profile'),
     path('profile/edit', views.ProfileEdit.as_view(), name='profile_edit'),
     path('profile/edit/categories', views.save_categories, name='save_categories'),
+    path('profile/projects', views.MyProjectsList.as_view(), name='my_projects'),
 ]

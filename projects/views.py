@@ -58,14 +58,14 @@ class ProjectDashboard(View):
                 auto_id = Project.objects.filter(owner=owner)
 
                 if auto_id:
-                    project.project_id = auto_id.last() + 1
+                    project.project_id = auto_id.last().project_id + 1
                 else:
                     project.project_id = 0
 
             project.save()
 
             messages.success(request, 'O projeto foi criado com sucesso!')
-            return redirect(reverse('accounts:profile'))
+            return redirect(reverse('accounts:my_projects'))
 
         messages.error(request, 'Há campos incorretos no formulário')
         return self.render_template(form)
