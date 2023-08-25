@@ -1,0 +1,240 @@
+{% extends 'documentation/pages/base.html' %}
+
+{% block title %}Routes - Documenation{% endblock title %}
+
+{% block content %}
+<div class="container">
+    <h1 class="my-4">Documentação - Rotas</h1>
+    <hr>
+    <h2 class="my-2">Accounts</h2>
+    <hr>
+    <h4>Criar Conta</h4>
+    <p><strong>Descrição:</strong> Exibe um formulário para criação de conta no sistema.</p>
+    <p><strong>Name:</strong> accounts:register</p>
+    <p><strong>URL:</strong> <code>'accounts/register/'</code></p>
+    <p><strong>Método:</strong> GET</p>
+    <p><strong>View Correspondente:</strong> <code>register_view</code> - Function </p>
+    <p><strong>Template:</strong> <code>accounts/pages/register.html</code></p>
+    <p><strong>Variáveis de Contexto:</strong></p>
+    <ul>
+        <li><strong>form:</strong> Formulário vinculado ao modelo UserCustom</li>
+        <ul>
+            <li><strong>Descrição:</strong> O formulário que os usuários preencherão para criar uma conta.</li>
+            <li><strong>Tipo:</strong> Formulário</li>
+        </ul>
+    </ul>
+    
+    <hr>
+
+    <h4>POST Criar Conta</h4>
+    <p><strong>Name:</strong> accounts:register_create</p>
+    <p><strong>Descrição:</strong> Realiza as validações do formulário de registro e salva o usuário no banco de dados.</p>
+    <p><strong>URL:</strong> <code>'accounts/register/create/'</code></p>
+    <p><strong>Método:</strong> POST</p>
+    <p><strong>View Correspondente:</strong> <code>register_create</code> - Function</p>
+
+    <hr>
+
+    <h4>Login</h4>
+    <p><strong>Descrição:</strong> Exibe um formulário para login no sistema.</p>
+    <p><strong>Name:</strong> accounts:login</p>
+    <p><strong>URL:</strong> <code>'accounts/login'</code></p>
+    <p><strong>Método:</strong> GET</p>
+    <p><strong>View Correspondente:</strong> <code>login_view</code> - Function</p>
+    <p><strong>Template:</strong> <code>accounts/pages/login.html</code></p>
+    <p><strong>Variáveis de Contexto:</strong></p>
+    <ul>
+        <li><strong>form:</strong> Formulário de login</li>
+        <ul>
+            <li><strong>Descrição:</strong> O formulário que os usuários preencherão para realizar o login.</li>
+            <li><strong>Tipo:</strong> Formulário</li>
+        </ul>
+    </ul>
+
+    <hr>
+
+    <h4>POST Login</h4>
+    <p><strong>Descrição:</strong> Realiza a autenticação do formulário de login e efetua o login.</p>
+    <p><strong>Name:</strong> accounts:login_create</p>
+    <p><strong>URL:</strong> <code>'accounts/login/create'</code></p>
+    <p><strong>Método:</strong> POST</p>
+    <p><strong>View Correspondente:</strong> <code>login_create</code> - Function</p>
+
+    <hr>
+
+    <h4>Logout</h4>
+    <p><strong>Descrição:</strong> Efetua o logout.</p>
+    <p><strong>Name:</strong> accounts:logout</p>
+    <p><strong>URL:</strong> <code>'accounts/logout'</code></p>
+    <p><strong>Método:</strong> POST</p>
+    <p><strong>View Correspondente:</strong> <code>logout_view</code> - Function</p>
+
+    <hr>
+
+    < h4>Perfil</h4>
+    <p><strong>Descrição:</strong> Exibe o perfil do usuário.</p>
+    <p><strong>Name:</strong> accounts:profile</p>
+    <p><strong>URL:</strong> <code>'accounts/profile'</code></p>
+    <p><strong>Método:</strong> GET</p>
+    <p><strong>View Correspondente:</strong> <code>ProfileDetail</code> - Class</p>
+    <p><strong>Template:</strong> <code>accounts/pages/profile.html</code></p>
+    <p><strong>Variáveis de Contexto:</strong></p>
+    <ul>
+        <li><strong>profile:</strong> Objeto do modelo CustomUser</li>
+        <ul>
+            <li><strong>Descrição:</strong> O objeto do usuário personalizado associado ao perfil.</li>
+            <li><strong>Tipo:</strong> CustomUser</li>
+        </ul>
+        <li><strong>profile_page:</strong> Booleano indicando que estamos na página de profile.</li>
+        <ul>
+            <li><strong>Descrição:</strong> Pode ser usado para realçar visualmente a guia de perfil no menu de navegação.</li>
+            <li><strong>Tipo:</strong> bool</li>
+        </ul>
+        <li><strong>profile_tab:</strong> Booleano indicando que estamos na aba de profile.</li>
+        <ul>
+            <li><strong>Descrição:</strong> Pode ser usado para destacar a aba de perfil no layout da página.</li>
+            <li><strong>Tipo:</strong> bool</li>
+        </ul>
+        <li><strong>categories:</strong> Lista de todas as categorias cadastradas no sistema.</li>
+        <ul>
+            <li><strong>Descrição:</strong> A lista de categorias disponíveis para exibição das categorias selecionadas ou não selecionadas</li>
+            <li><strong>Tipo:</strong> Lista de Category</li>
+        </ul>
+    </ul>
+
+    <hr>
+
+    <h4>Editar Perfil</h4>
+    <p><strong>Descrição:</strong> Exibe formulário para editar informações do perfil e gerenciar as categorias de preferência do usuário.</p>
+    <p><strong>Name:</strong> accounts:profile_edit</p>
+    <p><strong>URL:</strong> <code>'accounts/profile/edit'</code></p>
+    <p><strong>Método:</strong> GET</p>
+    <p><strong>View Correspondente:</strong> <code>ProfileEdit</code> - Class</p>
+    <p><strong>Template:</strong> <code>accounts/pages/edit_profile.html</code></p>
+    <p><strong>Variáveis de Contexto:</strong></p>
+    <ul>
+        <li><strong>form:</strong> Formulário</li>
+        <ul>
+            <li><strong>Descrição:</strong> O formulário para editar informações do perfil.</li>
+            <li><strong>Tipo:</strong> Formulário</li>
+        </ul>
+        <li><strong>form_categories:</strong> Formulário para gerenciar categorias de preferência do usuário.</li>
+        <ul>
+            <li><strong>Descrição:</strong> O formulário para editar as categorias de preferência do usuário.</li>
+            <li><strong>Tipo:</strong> Formulário</li>
+        </ul>
+        <li><strong>profile_page:</strong> Booleano indicando que estamos na página de perfil.</li>
+        <ul>
+            <li><strong>Descrição:</strong> Pode ser usado para realçar visualmente a guia de perfil no menu de navegação.</li>
+            <li><strong>Tipo:</strong> bool</li>
+        </ul>
+        <li><strong>profile_tab:</strong> Booleano indicando que estamos na aba de profile.</li>
+        <ul>
+            <li><strong>Descrição:</strong> Pode ser usado para destacar a aba de perfil no layout da página.</li>
+            <li><strong>Tipo:</strong> bool</li>
+        </ul>
+    </ul>
+
+    <hr>
+
+    <h4>POST Editar Perfil</h4>
+    <p><strong>Descrição:</strong> Valida o formulário de edição de perfil e salva as alterações no banco de dados.</p>
+    <p><strong>URL:</strong> <code>'accounts/profile/edit'</code></p>
+    <p><strong>Método:</strong> POST</p>
+    <p><strong>View Correspondente:</strong> <code>ProfileEdit</code> - Class</p>
+
+    <hr>
+
+    <h4>POST Categorias do Usuário</h4>
+    <p><strong>Descrição:</strong> Salva as preferências de categorias do usuário no banco de dados.</p>
+    <p><strong>Name:</strong> accounts:save_categories</p>
+    <p><strong>URL:</strong> <code>'accounts/profile/edit/categories'</code></p>
+    <p><strong>Método:</strong> POST</p>
+    <p><strong>View Correspondente:</strong> <code>save_categories</code> - Function</p>
+
+    <hr>
+
+    <h4>Meus Projetos</h4>
+    <p><strong>Descrição:</strong> Exibe os projetos em que o usuário está inserido, seja como dono, moderador ou membro.</p>
+    <p><strong>Name:</strong> accounts:my_projects</p>
+    <p><strong>URL:</strong> <code>'accounts/profile/projects'</code></p>
+    <p><strong>Método:</strong> GET</p>
+    <p><strong>View Correspondente:</strong> <code>MyProjectsList</code> - Class</p>
+    <p><strong>Template:</strong> <code>accounts/pages/my_projects.html</code></p>
+    <p><strong>Variáveis de Contexto:</strong></p>
+    <ul>
+        <li><strong>projects:</strong> Projetos</li>
+        <ul>
+            <li><strong>Descrição:</strong> Os projetos em que o usuário está inserido como dono, moderador ou membro.</li>
+            <li><strong>Tipo:</strong> Lista de Project</li>
+        </ul>
+        <li><strong>profile_page:</strong> Booleano indicando que estamos na página de perfil.</li>
+        <ul>
+            <li><strong>Descrição:</strong> Pode ser usado para realçar visualmente a guia de perfil no menu de navegação.</li>
+            <li><strong>Tipo:</strong> bool</li>
+        </ul>
+        <li><strong>project_tab:</strong> Booleano indicando que estamos na aba de projetos.</li>
+        <ul>
+            <li><strong>Descrição:</strong> Pode ser usado para destacar a aba de projetos no layout da página.</li>
+            <li><strong>Tipo:</strong> bool</li>
+        </ul>
+        <li><strong>profile:</strong> Objeto do modelo CustomUser</li>
+        <ul>
+            <li><strong>Descrição:</strong> O objeto do usuário personalizado associado ao perfil.</li>
+            <li><strong>Tipo:</strong> CustomUser</li>
+        </ul>
+    </ul>
+
+    <hr>
+    
+    <h2 class="my-2">Projects</h2>
+
+    <hr>
+
+    <h4>Novo Projeto</h4>
+    <p><strong>Descrição:</strong> Exibe um formulário para criação de um projeto.</p>
+    <p><strong>Name:</strong> project:project_new</p>
+    <p><strong>URL:</strong> <code>'project/new'</code></p>
+    <p><strong>Método:</strong> GET</p>
+    <p><strong>View Correspondente:</strong> <code>ProjectDashboard</code> - Class</p>
+    <p><strong>Template:</strong> <code>projects/pages/project_dashboard.html</code></p>
+    <p><strong>Variáveis de Contexto:</strong></p>
+    <ul>
+        <li><strong>form:</strong> Formulário</li>
+        <ul>
+            <li><strong>Descrição:</strong> O formulário para criação de um novo projeto.</li>
+            <li><strong>Tipo:</strong> Formulário</li>
+        </ul>
+    </ul>
+
+    <hr>
+
+    <h4>Editar Projeto</h4>
+    <p><strong>Descrição:</strong> Exibe um formulário para edição de um projeto.</p>
+    <p><strong>Name:</strong> project:project_edit</p>
+    <p><strong>URL:</strong> <code>'project/edit/&lt;str:project_pk&gt;'</code></p>
+    <p><strong>Método:</strong> GET</p>
+    <p><strong>View Correspondente:</strong> <code>ProjectDashboard</code> - Class</p>
+    <p><strong>Template:</strong> <code>projects/pages/project_dashboard.html</code></p>
+    <p><strong>Variáveis de Contexto:</strong></p>
+    <ul>
+        <li><strong>form:</strong> Formulário</li>
+        <ul>
+            <li><strong>Descrição:</strong> O formulário para edição de um projeto existente.</li>
+            <li><strong>Tipo:</strong> Formulário</li>
+        </ul>
+    </ul>
+
+    <hr>
+
+    <h4>Criar/Editar Projeto</h4>
+    <p><strong>Descrição:</strong> Valida o formulário e salva as alterações no banco de dados.</p>
+    <p><strong>Name:</strong>project:project_edit ou project:project_edit</p>
+    <p><strong>URL:</strong> <code>'project/new'</code> ou <code>'project/edit/&lt;str:project_pk&gt;'</code></p>
+    <p><strong>Método:</strong> POST</p>
+    <p><strong>View Correspondente:</strong> <code>ProjectDashboardView</code> - Class</p>
+
+    <hr>
+</div>
+
+{% endblock content %}

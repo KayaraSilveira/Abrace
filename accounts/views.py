@@ -11,12 +11,6 @@ from django.utils.decorators import method_decorator
 from django.views import View
 from projects.models import Project
 
-@login_required(login_url='accounts:login', redirect_field_name='next')
-def profile(request):
-
-    return render(request, 'accounts/pages/profile.html', {
-    })
-
 def register_view(request):
 
     register_form_data = request.session.get('register_form_data')
