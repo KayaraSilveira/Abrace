@@ -10,6 +10,7 @@ class Project(models.Model):
     description = models.TextField(max_length=600, blank=True)
     status = models.BooleanField(default=True)
     composite_pk = models.CharField(max_length=255, unique=True, primary_key=True)
+    members = models.ManyToManyField(get_user_model(), related_name='projects', blank=True)
 
     def save(self, *args, **kwargs):
         cpf = self.owner.cpf.replace('-', '')
@@ -27,3 +28,40 @@ class Project(models.Model):
 
     def __str__(self):
         return self.name
+    
+class Post(models.Model):
+    post_id = models.IntegerField()
+    autor = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    text = models.TextField(max_length=600, blank=True)
+    created = models.DateTimeField(auto_now=False, auto_now_add=True)
+    composite_pk = models.CharField(max_length=255, unique=True, primary_key=True)
+
+    def save(self, *args, **kwargs):
+        project = self.project.composite_pk
+        autor = self.autor.cpf.replace('-', '')
+        autor = autor.replace('.', '')
+        self.composite_pk = f"{project}-{autor}-{self.post_id}"
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.text
+    
+class Comment(models.Model):
+    comment_id = models.IntegerField()
+    autor = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    text = models.TextField(max_length=600, blank=True)
+    created = models.DateTimeField(auto_now=False, auto_now_add=True)
+    composite_pk = models.CharField(max_length=255, unique=True, primary_key=True)
+
+    def save(self, *args, **kwargs):
+        post = self.post.composite_pk
+        autor = self.autor.cpf.replace('-', '')
+        autor = autor.replace('.', '')
+        self.composite_pk = f"{post}-{autor}-{self.comment_id}"
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.text
+

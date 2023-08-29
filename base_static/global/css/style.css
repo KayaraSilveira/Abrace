@@ -122,3 +122,89 @@ nav {
  i.member {
     color: rgb(40, 122, 65);
  }
+
+ .project-detail-img {
+    border-radius: 50%;
+    width: 250px;
+    height: 200px;
+ }
+
+ .project-box {
+    background-color: #eaeaeb;
+    padding: 25px;
+    margin: 20px;
+    border-radius: 15px;
+ }
+
+.project-detail-description {
+    font-size: 17px;
+}
+
+.post-img {
+    border-radius: 50%;
+    width: 55px;
+    height: 50px;
+    margin-right: 20px;
+}
+
+.footer-post {
+    text-align: right;
+}
+
+.footer-post a {
+    color: inherit;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.footer-post a:hover {
+    font-weight: 700;
+}
+
+.post-created {
+    text-align: right;
+    color: rgb(99, 99, 99);
+    font-size: 15px;
+}
+
+.rounded-btn {
+    border-radius: 50%;
+    padding: 5px 10px;
+}
+
+textarea.form-control {
+    max-height: 100px;
+}
+
+.back-project a {
+    color: inherit;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.back-project a:hover {
+    font-weight: 700;
+}
+
+.comment-form textarea.form-control {
+    max-height: 40px;
+    border-radius: 20px;
+}
+
+.comment-form .post-img {
+    width: 43px;
+    height: 38px;
+}
+
+.comment-box .post-img {
+    width: 44px;
+    height: 42px;
+}
+
+.comment-box h5 {
+    font-size: 17px;
+}
+
+.comment-box p {
+    font-size: 15px;
+}

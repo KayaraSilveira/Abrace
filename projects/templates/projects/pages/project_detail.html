@@ -1,0 +1,93 @@
+{% extends 'global/base.html' %}
+
+{% block title %}Projeto{% endblock title %}
+
+{% block content %}
+<div class="container">
+
+    <div class="row project-box justify-content-between align-items-center">
+        <div class="col-3 text-center">
+            <img class="project-detail-img mb-2" src="{{ project.cover_photo.url }}" alt="Foto do Projeto">
+            <h3>{{project.name}}</h3>
+        </div>
+        <div class="col-8">
+            <p class="project-detail-description">{{project.description}}</p>
+            <div class="d-flex">
+                {% if project.owner == user %}
+                    <a class="btn btn-primary" href="{% url 'projects:project_edit' project.composite_pk %}">Editar Projeto</a>
+                {% elif is_member %}
+                    <a class="btn btn-danger" href="#">Sair</a>
+                {% else %}
+                    <a class="btn btn-primary" href="#">Entrar</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <hr>
+    {% if is_member %}
+    <div>
+        <form></form>
+        <form action="{% url 'projects:send_post' %}"  method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="project_composite_pk" value="{{project.composite_pk}}">
+            {% for field in post_form %}
+                <div class="my-3 d-flex">
+                    <div>
+                        <img class="post-img" src="{{ user.profile_picture.url }}" alt="Foto de perfil">
+                    </div>
+                    {{field}}
+                </div>
+            {% endfor %}
+            <div class="form-group-submit text-end my-4">
+                <button class="btn btn-secondary rounded-btn" type="submit"><i class="fa-solid fa-paper-plane"></i></button>
+            </div>
+        </form>
+    </div>
+    <hr>
+    {% endif %}
+    <div>
+        <h4>Postagens</h4>
+        {% if is_member %}
+        {% for post in posts %}
+            <div class="my-5">
+                <div class="d-flex">
+                    <div class="pr-2">
+                        <img class="post-img" src="{{ post.autor.profile_picture.url }}" alt="Foto de perfil">
+                    </div>
+                    <div>
+                        <h5 class="m-0">{{post.autor.first_name}} {{post.autor.last_name}}</h5>
+                        <div>
+                            {% if project.owner == post.autor %}
+                                Dono
+                            {% else %}
+                                Membro
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="my-2">
+                    <p>{{post.text}}</p>
+                    <div class="post-created">
+                        {{post.created}}
+                    </div>
+                </div>
+                
+                <div class="footer-post">
+                    <i class="fa-regular fa-comment"></i> <a href="{% url 'projects:post_detail' post.composite_pk %}">Comentários</a>
+                </div>
+                <hr>
+            </div>
+            {% empty %}
+            <h5 class="text-center my-5">Ainda não há postagens nesse projeto</h5>
+            {% endfor %}
+        {% else %}
+        <div class="text-center my-5">
+            <h1><i class="fa-solid fa-lock"></i></h1>
+            <h5>Torne-se membro para<br>visualizar e postar</h5>
+        </div>
+        {% endif %}
+    </div>
+
+</div>
+
+{% endblock content %}
