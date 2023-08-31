@@ -18,10 +18,19 @@
                         </div>
                     </div>
                 {% endfor %}
-                <div class="form-group-submit text-center my-4">
+                <div class="form-group-submit my-5">
                     <button class="btn btn-info" type="submit">Salvar Projeto</button>
                 </div>
             </form>
+            <div class="d-flex justify-content-end">
+            {% if project_pk %}
+                <form action="{% url 'projects:project_delete' %}" method='POST'>
+                    {% csrf_token %}
+                    <input type="hidden" name="project_composite_pk" value="{{project_pk}}">
+                    <button type="submit" class="btn btn-danger">Excluir Projeto</button>
+                <form>
+            {% endif %}
+            </div>
         </div>
 
 </div>

@@ -10,12 +10,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.utils.decorators import method_decorator
 from django.views import View
 from projects.models import Project
-
-@login_required(login_url='accounts:login', redirect_field_name='next')
-def profile(request):
-
-    return render(request, 'accounts/pages/profile.html', {
-    })
+from django.db.models import Q
 
 def register_view(request):
 
@@ -89,7 +84,7 @@ def login_create(request):
             login(request, authenticated_user)
             if request.session.get('login_form_data') is not None:
                 del (request.session['login_form_data'])
-                return redirect(reverse('accounts:profile'))
+                return redirect(reverse('projects:projects'))
 
         else:
             messages.error(request, 'Senha ou usuário inválido')
@@ -215,6 +210,9 @@ class MyProjectsList(View):
     def get(self, request):
 
         profile = CustomUser.objects.get(pk=request.user.pk)
-        projects = Project.objects.filter(owner=profile)
+        projects_owner = Project.objects.filter(owner=profile)
+        projects_members = Project.objects.filter(members=profile)
+
+        projects = projects_owner.union(projects_members)
 
         return self.render_template(projects, profile)
