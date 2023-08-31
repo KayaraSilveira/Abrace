@@ -2,10 +2,10 @@
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container">
         <div class="d-flex align-items-center justify-content-between w-100">
-            <a class="navbar-brand" href="#"><img src="{% static 'global/img/logo.png' %}" alt="Abrace" class="logo"></a>
+            <a class="navbar-brand" href="{% url 'projects:projects' %}"><img src="{% static 'global/img/logo.png' %}" alt="Abrace" class="logo"></a>
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link {% if project_page %}active{% endif %}" href="#">Projetos</a>
+                    <a class="nav-link {% if projects_page %}active{% endif %}" href="{% url 'projects:projects' %}">Projetos</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link {% if profile_page %}active{% endif %}" href="{% url 'accounts:profile' %}">Perfil</a>

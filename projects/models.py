@@ -20,11 +20,31 @@ class Project(models.Model):
 
         if self.cover_photo:
             img = Image.open(self.cover_photo.path)
-            target_width = 1600 
-            target_height = 900  
-            
-            img.thumbnail((target_width, target_height))
-            img.save(self.cover_photo.path, quality=85)
+
+            target_width = 1080  
+            target_height = int(target_width * 9 / 16)  
+
+            img_width, img_height = img.size
+            aspect_ratio = img_width / img_height
+
+            if aspect_ratio > (16 / 9):
+                new_width = int(img_height * (16 / 9))
+                new_height = img_height
+            else:
+                new_width = img_width
+                new_height = int(img_width * (9 / 16))
+
+            left = (img_width - new_width) // 2
+            top = (img_height - new_height) // 2
+            right = (img_width + new_width) // 2
+            bottom = (img_height + new_height) // 2
+
+            img = img.crop((left, top, right, bottom))
+
+            img = img.resize((target_width, target_height), Image.LANCZOS)
+
+            img.save(self.cover_photo.path)
+
 
     def __str__(self):
         return self.name

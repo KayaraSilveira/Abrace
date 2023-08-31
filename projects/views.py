@@ -15,12 +15,13 @@ from django.http import Http404
 )
 class ProjectDashboard(View):
 
-    def render_template(self, form):
+    def render_template(self, form, project_pk):
         return render(
             self.request,
             'projects/pages/project_dashboard.html',
             context={
                 'form': form,
+                'project_pk': project_pk,
             }
         )
     
@@ -37,7 +38,7 @@ class ProjectDashboard(View):
         project = self.get_project(project_pk)
         form = ProjectForm(instance=project)
 
-        return self.render_template(form)
+        return self.render_template(form, project_pk)
 
     def post(self, request, project_pk=None):
 
@@ -82,13 +83,15 @@ class ProjectDetail(View):
         is_member = self.is_member(user, project)
         posts = self.get_posts(project)
         post_form = PostForm()
+        members = self.get_members(project)
         return render(self.request, 'projects/pages/project_detail.html',
             context={
                 'is_member': is_member,
                 'project': project,
                 'posts': posts,
                 'user': user,
-                'post_form': post_form
+                'post_form': post_form,
+                'members': members,
             })
     
     def get_project(self, project_pk):
@@ -97,6 +100,9 @@ class ProjectDetail(View):
     
     def is_member(self, user, project):
         return project.members.filter(pk=user.pk).exists() or project.owner == user
+    
+    def get_members(self, project):
+        return project.members.all()[:3]
     
     def get_posts(self, project):
         return Post.objects.filter(project=project).order_by("-created")
@@ -135,6 +141,10 @@ def send_post(request):
     return redirect (reverse('projects:project_detail', args=[project_pk]))
 
 
+@method_decorator(
+    login_required(login_url='accounts:login', redirect_field_name='next'),
+    name='dispatch'
+) 
 class PostDetail(View):
 
     def render_template(self, user, post):
@@ -189,3 +199,104 @@ def send_comment(request):
 
     messages.success(request, 'Seu Comentário foi enviado.')
     return redirect (reverse('projects:post_detail', args=[post_pk]))
+
+
+@method_decorator(
+    login_required(login_url='accounts:login', redirect_field_name='next'),
+    name='dispatch'
+) 
+class ProjectsList(View):
+
+    def render_template(self, projects):
+        return render(
+            self.request,
+            'projects/pages/projects.html',
+            context={
+                'projects_page': True,
+                'projects': projects,
+            }
+        )
+    
+    def get_projects(self):
+        return Project.objects.all()
+
+    def get(self, request):
+
+        projects = self.get_projects()
+
+        return self.render_template(projects)
+    
+def enter_project(request):
+    if not request.POST:
+        raise Http404
+    
+    project_pk = request.POST.get('project_composite_pk')
+    project = Project.objects.get(composite_pk=project_pk)
+    user = CustomUser.objects.get(pk=request.user.pk)
+
+    project.members.add(user)
+    project.save()
+
+    return redirect (reverse('projects:project_detail', args=[project_pk]))
+
+def leave_project(request):
+    if not request.POST:
+        raise Http404
+    
+    project_pk = request.POST.get('project_composite_pk')
+    project = Project.objects.get(composite_pk=project_pk)
+    user = CustomUser.objects.get(pk=request.user.pk)
+
+    project.members.remove(user)
+    project.save()
+
+    return redirect (reverse('projects:project_detail', args=[project_pk]))
+
+
+@method_decorator(
+    login_required(login_url='accounts:login', redirect_field_name='next'),
+    name='dispatch'
+) 
+class MembersList(View):
+
+    def render_template(self, user, project):
+        is_member = self.is_member(user, project)
+        members = self.get_members(project)
+        return render(self.request, 'projects/pages/members.html',
+            context={
+                'is_member': is_member,
+                'project': project,
+                'user': user,
+                'members': members,
+            })
+    
+    def get_project(self, project_pk):
+        project = get_object_or_404(Project, composite_pk=project_pk)
+        return project
+    
+    def is_member(self, user, project):
+        return project.members.filter(pk=user.pk).exists() or project.owner == user
+    
+    def get_members(self, project):
+        return project.members.all()
+    
+    def get(self, request, project_pk):
+        project = self.get_project(project_pk)
+        user = CustomUser.objects.get(pk=request.user.pk)
+        return self.render_template(user, project)
+    
+def delete_project(request):
+    if not request.POST:
+        raise Http404
+    
+    project_pk = request.POST.get('project_composite_pk')
+    project = Project.objects.get(composite_pk=project_pk)
+    user = CustomUser.objects.get(pk=request.user.pk)
+
+    if not project.owner == user:
+        messages.error(request, 'Você não tem permissão para excluir este Projeto.')
+        return redirect (reverse('projects:project_detail', args=[project_pk]))
+    
+    project.delete()
+    messages.success(request, 'O projeto foi excluído com sucesso')
+    return redirect (reverse('projects:projects'))
