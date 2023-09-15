@@ -260,14 +260,15 @@ def leave_project(request):
 class MembersList(View):
 
     def render_template(self, user, project):
-        is_member = self.is_member(user, project)
-        members = self.get_members(project)
         return render(self.request, 'projects/pages/members.html',
             context={
-                'is_member': is_member,
+                'is_member': self.is_member(user, project),
+                'is_mod': self.is_mod(user, project),
+                'is_owner': self.is_owner(user, project),
                 'project': project,
                 'user': user,
-                'members': members,
+                'members': self.get_members(project),
+                'mods': self.get_mods(project),
             })
     
     def get_project(self, project_pk):
@@ -277,8 +278,17 @@ class MembersList(View):
     def is_member(self, user, project):
         return project.members.filter(pk=user.pk).exists() or project.owner == user
     
+    def is_owner(self, user, project):
+        return project.owner == user
+
+    def is_mod(self, user, project):
+        return project.mods.filter(pk=user.pk).exists() or project.owner == user
+    
     def get_members(self, project):
         return project.members.all()
+    
+    def get_mods(self, project):
+        return project.mods.all()
     
     def get(self, request, project_pk):
         project = self.get_project(project_pk)
@@ -300,3 +310,35 @@ def delete_project(request):
     project.delete()
     messages.success(request, 'O projeto foi excluído com sucesso')
     return redirect (reverse('projects:projects'))
+
+def add_mod(request):
+    if not request.POST:
+        raise Http404
+    
+    project_pk = request.POST.get('project_composite_pk')
+    user = CustomUser.objects.get(cpf=request.POST.get('user'))
+    project = Project.objects.get(composite_pk=project_pk)
+
+    if not project.owner == CustomUser.objects.get(pk=request.user.pk):
+        raise Http404
+    
+    project.mods.add(user)
+    project.save()
+
+    return redirect (reverse('projects:members_list', args=[project_pk]))
+
+def remove_mod(request):
+    if not request.POST:
+        raise Http404
+    
+    project_pk = request.POST.get('project_composite_pk')
+    user = CustomUser.objects.get(cpf=request.POST.get('user'))
+    project = Project.objects.get(composite_pk=project_pk)
+
+    if not project.owner == CustomUser.objects.get(pk=request.user.pk):
+        raise Http404
+    
+    project.mods.remove(user)
+    project.save()
+
+    return redirect (reverse('projects:members_list', args=[project_pk]))

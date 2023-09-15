@@ -11,6 +11,8 @@ class Project(models.Model):
     status = models.BooleanField(default=True)
     composite_pk = models.CharField(max_length=255, unique=True, primary_key=True)
     members = models.ManyToManyField(get_user_model(), related_name='projects', blank=True)
+    mods = models.ManyToManyField(get_user_model(), related_name='projects_mods', blank=True)
+    solicitation = models.ManyToManyField(get_user_model(), related_name='projects_solicitation', blank=True)
 
     def save(self, *args, **kwargs):
         cpf = self.owner.cpf.replace('-', '')

@@ -16,4 +16,6 @@ urlpatterns = [
     path('project/leave', views.leave_project, name='project_leave'),
     path('project/delete', views.delete_project, name='project_delete'),
     path('project/members/<str:project_pk>', views.MembersList.as_view(), name='members_list'),
+    path('project/mod/add', views.add_mod, name='mod_add'),
+    path('project/mod/remove', views.remove_mod, name='mod_remove'),
 ]
