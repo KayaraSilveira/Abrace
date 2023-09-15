@@ -334,11 +334,22 @@ def remove_mod(request):
     project_pk = request.POST.get('project_composite_pk')
     user = CustomUser.objects.get(cpf=request.POST.get('user'))
     project = Project.objects.get(composite_pk=project_pk)
-
-    if not project.owner == CustomUser.objects.get(pk=request.user.pk):
-        raise Http404
     
     project.mods.remove(user)
+    project.save()
+
+    return redirect (reverse('projects:members_list', args=[project_pk]))
+
+def remove_member(request):
+    if not request.POST:
+        raise Http404
+    
+    project_pk = request.POST.get('project_composite_pk')
+    user = CustomUser.objects.get(cpf=request.POST.get('user'))
+    project = Project.objects.get(composite_pk=project_pk)
+
+    
+    project.members.remove(user)
     project.save()
 
     return redirect (reverse('projects:members_list', args=[project_pk]))
