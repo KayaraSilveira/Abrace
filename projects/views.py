@@ -88,9 +88,12 @@ class ProjectDetail(View):
                 'user': user,
                 'post_form': PostForm(),
                 'members': self.get_members(project),
-                'mods': self.get_mods(project)
+                'mods': self.get_mods(project),
+                'solicitation': self.get_solicitation(project),
             })
-    
+    def get_solicitation(self, project):
+        return project.solicitation.all()
+
     def get_mods(self, project):
         return project.mods.all()
     
@@ -148,17 +151,19 @@ def send_post(request):
 class PostDetail(View):
 
     def render_template(self, user, post):
-        comments = self.get_comments(post)
-        comment_form = CommentForm()
         project = get_object_or_404(Project, composite_pk=post.project.composite_pk)
         return render(self.request, 'projects/pages/post_detail.html',
             context={
-                'comments': comments,
+                'comments': self.get_comments(post),
                 'post': post,
                 'user': user,
                 'project': project,
-                'comment_form': comment_form,
+                'comment_form': CommentForm(),
+                'mods': self.get_mods(project)
             })
+    
+    def get_mods(self, project):
+        return project.mods.all()
     
     def get_comments(self, post):
         return Comment.objects.filter(post=post).order_by("created")
@@ -226,18 +231,6 @@ class ProjectsList(View):
 
         return self.render_template(projects)
     
-def enter_project(request):
-    if not request.POST:
-        raise Http404
-    
-    project_pk = request.POST.get('project_composite_pk')
-    project = Project.objects.get(composite_pk=project_pk)
-    user = CustomUser.objects.get(pk=request.user.pk)
-
-    project.members.add(user)
-    project.save()
-
-    return redirect (reverse('projects:project_detail', args=[project_pk]))
 
 def leave_project(request):
     if not request.POST:
@@ -325,7 +318,6 @@ def add_mod(request):
     project.mods.add(user)
     project.save()
 
-    messages.success(request, 'O usuário agora é um moderador')
     return redirect (reverse('projects:members_list', args=[project_pk]))
 
 def remove_mod(request):
@@ -339,7 +331,6 @@ def remove_mod(request):
     project.mods.remove(user)
     project.save()
 
-    messages.success(request, 'O usuário não é mais moderador')
     return redirect (reverse('projects:members_list', args=[project_pk]))
 
 def remove_member(request):
@@ -354,7 +345,6 @@ def remove_member(request):
     project.members.remove(user)
     project.save()
 
-    messages.success(request, 'O membro foi removido')
     return redirect (reverse('projects:members_list', args=[project_pk]))
 
 def delete_post(request):
@@ -366,5 +356,84 @@ def delete_post(request):
     project_pk = post.project.composite_pk
     
     post.delete()
-    messages.success(request, 'O post foi deletado')
     return redirect (reverse('projects:project_detail', args=[project_pk]))
+
+class Solicitation(View):
+
+    def render_template(self, project):
+        return render(self.request, 'projects/pages/solicitation.html',
+            context={
+                'project': project,
+                'solicitation': self.get_solicitation(project),
+            })
+    
+    def get_project(self, project_pk):
+        project = get_object_or_404(Project, composite_pk=project_pk)
+        return project
+    
+    def get_solicitation(self, project):
+        return project.solicitation.all()
+    
+    
+    def get(self, request, project_pk):
+
+        user = CustomUser.objects.get(pk=request.user.pk)
+        project = self.get_project(project_pk)
+
+        if not user == project.owner and user not in project.mods.all():
+            raise Http404
+        
+        return self.render_template(project)
+    
+def add_solicitation(request):
+    if not request.POST:
+        raise Http404
+    
+    project_pk = request.POST.get('project_composite_pk')
+    user = CustomUser.objects.get(pk=request.user.pk)
+    project = Project.objects.get(composite_pk=project_pk)
+    
+    project.solicitation.add(user)
+    project.save()
+
+    return redirect (reverse('projects:project_detail', args=[project_pk]))
+
+def remove_solicitation(request):
+    if not request.POST:
+        raise Http404
+    
+    project_pk = request.POST.get('project_composite_pk')
+    user = CustomUser.objects.get(pk=request.user.pk)
+    project = Project.objects.get(composite_pk=project_pk)
+    
+    project.solicitation.remove(user)
+    project.save()
+
+    return redirect (reverse('projects:project_detail', args=[project_pk]))
+
+def accept_solicitation(request):
+    if not request.POST:
+        raise Http404
+    
+    project_pk = request.POST.get('project_composite_pk')
+    user = CustomUser.objects.get(cpf=request.POST.get('user'))
+    project = Project.objects.get(composite_pk=project_pk)
+    
+    project.solicitation.remove(user)
+    project.members.add(user)
+    project.save()
+
+    return redirect (reverse('projects:project_solicitation', args=[project_pk]))
+
+def reject_solicitation(request):
+    if not request.POST:
+        raise Http404
+    
+    project_pk = request.POST.get('project_composite_pk')
+    user = CustomUser.objects.get(cpf=request.POST.get('user'))
+    project = Project.objects.get(composite_pk=project_pk)
+    
+    project.solicitation.remove(user)
+    project.save()
+
+    return redirect (reverse('projects:project_solicitation', args=[project_pk]))

@@ -13,24 +13,42 @@
         <div class="col-7 align-items-start align-self-stretch d-flex flex-column">
             <p class="project-detail-description my-2">{{project.description}}</p>
             <div class="align-self-end mt-auto d-flex">
-                {% if project.owner == user %}
+                {% if project.owner == user or user in mods %}
+                    <div class="btn-group">
+                        <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Membros
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{% url 'projects:project_solicitation' project.composite_pk %}">Solicitações</a></li>
+                            <li><a href="{% url 'projects:members_list' project.composite_pk %}" class="dropdown-item">Todos Membros</a></li>
+                        </ul>
+                    </div>
+                {% elif is_member %}
                     <a href="{% url 'projects:members_list' project.composite_pk %}" class="mx-2 btn btn-primary">Membros</a>
+                {% endif %}
+                {% if project.owner == user %}
                     <a class="btn btn-primary mx-2 " href="{% url 'projects:project_edit' project.composite_pk %}">Editar Projeto</a>
                 {% elif is_member %}
-                <a href="{% url 'projects:members_list' project.composite_pk %}" class="mx-2  btn btn-primary">Membros</a>
                 <form></form>
-                    <form class="mx-2" action="{% url 'projects:project_leave' %}" method='POST'>
-                        {% csrf_token %}
-                        <input type="hidden" name="project_composite_pk" value="{{project.composite_pk}}">
-                        <button type="submit" class="btn btn-danger">Sair</button>
-                    <form>
+                <form class="mx-2" action="{% url 'projects:project_leave' %}" method='POST'>
+                    {% csrf_token %}
+                    <input type="hidden" name="project_composite_pk" value="{{project.composite_pk}}">
+                    <button type="submit" class="btn btn-danger">Sair</button>
+                <form>
+                {% elif user in solicitation %}
+                <form></form>
+                <form class="mx-2" action="{% url 'projects:solicitation_remove' %}" method='POST'>
+                    {% csrf_token %}
+                    <input type="hidden" name="project_composite_pk" value="{{project.composite_pk}}">
+                    <button type="submit" class="btn btn-danger">Remover Solicitação</button>
+                <form>   
                 {% else %}
                 <form></form>
-                    <form class="mx-2" action="{% url 'projects:project_enter' %}" method='POST'>
-                        {% csrf_token %}
-                        <input type="hidden" name="project_composite_pk" value="{{project.composite_pk}}">
-                        <button type="submit" class="btn btn-primary">Entrar</button>
-                    <form>
+                <form class="mx-2" action="{% url 'projects:solicitation_add' %}" method='POST'>
+                    {% csrf_token %}
+                    <input type="hidden" name="project_composite_pk" value="{{project.composite_pk}}">
+                    <button type="submit" class="btn btn-primary">Solicitar Entrada</button>
+                <form>
                 {% endif %}
             </div>
         </div>
@@ -145,7 +163,13 @@
                         <h5 class="m-0">
                             {{member.first_name}} {{member.last_name}}
                         </h5>
-                        <p class="m-0">Membro</p>
+                        <p class="m-0">
+                            {% if member in mods %}
+                                Moderador
+                            {% else %}
+                                Membro
+                            {% endif %}
+                        </p>
                     </div>
                 </div>      
                 {% endfor %}
