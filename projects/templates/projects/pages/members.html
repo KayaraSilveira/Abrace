@@ -1,6 +1,6 @@
 {% extends 'global/base.html' %}
 
-{% block title %}Projeto{% endblock title %}
+{% block title %}Membros{% endblock title %}
 
 {% block content %}
 <div class="container">
@@ -26,11 +26,63 @@
             <div class="col-1">
                 <img class="post-img img-member" src="{{ member.profile_picture.url }}" alt="Foto de perfil">
             </div>
-            <div class="col-11 d-flex flex-column justify-content-center">
+            <div class="col-10 d-flex flex-column justify-content-center">
                 <h5 class="m-0">
                     {{member.first_name}} {{member.last_name}}
                 </h5>
-                <p class="m-0">Membro</p>
+                <p class="m-0">
+                    {% if member in mods %}
+                        Moderador
+                    {% else %}
+                        Membro
+                    {% endif %}
+                </p>
+            </div>
+            <div class="col-1">
+                {% if is_mod and not member == user %}
+                <div class="btn-group dropstart">
+                    <div type="button" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fa-solid fa-ellipsis-vertical"></i>
+                    </div>
+                    <ul class="dropdown-menu">
+                        {% if member not in mods %}
+                        <li>
+                            <form></form>
+                            <form class="mx-2" action="{% url 'projects:member_remove' %}" method='POST'>
+                                {% csrf_token %}
+                                <input type="hidden" name="project_composite_pk" value="{{project.composite_pk}}">
+                                <input type="hidden" name="user" value="{{member.cpf}}">
+                                <button type="submit" class="btn btn-link dropdown-item"><i class="fa-solid fa-user-xmark"></i> Remover</button>
+                            <form>
+                        </li>
+                        {% endif %}
+                        <li><a class="dropdown-item" href="#"><i class="fa-solid fa-star"></i> Avaliar</a></li>
+                        {% if is_owner %}
+                            {% if member in mods %}
+                            <li>
+                                <form></form>
+                                <form class="mx-2" action="{% url 'projects:mod_remove' %}" method='POST'>
+                                    {% csrf_token %}
+                                    <input type="hidden" name="project_composite_pk" value="{{project.composite_pk}}">
+                                    <input type="hidden" name="user" value="{{member.cpf}}">
+                                    <button type="submit" class="btn btn-link dropdown-item"><i class="fa-solid fa-xmark"></i> Remover Moderação</button>
+                                <form>
+                            </li>
+                            {% else %}
+                            <li>
+                                <form></form>
+                                <form class="mx-2" action="{% url 'projects:mod_add' %}" method='POST'>
+                                    {% csrf_token %}
+                                    <input type="hidden" name="project_composite_pk" value="{{project.composite_pk}}">
+                                    <input type="hidden" name="user" value="{{member.cpf}}">
+                                    <button type="submit" class="btn btn-link dropdown-item"><i class="fa-solid fa-clipboard-user"></i> Adicionar Moderação</button>
+                                <form>
+                            </li>
+                            {% endif %}
+                        {% endif %}
+                    </ul>
+                  </div>
+                  {% endif %}
             </div>
         </div>      
         {% endfor %}
