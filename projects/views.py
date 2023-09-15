@@ -80,19 +80,19 @@ class ProjectDashboard(View):
 class ProjectDetail(View):
 
     def render_template(self, user, project):
-        is_member = self.is_member(user, project)
-        posts = self.get_posts(project)
-        post_form = PostForm()
-        members = self.get_members(project)
         return render(self.request, 'projects/pages/project_detail.html',
             context={
-                'is_member': is_member,
+                'is_member': self.is_member(user, project),
                 'project': project,
-                'posts': posts,
+                'posts': self.get_posts(project),
                 'user': user,
-                'post_form': post_form,
-                'members': members,
+                'post_form': PostForm(),
+                'members': self.get_members(project),
+                'mods': self.get_mods(project)
             })
+    
+    def get_mods(self, project):
+        return project.mods.all()
     
     def get_project(self, project_pk):
         project = get_object_or_404(Project, composite_pk=project_pk)
@@ -325,6 +325,7 @@ def add_mod(request):
     project.mods.add(user)
     project.save()
 
+    messages.success(request, 'O usuário agora é um moderador')
     return redirect (reverse('projects:members_list', args=[project_pk]))
 
 def remove_mod(request):
@@ -338,6 +339,7 @@ def remove_mod(request):
     project.mods.remove(user)
     project.save()
 
+    messages.success(request, 'O usuário não é mais moderador')
     return redirect (reverse('projects:members_list', args=[project_pk]))
 
 def remove_member(request):
@@ -352,4 +354,17 @@ def remove_member(request):
     project.members.remove(user)
     project.save()
 
+    messages.success(request, 'O membro foi removido')
     return redirect (reverse('projects:members_list', args=[project_pk]))
+
+def delete_post(request):
+    if not request.POST:
+        raise Http404
+    
+    post_pk = request.POST.get('post_composite_pk')
+    post = Post.objects.get(composite_pk=post_pk)
+    project_pk = post.project.composite_pk
+    
+    post.delete()
+    messages.success(request, 'O post foi deletado')
+    return redirect (reverse('projects:project_detail', args=[project_pk]))

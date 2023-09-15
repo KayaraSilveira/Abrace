@@ -63,18 +63,41 @@
         {% for post in posts %}
             <div class="my-5">
                 <div class="d-flex">
-                    <div class="pr-2">
+                    <div class="pr-2 col-1">
                         <img class="post-img" src="{{ post.autor.profile_picture.url }}" alt="Foto de perfil">
                     </div>
-                    <div>
+                    <div class=col-10>
                         <h5 class="m-0">{{post.autor.first_name}} {{post.autor.last_name}}</h5>
                         <div>
                             {% if project.owner == post.autor %}
                                 Dono
+                            {% elif post.autor in mods %}
+                                Moderador
                             {% else %}
                                 Membro
                             {% endif %}
                         </div>
+                    </div>
+                    <div class="col-1">
+                        {% if project.owner == user or user in mods or user == post.autor%}
+                            {% if post.autor not in mods and not post.autor == project.owner %}
+                            <div class="btn-group dropstart">
+                                <div type="button" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fa-solid fa-ellipsis-vertical"></i>
+                                </div>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <form></form>
+                                        <form class="mx-2" action="{% url 'projects:post_delete' %}" method='POST'>
+                                            {% csrf_token %}
+                                            <input type="hidden" name="post_composite_pk" value="{{post.composite_pk}}">
+                                            <button type="submit" class="btn btn-link dropdown-item"><i class="fa-solid fa-trash"></i> Excluir Postagem</button>
+                                        <form>
+                                    </li>
+                                </ul>
+                            </div>
+                          {% endif %}
+                        {% endif %}
                     </div>
                 </div>
                 <div class="my-2">
