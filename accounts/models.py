@@ -1,7 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from PIL import Image
-from projects.models import Project
 
 
 class Category(models.Model):
@@ -48,15 +47,16 @@ class CustomUser(AbstractUser):
 
             img.save(self.profile_picture.path)
 
+from projects.models import Project
 
 class Review(models.Model):
     review_id = models.IntegerField()
     review_body = models.TextField(max_length=200)
-    review_value = models.ValueRange(1,5)
+    review_value = models.IntegerField()
     created_at = models.DateTimeField(auto_now=True)
 
     project = models.ForeignKey(Project, related_name='project', on_delete=models.CASCADE)
-    reviewed_user = models.ForeignKey(CustomUser, related_name='reviwed_user', on_delete=models.CASCADE)
+    reviewed_user = models.ForeignKey(CustomUser, related_name='reviewed_user', on_delete=models.CASCADE)
     author_user = models.ForeignKey(CustomUser, related_name='author_user', on_delete=models.CASCADE)
 
     composite_pk = models.CharField(max_length=255, unique=True, primary_key=True)

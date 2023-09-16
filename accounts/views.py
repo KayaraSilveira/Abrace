@@ -123,8 +123,7 @@ class ProfileDetail(View):
 
         profile = CustomUser.objects.get(pk=request.user.pk)
         categories = Category.objects.all()
-        reviews = Review.objects.get(reviewed_user=request.user.pk)
-
+        reviews = Review.objects.filter(reviewed_user=request.user.pk)
         return self.render_template(profile, categories, reviews)
 
 @method_decorator(
