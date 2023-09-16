@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from projects.models import Project, Post, Comment
 from projects.forms import ProjectForm, PostForm, CommentForm, ProjectCategoriesForm
 from django.urls import reverse
-from accounts.models import CustomUser
+from accounts.models import CustomUser, Category
 from django.http import Http404
 
 @method_decorator(
@@ -256,24 +256,33 @@ def send_comment(request):
 ) 
 class ProjectsList(View):
 
-    def render_template(self, projects):
+    def render_template(self, projects, category_active):
+        user = CustomUser.objects.get(pk=self.request.user.pk)
+        categories = Category.objects.all()
         return render(
             self.request,
             'projects/pages/projects.html',
             context={
                 'projects_page': True,
                 'projects': projects,
+                'user': user,
+                'categories': categories,
+                'category_active': category_active,
             }
         )
-    
-    def get_projects(self):
-        return Project.objects.all()
 
-    def get(self, request):
+    def get(self, request, category=None):
 
-        projects = self.get_projects()
+        category_active = None
 
-        return self.render_template(projects)
+        if category:
+            category_active = Category.objects.get(title=category)
+            projects = Project.objects.filter(categories=category_active)
+            
+        else:
+            projects = Project.objects.all()
+
+        return self.render_template(projects, category_active)
     
 
 @login_required(login_url='accounts:login', redirect_field_name='next')

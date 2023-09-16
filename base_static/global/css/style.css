@@ -139,6 +139,10 @@ nav {
     color: rgb(40, 122, 65);
  }
 
+ i.mod {
+    color: rgb(88, 158, 238);
+ }
+
  .project-detail-img {
     border-radius: 50%;
     width: 250px;
@@ -254,3 +258,31 @@ footer {
     color: inherit;
     background-color: inherit;
   }
+
+.category-list {
+    list-style: none;
+}
+
+.category-item {
+    font-size: 18px;
+    margin: 15px 0px;
+}
+
+.category-item  a:hover{
+    color: #62b7d6;
+}
+
+.category-item  a.active{
+    color: #62b7d6;
+    font-weight: 500;
+}
+
+.small-text {
+    display: block;
+    margin-top: auto;
+    font-size: 12px;
+}
+
+.tags {
+    font-size: 15px;
+}

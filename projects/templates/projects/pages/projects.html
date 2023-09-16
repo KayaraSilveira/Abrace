@@ -4,16 +4,47 @@
 
 {% block content %}
 <div class="container">
-    <h2 class="mt-5">Todos os Projetos</h2>
-    <div class="row justify-content-between my-1">
-    {% for project in projects %}
-        <div class="my-3 profile-project-box">
-            <a href="{% url 'projects:project_detail' project.composite_pk %}">
-                <img class="profile-project-cover" src="{{ project.cover_photo.url }}" alt="Capa do Projeto">
-                <h3 class="mt-3">Projeto - {{project.name}}</h3>
-            </a>
+    <div class="text-end mt-5 mb-0">
+        <a class="btn btn-outline-primary" href="{% url 'projects:project_new' %}"><i class="fa-solid fa-plus"></i> Criar Projeto</a>
+    </div>
+    <div class="row">
+        <div class="col-3">
+            <h5 class="my-4">Filtre por Categoria</h5>
+            <ul class="category-list">
+                <li class="category-item"><a href="{% url 'projects:projects' %}" {% if not category_active %}class="active"{% endif %}><i class="fa-solid fa-tags"></i> Todos</a></li>
+            {% for category in categories %}
+                <li class="category-item"><a href="{% url 'projects:projects_filter' category.title %}" {% if category_active == category %} class="active" {% endif %}><i class="fa-solid fa-tag"></i> {{category.title}}</a></li>
+            {% endfor %}
+            </ul>
         </div>
-    {% endfor %}
+        <div class="col">
+            <h2 class="mt-3">Todos os Projetos</h2>
+            <div class="row justify-content-between my-1">
+            {% for project in projects %}
+                <div class="my-3 profile-project-box">
+                    <a href="{% url 'projects:project_detail' project.composite_pk %}">
+                        <img class="profile-project-cover" src="{{ project.cover_photo.url }}" alt="Capa do Projeto">
+                        <h3 class="mt-3">Projeto - {{project.name}}</h3>
+                        <p class="tags">
+                            {% if project.categories.all %}<i class="fa-solid fa-tags"></i> {% endif %}
+                            {% for category in project.categories.all %}
+                                {{category.title}}; 
+                            {% endfor %}
+                        </p>
+                        {% if user == project.owner %}
+                            <p class="small-text"><i class="fa-solid fa-circle owner"></i> Dono </p>
+                        {% elif user in project.mods.all %}
+                            <p class="small-text"><i class="fa-solid fa-circle mod"></i> moderador</p>
+                        {% elif user in project.members.all %}
+                            <p class="small-text"><i class="fa-solid fa-circle member"></i> Membro</p>
+                        {% endif %}
+                    </a>
+                </div>
+            {%empty%}
+                <h5 class="text-center my-5">Não há Projetos<br>Tente criar seu próprio Projeto<h5>
+            {% endfor %}
+            </div>
+        </div>
     </div>
 
 </div>
