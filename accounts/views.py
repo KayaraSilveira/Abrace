@@ -1,8 +1,8 @@
 from django.shortcuts import redirect, render
-from .forms import RegisterForm, LoginForm, EditProfileForm, ProfileCategoriesForm
+from .forms import RegisterForm, LoginForm, EditProfileForm, ProfileCategoriesForm, ReviewForm
 from django.contrib.auth.models import User
 from django.http import Http404
-from .models import CustomUser, Category
+from .models import CustomUser, Category, Review
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
@@ -106,7 +106,7 @@ def logout_view(request):
 )
 class ProfileDetail(View):
 
-    def render_template(self, profile, categories):
+    def render_template(self, profile, categories, reviews):
         return render(
             self.request,
             'accounts/pages/profile.html',
@@ -115,6 +115,7 @@ class ProfileDetail(View):
                 'profile_page': True,
                 'profile_tab': True,
                 'categories': categories,
+                'reviews': reviews
             }
         )
 
@@ -122,8 +123,9 @@ class ProfileDetail(View):
 
         profile = CustomUser.objects.get(pk=request.user.pk)
         categories = Category.objects.all()
+        reviews = Review.objects.get(reviewed_user=request.user.pk)
 
-        return self.render_template(profile, categories)
+        return self.render_template(profile, categories, reviews)
 
 @method_decorator(
     login_required(login_url='accounts:login', redirect_field_name='next'),
@@ -216,3 +218,33 @@ class MyProjectsList(View):
         projects = projects_owner.union(projects_members)
 
         return self.render_template(projects, profile)
+    
+def send_review(request):
+    if not request.POST:
+        raise Http404
+
+    form = ReviewForm(request.POST)
+    project_pk = request.POST.get('project_composite_pk')
+    project = Project.objects.get(composite_pk=project_pk)
+
+
+    review = form.save(commit=False)
+    
+    author = CustomUser.objects.get(pk=request.author_user.pk)
+    reviewed = CustomUser.objects.get(pk=request.reviewed_user.pk)
+
+    review.author_user = author
+    review.reviewed_user = reviewed
+    review.project = project
+
+    auto_id = Review.objects.filter(reviwed_user=reviewed)
+
+    if auto_id:
+        review.review_id = auto_id.last().review_id + 1
+    else:
+        review.review_id = 0
+
+    review.save()
+
+    messages.success(request, 'Sua avaliação foi enviada.')
+    return redirect (reverse('projects:members_list', args=[project_pk]))
