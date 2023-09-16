@@ -181,9 +181,13 @@ def save_categories(request):
     form = ProfileCategoriesForm(
             data=request.POST or None,
             instance=profile, 
-        )
-    
-    form.save()
+    )
+
+    if form.is_valid():
+        form.save()
+    else:
+        profile.categories.set('')
+        profile.save()
 
     messages.success(request, 'As preferências foram alteradas com sucesso!')
     return redirect(reverse('accounts:profile'))

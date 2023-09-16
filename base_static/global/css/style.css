@@ -44,12 +44,14 @@ nav {
 }
 
 .btn-info {
-    background-color: #7CBFD8;
+    background-color: #62b7d6;
     border: none;
+    color: white;
 }
 
 .btn-info:hover {
     background-color: #86cee9;
+    color: white;
 }
 
 .horizontal-list {

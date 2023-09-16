@@ -4,7 +4,7 @@ from django.views import View
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from projects.models import Project, Post, Comment
-from projects.forms import ProjectForm, PostForm, CommentForm
+from projects.forms import ProjectForm, PostForm, CommentForm, ProjectCategoriesForm
 from django.urls import reverse
 from accounts.models import CustomUser
 from django.http import Http404
@@ -15,13 +15,14 @@ from django.http import Http404
 )
 class ProjectDashboard(View):
 
-    def render_template(self, form, project_pk):
+    def render_template(self, form, project_pk, form_categories):
         return render(
             self.request,
             'projects/pages/project_dashboard.html',
             context={
                 'form': form,
                 'project_pk': project_pk,
+                'form_categories': form_categories,
             }
         )
     
@@ -37,8 +38,12 @@ class ProjectDashboard(View):
 
         project = self.get_project(project_pk)
         form = ProjectForm(instance=project)
+        form_categories = None
 
-        return self.render_template(form, project_pk)
+        if project_pk:
+            form_categories = ProjectCategoriesForm(instance=project)
+
+        return self.render_template(form, project_pk, form_categories)
 
     def post(self, request, project_pk=None):
 
@@ -65,12 +70,49 @@ class ProjectDashboard(View):
                     project.project_id = 0
 
             project.save()
+            
+            if project_pk:
+                messages.success(request, 'O projeto foi salvo com sucesso!')
+                return redirect (reverse('projects:project_detail', args=[project.composite_pk]))
+            return redirect (reverse('projects:set_categories', args=[project.composite_pk]))
 
-            messages.success(request, 'O projeto foi criado com sucesso!')
-            return redirect (reverse('projects:project_detail', args=[project.composite_pk]))
+        form_categories = None
+        if project_pk:
+            form_categories = ProjectCategoriesForm(instance=project)
 
         messages.error(request, 'Há campos incorretos no formulário')
-        return self.render_template(form)
+        return self.render_template(form, project_pk, form_categories)
+
+
+@login_required(login_url='accounts:login', redirect_field_name='next')    
+def save_categories(request, project_pk):
+    if not request.POST:
+        raise Http404
+    
+    project = get_object_or_404(Project, composite_pk=project_pk)
+
+    form = ProjectCategoriesForm(data=request.POST or None, instance=project)
+
+    if form.is_valid():
+        form.save()
+    else:
+        project.categories.set('')
+        project.save()
+
+
+    messages.success(request, 'As categorias foram alteradas com sucesso!')
+    return redirect (reverse('projects:project_detail', args=[project_pk]))
+
+def set_categories(request, project_pk):
+    project = get_object_or_404(Project, composite_pk=project_pk)
+    form_categories = ProjectCategoriesForm(instance=project)
+    return render(request,
+            'projects/pages/project_categories.html',
+            context={
+                'form_categories': form_categories,
+                'project_pk': project_pk,
+            }
+        )
 
 
 @method_decorator(
@@ -116,6 +158,7 @@ class ProjectDetail(View):
         return self.render_template(user, project)
 
 
+@login_required(login_url='accounts:login', redirect_field_name='next')
 def send_post(request):
     if not request.POST:
         raise Http404
@@ -176,8 +219,9 @@ class PostDetail(View):
         
         user = CustomUser.objects.get(pk=request.user.pk)
         return self.render_template(user, post)
-    
 
+
+@login_required(login_url='accounts:login', redirect_field_name='next')
 def send_comment(request):
     if not request.POST:
         raise Http404
@@ -232,6 +276,7 @@ class ProjectsList(View):
         return self.render_template(projects)
     
 
+@login_required(login_url='accounts:login', redirect_field_name='next')
 def leave_project(request):
     if not request.POST:
         raise Http404
@@ -287,7 +332,9 @@ class MembersList(View):
         project = self.get_project(project_pk)
         user = CustomUser.objects.get(pk=request.user.pk)
         return self.render_template(user, project)
-    
+
+
+@login_required(login_url='accounts:login', redirect_field_name='next')   
 def delete_project(request):
     if not request.POST:
         raise Http404
@@ -304,6 +351,8 @@ def delete_project(request):
     messages.success(request, 'O projeto foi excluído com sucesso')
     return redirect (reverse('projects:projects'))
 
+
+@login_required(login_url='accounts:login', redirect_field_name='next')
 def add_mod(request):
     if not request.POST:
         raise Http404
@@ -320,6 +369,8 @@ def add_mod(request):
 
     return redirect (reverse('projects:members_list', args=[project_pk]))
 
+
+@login_required(login_url='accounts:login', redirect_field_name='next')
 def remove_mod(request):
     if not request.POST:
         raise Http404
@@ -333,6 +384,8 @@ def remove_mod(request):
 
     return redirect (reverse('projects:members_list', args=[project_pk]))
 
+
+@login_required(login_url='accounts:login', redirect_field_name='next')
 def remove_member(request):
     if not request.POST:
         raise Http404
@@ -347,6 +400,8 @@ def remove_member(request):
 
     return redirect (reverse('projects:members_list', args=[project_pk]))
 
+
+@login_required(login_url='accounts:login', redirect_field_name='next')
 def delete_post(request):
     if not request.POST:
         raise Http404
@@ -358,6 +413,11 @@ def delete_post(request):
     post.delete()
     return redirect (reverse('projects:project_detail', args=[project_pk]))
 
+
+@method_decorator(
+    login_required(login_url='accounts:login', redirect_field_name='next'),
+    name='dispatch'
+) 
 class Solicitation(View):
 
     def render_template(self, project):
@@ -384,7 +444,9 @@ class Solicitation(View):
             raise Http404
         
         return self.render_template(project)
-    
+
+
+@login_required(login_url='accounts:login', redirect_field_name='next')   
 def add_solicitation(request):
     if not request.POST:
         raise Http404
@@ -398,6 +460,8 @@ def add_solicitation(request):
 
     return redirect (reverse('projects:project_detail', args=[project_pk]))
 
+
+@login_required(login_url='accounts:login', redirect_field_name='next')
 def remove_solicitation(request):
     if not request.POST:
         raise Http404
@@ -411,6 +475,8 @@ def remove_solicitation(request):
 
     return redirect (reverse('projects:project_detail', args=[project_pk]))
 
+
+@login_required(login_url='accounts:login', redirect_field_name='next')
 def accept_solicitation(request):
     if not request.POST:
         raise Http404
@@ -425,6 +491,8 @@ def accept_solicitation(request):
 
     return redirect (reverse('projects:project_solicitation', args=[project_pk]))
 
+
+@login_required(login_url='accounts:login', redirect_field_name='next')
 def reject_solicitation(request):
     if not request.POST:
         raise Http404
