@@ -217,7 +217,16 @@ class MyProjectsList(View):
         projects = projects_owner.union(projects_members)
 
         return self.render_template(projects, profile)
-    
+
+def review_view(request):
+
+    review_form_data = request.session.get('review_form_data')
+    form = ReviewForm(review_form_data)
+
+    return render(request, 'accounts/pages/review.html', {
+        'form': form,
+    })
+ 
 def send_review(request):
     if not request.POST:
         raise Http404
