@@ -219,6 +219,16 @@ class MyProjectsList(View):
 
         return self.render_template(projects, profile)
 
+def review_view(request):
+    user = get_object_or_404(CustomUser, pk=request.user.pk)
+    reviews = Review.objects.filter(reviewed_user=user)
+
+    return render(request, 'accounts/pages/reviews.html', {
+        'user': user,
+        'reviews': reviews
+    })
+    
+
 def review_create_view(request):
 
     review_form_data = request.session.get('review_form_data')
