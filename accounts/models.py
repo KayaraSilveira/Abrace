@@ -62,7 +62,7 @@ class Review(models.Model):
     composite_pk = models.CharField(max_length=255, unique=True, primary_key=True)
 
     def save(self, *args, **kwargs):
-        reviewed_user_id = self.reviewed_user_id.cpf.replace('-', '')
+        reviewed_user_id = self.reviewed_user.cpf.replace('-', '')
         reviewed_user_id = reviewed_user_id.replace('.', '')
         self.composite_pk = f"{reviewed_user_id}-{self.review_id}"
         super().save(*args, **kwargs)

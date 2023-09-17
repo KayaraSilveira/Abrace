@@ -14,6 +14,6 @@ urlpatterns = [
     path('profile/edit', views.ProfileEdit.as_view(), name='profile_edit'),
     path('profile/edit/categories', views.save_categories, name='save_categories'),
     path('profile/projects', views.MyProjectsList.as_view(), name='my_projects'),
-    path('review/view', views.review_view, name='review_view'),
+    path('review/', views.review_view, name='review'),
     path('review/create', views.send_review, name='send_review'),
 ]

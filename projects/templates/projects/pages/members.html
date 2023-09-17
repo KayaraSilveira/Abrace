@@ -56,7 +56,16 @@
                             <form>
                         </li>
                         {% endif %}
-                        <li><a class="dropdown-item" href="#"><i class="fa-solid fa-star"></i> Avaliar</a></li>
+                        {% comment %} <li><a class="dropdown-item" href="{% url 'accounts:review' member.cpf project.composite_pk %}"><i class="fa-solid fa-star"></i> Avaliar</a></li> {% endcomment %}
+                        <li>
+                            <form></form>
+                            <form class="mx-2" action="{% url 'accounts:review' %}" method='POST'>
+                                {% csrf_token %}
+                                <input type="hidden" name="project_composite_pk" value="{{project.composite_pk}}">
+                                <input type="hidden" name="reviewed_user_cpf" value="{{member.cpf}}">
+                                <button type="submit" class="btn btn-link dropdown-item"><i class="fa-solid fa-star"></i> Avaliar</button>
+                            <form>
+                        </li>
                         {% if is_owner %}
                             {% if member in mods %}
                             <li>

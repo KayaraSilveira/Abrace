@@ -5,9 +5,9 @@
 {% block content %}
 <div class="container">
         <div class="my-2">
-            <h1 class="my-3">Avaliação de (nome pessoa avaliada) no Projeto - (nome do projeto)</h1>
+            <h1 class="my-3">Avaliação de {{ reviewed_user.first_name }} no Projeto {{ project.name }} avaliado por {{user.first_name}}</h1>
             <form></form>
-            <form method="POST" enctype="multipart/form-data">
+            <form method="POST" action="{% url 'accounts:send_review' %}" enctype="multipart/form-data">
                 {% csrf_token %}
                 {% for field in form %}
                     <div class="my-3">
@@ -19,6 +19,8 @@
                     </div>
                 {% endfor %}
                 <div class="form-group-submit my-5">
+                    <input type="hidden" name="project_composite_pk" value="{{project.composite_pk}}">
+                    <input type="hidden" name="reviewed_user_cpf" value="{{member.cpf}}">
                     <button class="btn btn-info" type="submit">Avaliar</button>
                 </div>
             </form>

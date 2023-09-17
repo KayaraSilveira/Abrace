@@ -11,6 +11,7 @@ from django.utils.decorators import method_decorator
 from django.views import View
 from projects.models import Project
 from django.db.models import Q
+from django.shortcuts import get_object_or_404
 
 def register_view(request):
 
@@ -223,10 +224,47 @@ def review_view(request):
     review_form_data = request.session.get('review_form_data')
     form = ReviewForm(review_form_data)
 
+    project = get_object_or_404(Project, composite_pk=request.POST.get('project_composite_pk'))
+    reviewed_user = get_object_or_404(CustomUser, cpf=request.POST.get('reviewed_user_cpf'))
+    author_user = get_object_or_404(CustomUser, pk=request.user.pk)
+
     return render(request, 'accounts/pages/review.html', {
         'form': form,
+        'reviewed_user': reviewed_user,
+        'project': project,
+        'user': author_user
     })
- 
+
+# class ReviewView(View):
+#     def render_template(self, form, author_user, reviewed_user, project):
+        
+#         return render(self.request, 'accounts/pages/review.html',
+#             context={
+#                 'form': form,
+#                 'author_user': author_user,
+#                 'reviewed_user': reviewed_user,
+#                 'project': project,
+#             })
+    
+#     def get_project(self, project_pk):
+#         project = get_object_or_404(Project, composite_pk=project_pk)
+#         return project
+    
+#     def get_reviewed_user(self, cpf):
+#         user = get_object_or_404(CustomUser, cpf=cpf)
+#         return user
+    
+#     def get(self, request):
+
+#         review_form_data = request.session.get('review_form_data')
+#         form = ReviewForm(review_form_data)
+
+#         project = self.get_project(request.POST.get('project_composite_pk'))
+#         reviewed_user = self.get_reviewed_user(request.POST.get('reviewed_user_cpf'))
+#         author_user = CustomUser.objects.get(pk=request.POST.get('author_user_cpf'))
+
+#         return self.render_template(form, author_user, reviewed_user, project)
+
 def send_review(request):
     if not request.POST:
         raise Http404
@@ -235,17 +273,16 @@ def send_review(request):
     project_pk = request.POST.get('project_composite_pk')
     project = Project.objects.get(composite_pk=project_pk)
 
-
     review = form.save(commit=False)
-    
-    author = CustomUser.objects.get(pk=request.author_user.pk)
-    reviewed = CustomUser.objects.get(pk=request.reviewed_user.pk)
 
-    review.author_user = author
-    review.reviewed_user = reviewed
+    author_user = CustomUser.objects.get(pk=request.user.pk)
+    reviewed_user = CustomUser.objects.get(cpf=request.POST.get('reviewed_user_cpf'))
+
+    review.author_user = author_user
+    review.reviewed_user = reviewed_user
     review.project = project
 
-    auto_id = Review.objects.filter(reviwed_user=reviewed)
+    auto_id = Review.objects.filter(reviewed_user=reviewed_user)
 
     if auto_id:
         review.review_id = auto_id.last().review_id + 1
