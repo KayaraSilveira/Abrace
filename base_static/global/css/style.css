@@ -44,12 +44,14 @@ nav {
 }
 
 .btn-info {
-    background-color: #7CBFD8;
+    background-color: #62b7d6;
     border: none;
+    color: white;
 }
 
 .btn-info:hover {
     background-color: #86cee9;
+    color: white;
 }
 
 .horizontal-list {
@@ -135,6 +137,10 @@ nav {
 
  i.member {
     color: rgb(40, 122, 65);
+ }
+
+ i.mod {
+    color: rgb(88, 158, 238);
  }
 
  .project-detail-img {
@@ -252,3 +258,32 @@ footer {
     color: inherit;
     background-color: inherit;
   }
+
+.category-list {
+    list-style: none;
+    padding-left: 0;
+}
+
+.category-item {
+    font-size: 18px;
+    margin: 15px 0px;
+}
+
+.category-item  a:hover{
+    color: #62b7d6;
+}
+
+.category-item  a.active{
+    color: #62b7d6;
+    font-weight: 500;
+}
+
+.small-text {
+    display: block;
+    margin-top: auto;
+    font-size: 12px;
+}
+
+.tags {
+    font-size: 15px;
+}

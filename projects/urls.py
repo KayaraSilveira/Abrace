@@ -6,7 +6,10 @@ app_name = 'projects'
 
 urlpatterns = [
     path('', views.ProjectsList.as_view(), name='projects'),
+    path('filter/category/<str:category>/', views.ProjectsList.as_view(), name='projects_filter'),
     path('project/new', views.ProjectDashboard.as_view(), name='project_new'),
+    path('project/edit/categories/set/<str:project_pk>', views.set_categories, name='set_categories'),
+    path('project/edit/categories/<str:project_pk>', views.save_categories, name='save_categories'),
     path('project/edit/<str:project_pk>', views.ProjectDashboard.as_view(), name='project_edit'), 
     path('project/detail/<str:project_pk>', views.ProjectDetail.as_view(), name='project_detail'),
     path('project/post/send', views.send_post, name='send_post'),
