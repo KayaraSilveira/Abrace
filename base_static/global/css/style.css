@@ -261,6 +261,7 @@ footer {
 
 .category-list {
     list-style: none;
+    padding-left: 0;
 }
 
 .category-item {

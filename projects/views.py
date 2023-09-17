@@ -256,7 +256,7 @@ def send_comment(request):
 ) 
 class ProjectsList(View):
 
-    def render_template(self, projects, category_active):
+    def render_template(self, projects, category_active, recommendations):
         user = CustomUser.objects.get(pk=self.request.user.pk)
         categories = Category.objects.all()
         return render(
@@ -268,12 +268,38 @@ class ProjectsList(View):
                 'user': user,
                 'categories': categories,
                 'category_active': category_active,
+                'recommendations': recommendations,
             }
         )
+    
+    def get_recommendations(self):
+        user = CustomUser.objects.get(pk=self.request.user.pk)
+        recommendations = []
+        user_categories = user.categories.all()
+
+        if not user_categories:
+            recommendations = Project.objects.all()[:3]
+
+        else:
+            for category in user_categories:
+                project = Project.objects.exclude(composite_pk__in=[p.composite_pk for p in recommendations]).exclude(owner=user).exclude(members=user).filter(categories=category).first()
+
+                if project:
+                    recommendations.append(project)
+
+                if len(recommendations) >= 3:
+                    break
+
+            if len(recommendations) < 3:
+                remaining_projects = Project.objects.exclude(composite_pk__in=[p.composite_pk for p in recommendations]).exclude(owner=user).exclude(members=user)[:3 - len(recommendations)]
+                recommendations.extend(remaining_projects)
+
+        return recommendations
 
     def get(self, request, category=None):
 
         category_active = None
+        recommendations = None
 
         if category:
             category_active = Category.objects.get(title=category)
@@ -281,8 +307,10 @@ class ProjectsList(View):
             
         else:
             projects = Project.objects.all()
+            recommendations = self.get_recommendations
 
-        return self.render_template(projects, category_active)
+
+        return self.render_template(projects, category_active, recommendations)
     
 
 @login_required(login_url='accounts:login', redirect_field_name='next')
