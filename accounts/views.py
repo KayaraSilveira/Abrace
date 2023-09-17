@@ -199,7 +199,7 @@ def save_categories(request):
 )
 class MyProjectsList(View):
 
-    def render_template(self, projects, profile):
+    def render_template(self, projects, profile, role):
         return render(
             self.request,
             'accounts/pages/my_projects.html',
@@ -208,15 +208,24 @@ class MyProjectsList(View):
                 'profile_page': True,
                 'project_tab': True,
                 'profile': profile,
+                'role': role,
             }
         )
 
-    def get(self, request):
+    def get(self, request, role=None):
 
         profile = CustomUser.objects.get(pk=request.user.pk)
-        projects_owner = Project.objects.filter(owner=profile)
-        projects_members = Project.objects.filter(members=profile)
 
-        projects = projects_owner.union(projects_members)
+        if role:
+            if role == 'Dono':
+                projects = Project.objects.filter(owner=profile)
+            elif role == 'Moderador':
+                projects = Project.objects.filter(mods=profile)
+            else:
+                projects = Project.objects.filter(members=profile)
+        else:
+            projects_owner = Project.objects.filter(owner=profile)
+            projects_members = Project.objects.filter(members=profile)
+            projects = projects_owner.union(projects_members)
 
-        return self.render_template(projects, profile)
+        return self.render_template(projects, profile, role)

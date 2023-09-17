@@ -5,8 +5,18 @@
 {% block content %}
 <div class="container">
     {% include 'accounts/partials/nav-profile.html' %}
-    <div class="text-end my-2">
-        <a class="btn btn-outline-primary" href="{% url 'projects:project_new' %}"><i class="fa-solid fa-plus"></i> Criar Projeto</a>
+    <div class="d-flex justify-content-between align-items-center my-2">
+        <div>
+            <select class="form-select" id="filterSelect">
+                <option {% if not role %}selected{% endif %} value="Todos">Todos</option>
+                <option {% if role == 'Dono' %}selected{% endif %} value="Dono">Dono</option>
+                <option {% if role == 'Moderador' %}selected{% endif %} value="Moderador">Moderador</option>
+                <option {% if role == 'Membro' %}selected{% endif %} value="Membro">Membro</option>
+            </select>
+        </div>
+        <div>
+            <a class="btn btn-outline-primary" href="{% url 'projects:project_new' %}"><i class="fa-solid fa-plus"></i> Criar Projeto</a>
+        </div>
     </div>
     <div class="row justify-content-between my-1 h-100">
     {% for project in projects %}
