@@ -5,7 +5,8 @@
 {% block content %}
 <div class="container">
         <div class="my-2">
-            <h1 class="my-3">Avaliação de {{ reviewed_user.first_name }} no Projeto {{ project.name }} avaliado por {{user.first_name}}</h1>
+            <h1 class="my-3 text-center">Avaliação</h1>
+            <h5> Avaliação de {{ reviewed_user.first_name }} no {{ project.name }}</h5>
             <form></form>
             <form method="POST" action="{% url 'accounts:send_review' %}" enctype="multipart/form-data">
                 {% csrf_token %}

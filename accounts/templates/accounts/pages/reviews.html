@@ -1,1 +1,30 @@
-{{reviews}}{{user}}
+{% extends 'global/base.html' %}
+{% comment %} {{reviews}}{{user}} {% endcomment %}
+{% block title %}Perfil{% endblock title %}
+
+{% block content %}
+<div class="container">
+    {% include 'accounts/partials/nav-profile.html' %}
+    <div class="row justify-content-between my-1 h-100">
+        {% comment %} {% for project in projects %}
+            <div class="my-3 profile-project-box">
+                <a href="{% url 'projects:project_detail' project.composite_pk %}">
+                    <img class="profile-project-cover" src="{{ project.cover_photo.url }}" alt="Capa do Projeto">
+                    <h3 class="mt-3">Projeto - {{project.name}}</h3>
+                    {% if profile == project.owner %}
+                        <p><i class="fa-solid fa-circle owner"></i> Dono </p>
+                    {% else %}
+                        <p><i class="fa-solid fa-circle member"></i> Membro</p>
+                    {% endif %}
+                </a>
+            </div> {% endcomment %}
+        {% comment %} {% empty %} 
+            <h4 class="text-center mt-5">
+                Você não possui projetos
+            </h4>
+            <h5 class="text-center mb-5">Tente criar um novo projeto ou entrar em um projeto já existente</h5>
+        {% endfor %} {% endcomment %}
+        </div>
+
+</div>
+{% endblock content %}
