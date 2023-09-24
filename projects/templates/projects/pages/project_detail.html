@@ -4,7 +4,12 @@
 
 {% block content %}
 <div class="container">
-
+    {% if not project.status %}
+    <div class="alert alert-danger" style="margin: 20px" role="alert">
+        <p class="m-0"><b>Projeto Desativado</b></p>
+        <p class="m-0">O projeto está inacessível e só você pode visualizá-lo. Ative o projeto na página de edição para deixá-lo visível novamente.</p>
+    </div>
+    {% endif %}
     <div class="row project-box justify-content-between align-items-center">
         <div class="col-5 text-center">
             <img class="profile-project-cover mb-2" src="{{ project.cover_photo.url }}" alt="Foto do Projeto">
