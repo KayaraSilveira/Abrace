@@ -62,9 +62,9 @@
                     </div>
                     <ul class="dropdown-menu">
                         {% if member not in mods %}
-                        <li>
+                        <li id="btnConfirmRemoveMember">
                             <form></form>
-                            <form class="mx-2" action="{% url 'projects:member_remove' %}" method='POST'>
+                            <form id="formRemoveMember" class="mx-2" action="{% url 'projects:member_remove' %}" method='POST'>
                                 {% csrf_token %}
                                 <input type="hidden" name="project_composite_pk" value="{{project.composite_pk}}">
                                 <input type="hidden" name="user" value="{{member.cpf}}">
@@ -104,6 +104,23 @@
         {% endfor %}
     </div>
 
+</div>
+
+<div class="modal fade" id="confirmRemoveMemberModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Tem certeza que deseja remover o usuário?</h5>
+        </div>
+        <div class="modal-body">
+          Ao remover o usuário ele não poderá mais ver ou interagir com as postagens do Projeto.
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button id="modalButtonRemoveMember" type="button" class="btn btn-danger">Excluir</button>
+        </div>
+      </div>
+    </div>
 </div>
 
 {% endblock content %}

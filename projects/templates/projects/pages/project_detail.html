@@ -35,10 +35,10 @@
                     <a class="btn btn-primary mx-2 " href="{% url 'projects:project_edit' project.composite_pk %}">Editar Projeto</a>
                 {% elif is_member %}
                 <form></form>
-                <form class="mx-2" action="{% url 'projects:project_leave' %}" method='POST'>
+                <form id="formLeaveProject" class="mx-2" action="{% url 'projects:project_leave' %}" method='POST'>
                     {% csrf_token %}
                     <input type="hidden" name="project_composite_pk" value="{{project.composite_pk}}">
-                    <button type="submit" class="btn btn-danger">Sair</button>
+                    <button id="btnConfirmLeave" type="submit" class="btn btn-danger">Sair</button>
                 <form>
                 {% elif user in solicitation %}
                 <form></form>
@@ -111,7 +111,6 @@
                     </div>
                     <div class="col-1">
                         {% if project.owner == user or user in mods or user == post.autor%}
-                            {% if post.autor not in mods and not post.autor == project.owner %}
                             <div class="btn-group dropstart">
                                 <div type="button" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                                     <i class="fa-solid fa-ellipsis-vertical"></i>
@@ -119,15 +118,14 @@
                                 <ul class="dropdown-menu">
                                     <li>
                                         <form></form>
-                                        <form class="mx-2" action="{% url 'projects:post_delete' %}" method='POST'>
+                                        <form id="{{post.composite_pk}}" class="mx-2" action="{% url 'projects:post_delete' %}" method='POST'>
                                             {% csrf_token %}
                                             <input type="hidden" name="post_composite_pk" value="{{post.composite_pk}}">
-                                            <button type="submit" class="btn btn-link dropdown-item"><i class="fa-solid fa-trash"></i> Excluir Postagem</button>
+                                            <button type="submit" class="btn btn-link dropdown-item btn-confirm-delete"><i class="fa-solid fa-trash"></i> Excluir Postagem</button>
                                         <form>
                                     </li>
                                 </ul>
                             </div>
-                          {% endif %}
                         {% endif %}
                     </div>
                 </div>
@@ -142,6 +140,22 @@
                     <i class="fa-regular fa-comment"></i> <a href="{% url 'projects:post_detail' post.composite_pk %}">Comentários</a>
                 </div>
                 <hr>
+            </div>
+            <div class="modal fade" id="confirmDeletePost{{post.composite_pk}}Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLabel">Tem certeza que deseja excluir a Postagem?</h5>
+                    </div>
+                    <div class="modal-body">
+                      Ao excluir uma postagem todos comentários relacionados são excluídos. Essa ação não pode ser desfeita.
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                      <button type="button" class="btn btn-danger btn-confirm">Excluir</button>
+                    </div>
+                  </div>
+                </div>
             </div>
             {% empty %}
             <h5 class="text-center my-5">Ainda não há postagens nesse projeto</h5>
@@ -192,5 +206,22 @@
     </div>
 
 </div>
-
+  
+  <div class="modal fade" id="confirmLeaveModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Tem certeza que seja sair do Projeto?</h5>
+        </div>
+        <div class="modal-body">
+          Você não poderá mais visualizar ou interagir com as postagens do Projeto.
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button id="modalButtonLeave" type="button" class="btn btn-danger">Sair</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
 {% endblock content %}
