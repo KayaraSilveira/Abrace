@@ -107,7 +107,7 @@ def logout_view(request):
 )
 class ProfileDetail(View):
 
-    def render_template(self, profile, categories, reviews):
+    def render_template(self, profile, categories):
         return render(
             self.request,
             'accounts/pages/profile.html',
@@ -116,7 +116,6 @@ class ProfileDetail(View):
                 'profile_page': True,
                 'profile_tab': True,
                 'categories': categories,
-                'reviews': reviews
             }
         )
 
@@ -124,8 +123,7 @@ class ProfileDetail(View):
 
         profile = CustomUser.objects.get(pk=request.user.pk)
         categories = Category.objects.all()
-        reviews = Review.objects.filter(reviewed_user=request.user.pk)
-        return self.render_template(profile, categories, reviews)
+        return self.render_template(profile, categories)
 
 @method_decorator(
     login_required(login_url='accounts:login', redirect_field_name='next'),
@@ -286,4 +284,62 @@ def send_review(request):
 
     messages.success(request, 'Sua avaliação foi enviada.')
     return redirect (reverse('projects:members_list', args=[project_pk]))
+
+@method_decorator(
+    login_required(login_url='accounts:login', redirect_field_name='next'),
+    name='dispatch'
+)
+class ViewProfile(View):
+
+    def render_template(self, profile, categories):
+        return render(
+            self.request,
+            'accounts/pages/view_profile.html',
+            context={
+                'profile': profile,
+                'profile_tab': True,
+                'categories': categories,
+            }
+        )
+
+    def get(self, request, cpf):
+        profile = CustomUser.objects.get(cpf=cpf)
+        categories = Category.objects.all()
+        return self.render_template(profile, categories)
+    
+@method_decorator(
+    login_required(login_url='accounts:login', redirect_field_name='next'),
+    name='dispatch'
+)
+class ViewProfileProjects(View):
+
+    def render_template(self, projects, profile, role):
+        return render(
+            self.request,
+            'accounts/pages/view_profile_projects.html',
+            context={
+                'projects': projects,
+                'project_tab': True,
+                'profile': profile,
+                'role': role,
+            }
+        )
+
+    def get(self, request, cpf, role=None):
+
+        profile = CustomUser.objects.get(cpf=cpf)
+
+        if role:
+            if role == 'Dono':
+                projects = Project.objects.filter(owner=profile)
+            elif role == 'Moderador':
+                projects = Project.objects.filter(mods=profile)
+            else:
+                projects = Project.objects.filter(members=profile)
+        else:
+            projects_owner = Project.objects.filter(owner=profile)
+            projects_members = Project.objects.filter(members=profile)
+            projects = projects_owner.union(projects_members)
+
+        return self.render_template(projects, profile, role)
 

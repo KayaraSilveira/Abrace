@@ -1,0 +1,53 @@
+{% extends 'global/base.html' %}
+
+{% block title %}Perfil - {{profile.first_name}}{% endblock title %}
+
+{% block content %}
+<div class="container">
+    {% include 'accounts/partials/nav-view-profile.html' %}
+
+    <div class="row my-5 align-items-center ">
+        <div class="col-10 row align-items-center justify-content-between">
+            <img class="profile-img" src="{{ profile.profile_picture.url }}" alt="Imagem de Perfil">
+            <h2 class="col-9">{{profile.first_name}} {{profile.last_name}}</h2>
+        </div>
+    </div>
+
+    <div class="row my-2 profile-detail">
+        <div class="col-7">
+            <div class="my-3">
+                <label class="form-label">UF</label>
+                <div class="form-control">{{profile.state}}</div>
+            </div>
+            <div class="my-3">
+                <label class="form-label">Cidade</label>
+                <div class="form-control">{{profile.city}}</div>
+            </div>
+            <div class="my-3">
+                <label class="form-label">Data de Nascimento</label>
+                <div class="form-control">{{profile.birth_date}}</div>
+            </div>
+            <div class="my-3">
+                <label class="form-label">Email</label>
+                <div class="form-control">{{profile.email}}</div>
+            </div>
+        </div>
+        <div class="col-4">
+            <label class="d-block form-label text-center">Categorias</label>
+            <div class="category-box">
+            {% for category in categories %}
+                <div class="category-profile">
+                {% if category in profile.categories.all %}
+                    <i class="fa-solid fa-square-check"></i> {{ category }}
+                {% else %}
+                    <i class="fa-regular fa-square"></i> {{ category }}
+                {% endif %}
+                </div>
+            {% endfor %}
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock content %}

@@ -82,10 +82,18 @@
             <div class="my-5">
                 <div class="d-flex">
                     <div class="pr-2 col-1">
-                        <img class="post-img" src="{{ post.autor.profile_picture.url }}" alt="Foto de perfil">
+                        {% if post.autor == user %}
+                            <img class="post-img" src="{{ post.autor.profile_picture.url }}" alt="Foto de perfil">
+                        {% else %}
+                            <a href="{% url 'accounts:view_profile' post.autor.cpf %}"><img class="post-img" src="{{ post.autor.profile_picture.url }}" alt="Foto de perfil"></a>
+                        {% endif %}
                     </div>
                     <div class=col-10>
-                        <h5 class="m-0">{{post.autor.first_name}} {{post.autor.last_name}}</h5>
+                        {% if post.autor == user %}
+                            <h5 class="m-0">{{post.autor.first_name}} {{post.autor.last_name}}</h5>
+                        {% else %}
+                            <a href="{% url 'accounts:view_profile' post.autor.cpf %}"><h5 class="m-0">{{post.autor.first_name}} {{post.autor.last_name}}</h5></a>
+                        {% endif %}
                         <div>
                             {% if project.owner == post.autor %}
                                 Dono

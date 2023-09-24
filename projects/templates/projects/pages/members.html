@@ -11,11 +11,19 @@
         <h4 class="mb-5 mt-4">Membros do Projeto</h4>
         <div class="row justify-content-center">
             <div class="col-1">
-                <img class="post-img img-member" src="{{ project.owner.profile_picture.url }}" alt="Foto de perfil">
+                {% if member == user %}
+                    <img class="post-img img-member" src="{{ project.owner.profile_picture.url }}" alt="Foto de perfil">
+                {% else %}
+                    <a href="{% url 'accounts:view_profile' project.owner.cpf %}"><img class="post-img img-member" src="{{ project.owner.profile_picture.url }}" alt="Foto de perfil"></a>
+                {% endif %}
             </div>
             <div class="col-11 d-flex flex-column justify-content-center">
                 <h5 class="m-0">
-                    {{project.owner.first_name}} {{project.owner.last_name}}
+                    {% if member == user %}
+                        {{project.owner.first_name}} {{project.owner.last_name}}
+                    {% else %}
+                        <a href="{% url 'accounts:view_profile' project.owner.cpf %}">{{project.owner.first_name}} {{project.owner.last_name}}</a>
+                    {% endif %}
                 </h5>
                 <p class="m-0">Dono</p>
             </div>
@@ -24,11 +32,19 @@
         <hr>
         <div class="row justify-content-center">
             <div class="col-1">
-                <img class="post-img img-member" src="{{ member.profile_picture.url }}" alt="Foto de perfil">
+                {% if member == user %}
+                    <img class="post-img img-member" src="{{ member.profile_picture.url }}" alt="Foto de perfil">
+                {% else %}
+                    <a href="{% url 'accounts:view_profile' member.cpf %}"><img class="post-img img-member" src="{{ member.profile_picture.url }}" alt="Foto de perfil"></a>
+                {% endif %}
             </div>
             <div class="col-10 d-flex flex-column justify-content-center">
                 <h5 class="m-0">
-                    {{member.first_name}} {{member.last_name}}
+                    {% if member == user %}
+                        {{member.first_name}} {{member.last_name}}
+                    {% else %}
+                        <a href="{% url 'accounts:view_profile' member.cpf %}">{{member.first_name}} {{member.last_name}}</a>
+                    {% endif %}
                 </h5>
                 <p class="m-0">
                     {% if member in mods %}
