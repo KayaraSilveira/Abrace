@@ -59,10 +59,10 @@
                                 <p class="my-0">Exclusão do projeto</p>
                                 <span class="form-text m-b-none">Exclua definitivamente esse projeto e todas as informações presentes nele.</span>
                             </div>
-                            <form action="{% url 'projects:project_delete' %}" method='POST'>
+                            <form id="formDeleteProject" action="{% url 'projects:project_delete' %}" method='POST'>
                                 {% csrf_token %}
                                 <input type="hidden" name="project_composite_pk" value="{{project_pk}}">
-                                <button type="submit" class="btn btn-danger">Excluir Projeto</button>
+                                <button id="btnConfirmDeleteProject" type="submit" class="btn btn-danger">Excluir Projeto</button>
                             <form>
                         </div>
                     </div>
@@ -70,8 +70,25 @@
                 </div>
             </div>
         </div>
-
 </div>
+
+<div class="modal fade" id="confirmDeleteProjectModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Tem certeza que deseja excluir o Projeto?</h5>
+        </div>
+        <div class="modal-body">
+          Todas as informações relacionadas ao projeto serão excluídas. Essa ação é definitiva.
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button id="modalButtonDeleteProject" type="button" class="btn btn-danger">Excluir</button>
+        </div>
+      </div>
+    </div>
+</div>
+
 <script>
     function switchActive() {
         window.location.href = "{% url 'projects:deactivate' project_pk %}";
