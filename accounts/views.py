@@ -1,8 +1,8 @@
 from django.shortcuts import redirect, render
-from .forms import RegisterForm, LoginForm, EditProfileForm, ProfileCategoriesForm
+from .forms import RegisterForm, LoginForm, EditProfileForm, ProfileCategoriesForm, ReviewForm
 from django.contrib.auth.models import User
 from django.http import Http404
-from .models import CustomUser, Category
+from .models import CustomUser, Category, Review
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
@@ -11,6 +11,7 @@ from django.utils.decorators import method_decorator
 from django.views import View
 from projects.models import Project
 from django.db.models import Q
+from django.shortcuts import get_object_or_404
 
 def register_view(request):
 
@@ -106,7 +107,7 @@ def logout_view(request):
 )
 class ProfileDetail(View):
 
-    def render_template(self, profile, categories):
+    def render_template(self, profile, categories, reviews):
         return render(
             self.request,
             'accounts/pages/profile.html',
@@ -115,6 +116,7 @@ class ProfileDetail(View):
                 'profile_page': True,
                 'profile_tab': True,
                 'categories': categories,
+                'reviews': reviews
             }
         )
 
@@ -122,8 +124,8 @@ class ProfileDetail(View):
 
         profile = CustomUser.objects.get(pk=request.user.pk)
         categories = Category.objects.all()
-
-        return self.render_template(profile, categories)
+        reviews = Review.objects.filter(reviewed_user=request.user.pk)
+        return self.render_template(profile, categories, reviews)
 
 @method_decorator(
     login_required(login_url='accounts:login', redirect_field_name='next'),
@@ -229,3 +231,59 @@ class MyProjectsList(View):
             projects = projects_owner.union(projects_members)
 
         return self.render_template(projects, profile, role)
+
+def review_view(request):
+    user = get_object_or_404(CustomUser, pk=request.user.pk)
+    reviews = Review.objects.filter(reviewed_user=user)
+
+    return render(request, 'accounts/pages/reviews.html', {
+        'user': user,
+        'reviews': reviews
+    })
+    
+
+def review_create_view(request):
+
+    review_form_data = request.session.get('review_form_data')
+    form = ReviewForm(review_form_data)
+
+    project = get_object_or_404(Project, composite_pk=request.POST.get('project_composite_pk'))
+    reviewed_user = get_object_or_404(CustomUser, cpf=request.POST.get('reviewed_user_cpf'))
+    author_user = get_object_or_404(CustomUser, pk=request.user.pk)
+
+    return render(request, 'accounts/pages/review_create.html', {
+        'form': form,
+        'reviewed_user': reviewed_user,
+        'project': project,
+        'user': author_user
+    })
+
+def send_review(request):
+    if not request.POST:
+        raise Http404
+
+    form = ReviewForm(request.POST)
+    project_pk = request.POST.get('project_composite_pk')
+    project = Project.objects.get(composite_pk=project_pk)
+
+    review = form.save(commit=False)
+
+    author_user = CustomUser.objects.get(pk=request.user.pk)
+    reviewed_user = CustomUser.objects.get(cpf=request.POST.get('reviewed_user_cpf'))
+
+    review.author_user = author_user
+    review.reviewed_user = reviewed_user
+    review.project = project
+
+    auto_id = Review.objects.filter(reviewed_user=reviewed_user)
+
+    if auto_id:
+        review.review_id = auto_id.last().review_id + 1
+    else:
+        review.review_id = 0
+
+    review.save()
+
+    messages.success(request, 'Sua avaliação foi enviada.')
+    return redirect (reverse('projects:members_list', args=[project_pk]))
+

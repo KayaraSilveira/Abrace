@@ -430,7 +430,6 @@ def remove_member(request):
     project_pk = request.POST.get('project_composite_pk')
     user = CustomUser.objects.get(cpf=request.POST.get('user'))
     project = Project.objects.get(composite_pk=project_pk)
-
     
     project.members.remove(user)
     project.save()

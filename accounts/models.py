@@ -47,18 +47,25 @@ class CustomUser(AbstractUser):
 
             img.save(self.profile_picture.path)
 
+from projects.models import Project
 
 class Review(models.Model):
-    review_id = models.UUIDField(auto_created=True, primary_key=True, unique=True)
+    review_id = models.IntegerField()
     review_body = models.TextField(max_length=200)
-    review_value = models.ValueRange(1,5)
+    review_value = models.IntegerField()
     created_at = models.DateTimeField(auto_now=True)
 
-    reviewed_user = models.ForeignKey(CustomUser, related_name='reviwed_user', on_delete=models.CASCADE)
+    project = models.ForeignKey(Project, related_name='project', on_delete=models.CASCADE)
+    reviewed_user = models.ForeignKey(CustomUser, related_name='reviewed_user', on_delete=models.CASCADE)
     author_user = models.ForeignKey(CustomUser, related_name='author_user', on_delete=models.CASCADE)
 
-    # TODO Criar chave estrangeira do projeto
-    # TODO Faz sentido manter um id pra review ou utilizar reviewed_user + author_user + project_id + inteiro iterativo?
+    composite_pk = models.CharField(max_length=255, unique=True, primary_key=True)
+
+    def save(self, *args, **kwargs):
+        reviewed_user_id = self.reviewed_user.cpf.replace('-', '')
+        reviewed_user_id = reviewed_user_id.replace('.', '')
+        self.composite_pk = f"{reviewed_user_id}-{self.review_id}"
+        super().save(*args, **kwargs)
 
     def __str__(self):
-        return self.review_id
+        return self.review_body + ' ' + str(self.review_value)
