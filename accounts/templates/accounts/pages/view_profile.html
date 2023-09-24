@@ -16,7 +16,7 @@
     <div class="row my-2 profile-detail">
         <div class="col-7">
             <div class="my-3">
-                <label class="form-label">UF</label>
+                <label class="form-label">Estado</label>
                 <div class="form-control">{{profile.state}}</div>
             </div>
             <div class="my-3">
@@ -24,24 +24,16 @@
                 <div class="form-control">{{profile.city}}</div>
             </div>
             <div class="my-3">
-                <label class="form-label">Data de Nascimento</label>
-                <div class="form-control">{{profile.birth_date}}</div>
-            </div>
-            <div class="my-3">
-                <label class="form-label">Email</label>
+                <label class="form-label">Email para Contato</label>
                 <div class="form-control">{{profile.email}}</div>
             </div>
         </div>
         <div class="col-4">
-            <label class="d-block form-label text-center">Categorias</label>
+            <label class="d-block form-label text-center">Projetos de Interesse</label>
             <div class="category-box">
-            {% for category in categories %}
+            {% for category in profile.categories.all %}
                 <div class="category-profile">
-                {% if category in profile.categories.all %}
-                    <i class="fa-solid fa-square-check"></i> {{ category }}
-                {% else %}
-                    <i class="fa-regular fa-square"></i> {{ category }}
-                {% endif %}
+                    <i class="fa-solid fa-tag"></i> {{ category }}
                 </div>
             {% endfor %}
             </div>

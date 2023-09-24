@@ -5,5 +5,7 @@
     <li class="col-2 text-center">
         <a class="nav-link {% if project_tab %}active{% endif %}" href="{% url 'accounts:view_profile_projects' profile.cpf %}">Projetos</a>
     </li>
-     
+    <li class="col-2 text-center">
+        <a class="nav-link {% if review_tab %}active{% endif %}" href="{% url 'accounts:view_profile_reviews' profile.cpf %}">Avaliações</a>
+    </li>  
 </ul>
