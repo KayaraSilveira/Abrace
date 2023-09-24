@@ -183,9 +183,13 @@ def save_categories(request):
     form = ProfileCategoriesForm(
             data=request.POST or None,
             instance=profile, 
-        )
-    
-    form.save()
+    )
+
+    if form.is_valid():
+        form.save()
+    else:
+        profile.categories.set('')
+        profile.save()
 
     messages.success(request, 'As preferências foram alteradas com sucesso!')
     return redirect(reverse('accounts:profile'))
@@ -197,7 +201,7 @@ def save_categories(request):
 )
 class MyProjectsList(View):
 
-    def render_template(self, projects, profile):
+    def render_template(self, projects, profile, role):
         return render(
             self.request,
             'accounts/pages/my_projects.html',
@@ -206,18 +210,27 @@ class MyProjectsList(View):
                 'profile_page': True,
                 'project_tab': True,
                 'profile': profile,
+                'role': role,
             }
         )
 
-    def get(self, request):
+    def get(self, request, role=None):
 
         profile = CustomUser.objects.get(pk=request.user.pk)
-        projects_owner = Project.objects.filter(owner=profile)
-        projects_members = Project.objects.filter(members=profile)
 
-        projects = projects_owner.union(projects_members)
+        if role:
+            if role == 'Dono':
+                projects = Project.objects.filter(owner=profile)
+            elif role == 'Moderador':
+                projects = Project.objects.filter(mods=profile)
+            else:
+                projects = Project.objects.filter(members=profile)
+        else:
+            projects_owner = Project.objects.filter(owner=profile)
+            projects_members = Project.objects.filter(members=profile)
+            projects = projects_owner.union(projects_members)
 
-        return self.render_template(projects, profile)
+        return self.render_template(projects, profile, role)
 
 def review_view(request):
     user = get_object_or_404(CustomUser, pk=request.user.pk)
@@ -273,3 +286,4 @@ def send_review(request):
 
     messages.success(request, 'Sua avaliação foi enviada.')
     return redirect (reverse('projects:members_list', args=[project_pk]))
+

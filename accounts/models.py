@@ -19,7 +19,7 @@ class CustomUser(AbstractUser):
 
     profile_picture = models.ImageField(upload_to='user/profile/%Y/%m/%d/', null=True, blank=True)
 
-    categories = models.ManyToManyField(Category, related_name='user_categories')
+    categories = models.ManyToManyField(Category, related_name='user_categories', blank=True)
 
 
 

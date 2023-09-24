@@ -17,4 +17,5 @@ urlpatterns = [
     path('profile/reviews', views.review_view, name='profile_reviews'),
     path('review/', views.review_create_view, name='review'),
     path('review/create', views.send_review, name='send_review'),
+    path('profile/projects/filter/<str:role>/', views.MyProjectsList.as_view(), name='my_projects_filter'),
 ]

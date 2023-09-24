@@ -1,6 +1,7 @@
 from django.db import models
 from PIL import Image
 from django.contrib.auth import get_user_model
+from accounts.models import Category
 
 class Project(models.Model):
     owner = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
@@ -9,6 +10,7 @@ class Project(models.Model):
     cover_photo = models.ImageField(upload_to='project/cover/%Y/%m/%d/')
     description = models.TextField(max_length=600, blank=True)
     status = models.BooleanField(default=True)
+    categories = models.ManyToManyField(Category, related_name='project_categories', blank=True)
     composite_pk = models.CharField(max_length=255, unique=True, primary_key=True)
     members = models.ManyToManyField(get_user_model(), related_name='projects', blank=True)
     mods = models.ManyToManyField(get_user_model(), related_name='projects_mods', blank=True)

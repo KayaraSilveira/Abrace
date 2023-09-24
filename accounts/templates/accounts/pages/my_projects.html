@@ -5,8 +5,18 @@
 {% block content %}
 <div class="container">
     {% include 'accounts/partials/nav-profile.html' %}
-    <div class="text-end my-2">
-        <a class="btn btn-outline-primary" href="{% url 'projects:project_new' %}"><i class="fa-solid fa-plus"></i> Criar Projeto</a>
+    <div class="d-flex justify-content-between align-items-center my-2">
+        <div>
+            <select class="form-select" id="filterSelect">
+                <option {% if not role %}selected{% endif %} value="Todos">Todos</option>
+                <option {% if role == 'Dono' %}selected{% endif %} value="Dono">Dono</option>
+                <option {% if role == 'Moderador' %}selected{% endif %} value="Moderador">Moderador</option>
+                <option {% if role == 'Membro' %}selected{% endif %} value="Membro">Membro</option>
+            </select>
+        </div>
+        <div>
+            <a class="btn btn-outline-primary" href="{% url 'projects:project_new' %}"><i class="fa-solid fa-plus"></i> Criar Projeto</a>
+        </div>
     </div>
     <div class="row justify-content-between my-1 h-100">
     {% for project in projects %}
@@ -14,10 +24,18 @@
             <a href="{% url 'projects:project_detail' project.composite_pk %}">
                 <img class="profile-project-cover" src="{{ project.cover_photo.url }}" alt="Capa do Projeto">
                 <h3 class="mt-3">Projeto - {{project.name}}</h3>
+                <p class="tags">
+                    {% if project.categories.all %}<i class="fa-solid fa-tags"></i> {% endif %}
+                    {% for category in project.categories.all %}
+                        {{category.title}}; 
+                    {% endfor %}
+                </p>
                 {% if profile == project.owner %}
-                    <p><i class="fa-solid fa-circle owner"></i> Dono </p>
+                    <p class="small-text"><i class="fa-solid fa-circle owner"></i> Dono </p>
+                {% elif profile in project.mods.all %}
+                    <p class="small-text"><i class="fa-solid fa-circle mod"></i> moderador</p>
                 {% else %}
-                    <p><i class="fa-solid fa-circle member"></i> Membro</p>
+                    <p class="small-text"><i class="fa-solid fa-circle member"></i> Membro</p>
                 {% endif %}
             </a>
         </div>
