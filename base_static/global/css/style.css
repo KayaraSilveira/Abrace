@@ -308,10 +308,23 @@ footer {
     color: #d6d7d8;
 }
 
-.star-yellow {
-    color:rgb(240, 197, 7);
-}
 
 .text-red {
     color:rgb(124, 19, 19);
+}
+
+.star-rating {
+    font-size: 22px;
+}
+
+.star-rating i {
+    color: #d6d7d8;
+}
+
+.star-rating i:hover, .star-rating i:hover ~ i {
+    color:rgb(240, 197, 7);
+}
+
+.star-yellow {
+    color:rgb(240, 197, 7) !important;
 }
