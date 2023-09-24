@@ -37,6 +37,10 @@
                 {% else %}
                     <p class="small-text"><i class="fa-solid fa-circle member"></i> Membro</p>
                 {% endif %}
+
+                {% if not project.status %}
+                    <p class="text-center text-red"><b>Projeto Desativado</b></p>
+                {% endif %}
             </a>
         </div>
     {% empty %} 

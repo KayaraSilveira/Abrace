@@ -15,7 +15,7 @@ from django.http import Http404
 )
 class ProjectDashboard(View):
 
-    def render_template(self, form, project_pk, form_categories):
+    def render_template(self, form, project_pk, form_categories, project_active=False):
         return render(
             self.request,
             'projects/pages/project_dashboard.html',
@@ -23,6 +23,7 @@ class ProjectDashboard(View):
                 'form': form,
                 'project_pk': project_pk,
                 'form_categories': form_categories,
+                'project_active': project_active,
             }
         )
     
@@ -39,11 +40,13 @@ class ProjectDashboard(View):
         project = self.get_project(project_pk)
         form = ProjectForm(instance=project)
         form_categories = None
+        project_active = False
 
         if project_pk:
             form_categories = ProjectCategoriesForm(instance=project)
+            project_active = project.status
 
-        return self.render_template(form, project_pk, form_categories)
+        return self.render_template(form, project_pk, form_categories, project_active)
 
     def post(self, request, project_pk=None):
 
@@ -76,12 +79,14 @@ class ProjectDashboard(View):
                 return redirect (reverse('projects:project_detail', args=[project.composite_pk]))
             return redirect (reverse('projects:set_categories', args=[project.composite_pk]))
 
+        project_active = False
         form_categories = None
         if project_pk:
             form_categories = ProjectCategoriesForm(instance=project)
+            project_active = project.status
 
         messages.error(request, 'Há campos incorretos no formulário')
-        return self.render_template(form, project_pk, form_categories)
+        return self.render_template(form, project_pk, form_categories, project_active)
 
 
 @login_required(login_url='accounts:login', redirect_field_name='next')    
@@ -282,7 +287,7 @@ class ProjectsList(View):
 
         else:
             for category in user_categories:
-                project = Project.objects.exclude(composite_pk__in=[p.composite_pk for p in recommendations]).exclude(owner=user).exclude(members=user).filter(categories=category).first()
+                project = Project.objects.exclude(composite_pk__in=[p.composite_pk for p in recommendations]).exclude(owner=user).exclude(members=user).exclude(status=False).filter(categories=category).first()
 
                 if project:
                     recommendations.append(project)
@@ -291,7 +296,7 @@ class ProjectsList(View):
                     break
 
             if len(recommendations) < 3:
-                remaining_projects = Project.objects.exclude(composite_pk__in=[p.composite_pk for p in recommendations]).exclude(owner=user).exclude(members=user)[:3 - len(recommendations)]
+                remaining_projects = Project.objects.exclude(composite_pk__in=[p.composite_pk for p in recommendations]).exclude(owner=user).exclude(members=user).exclude(status=False)[:3 - len(recommendations)]
                 recommendations.extend(remaining_projects)
 
         return recommendations
@@ -303,10 +308,10 @@ class ProjectsList(View):
 
         if category:
             category_active = Category.objects.get(title=category)
-            projects = Project.objects.filter(categories=category_active)
+            projects = Project.objects.filter(categories=category_active, status=True)
             
         else:
-            projects = Project.objects.all()
+            projects = Project.objects.filter(status=True)
             recommendations = self.get_recommendations
 
 
@@ -541,3 +546,17 @@ def reject_solicitation(request):
     project.save()
 
     return redirect (reverse('projects:project_solicitation', args=[project_pk]))
+
+@login_required(login_url='accounts:login', redirect_field_name='next')
+def deactivate(request, project_pk):
+
+    owner = CustomUser.objects.get(pk=request.user.pk)
+    project = get_object_or_404(Project, composite_pk=project_pk)
+
+    if not project.owner == owner:
+        raise Http404
+        
+    project.status = not project.status 
+    project.save()
+
+    return redirect (reverse('projects:project_edit', args=[project_pk]))

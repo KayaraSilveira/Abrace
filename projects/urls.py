@@ -27,4 +27,5 @@ urlpatterns = [
     path('project/solicitation/accept', views.accept_solicitation, name='solicitation_accept'),
     path('project/solicitation/reject', views.reject_solicitation, name='solicitation_reject'),
     path('project/solicitation/<str:project_pk>', views.Solicitation.as_view(), name='project_solicitation'),
+    path('project/deactivate/<str:project_pk>', views.deactivate, name='deactivate'),
 ]

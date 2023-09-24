@@ -18,12 +18,15 @@
                                 {{ form_categories }}
                             </div>
                             <div class="form-group-submit text-center my-4">
-                                <button class="btn btn-info" type="submit">Salvar categorias</button>
+                                <button class="btn btn-info" type="submit">Salvar Categorias</button>
                             </div>
                         </form>
                     </div>
                 {% endif %}
                 <div class="col">
+                    {% if project_pk %}
+                    <h5>Informações Gerais</h5>
+                    {% endif %}
                     <form></form>
                     <form method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
@@ -36,21 +39,42 @@
                                 </div>
                             </div>
                         {% endfor %}
-                        <div class="form-group-submit mt-5 mb-2">
-                            <button class="btn btn-info" type="submit">{% if project_pk %}Salvar Projeto{% else %}Próximo{% endif %}</button>
+                        <div class="form-group-submit mt-5 mb-5 text-center">
+                            <button class="btn btn-info" type="submit">{% if project_pk %}Salvar Informações{% else %}Próximo{% endif %}</button>
                         </div>
                     </form>
+                    <hr>
                     {% if project_pk %}
-                        <form class="text-end" action="{% url 'projects:project_delete' %}" method='POST'>
-                            {% csrf_token %}
-                            <input type="hidden" name="project_composite_pk" value="{{project_pk}}">
-                            <button type="submit" class="btn btn-danger">Excluir Projeto</button>
-                        <form>
+                    <h5 class="mt-3">Desativação e Exclusão do Projeto</h5>
+                    <div class="mt-4 mb-5">
+                        <div class="d-flex justify-content-between align-items-center my-4">
+                            <div>
+                                <p class="my-0">Ativar/Desativar projeto </p>
+                                <span class="form-text m-b-none">Ative para publicar seu projeto. Desative caso queira deixar o projeto inacessível.</span>
+                            </div>
+                            <input {% if project_active %}checked{% endif %} onchange="switchActive()" id="input-switch" type="checkbox" data-toggle="switchbutton" data-onlabel="Ativo" data-offlabel="Desativado" data-onstyle="success" data-offstyle="danger">
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center my-4">
+                            <div>
+                                <p class="my-0">Exclusão do projeto</p>
+                                <span class="form-text m-b-none">Exclua definitivamente esse projeto e todas as informações presentes nele.</span>
+                            </div>
+                            <form action="{% url 'projects:project_delete' %}" method='POST'>
+                                {% csrf_token %}
+                                <input type="hidden" name="project_composite_pk" value="{{project_pk}}">
+                                <button type="submit" class="btn btn-danger">Excluir Projeto</button>
+                            <form>
+                        </div>
+                    </div>
                     {% endif %}
                 </div>
             </div>
         </div>
 
 </div>
-
+<script>
+    function switchActive() {
+        window.location.href = "{% url 'projects:deactivate' project_pk %}";
+    }
+</script>
 {% endblock content %}

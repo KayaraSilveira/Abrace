@@ -221,12 +221,12 @@ class MyProjectsList(View):
             if role == 'Dono':
                 projects = Project.objects.filter(owner=profile)
             elif role == 'Moderador':
-                projects = Project.objects.filter(mods=profile)
+                projects = Project.objects.filter(mods=profile, status=True)
             else:
-                projects = Project.objects.filter(members=profile)
+                projects = Project.objects.filter(members=profile, status=True)
         else:
             projects_owner = Project.objects.filter(owner=profile)
-            projects_members = Project.objects.filter(members=profile)
+            projects_members = Project.objects.filter(members=profile, status=True)
             projects = projects_owner.union(projects_members)
 
         return self.render_template(projects, profile, role)
@@ -339,14 +339,14 @@ class ViewProfileProjects(View):
 
         if role:
             if role == 'Dono':
-                projects = Project.objects.filter(owner=profile)
+                projects = Project.objects.filter(owner=profile, status=True)
             elif role == 'Moderador':
-                projects = Project.objects.filter(mods=profile)
+                projects = Project.objects.filter(mods=profile, status=True)
             else:
-                projects = Project.objects.filter(members=profile)
+                projects = Project.objects.filter(members=profile, status=True)
         else:
-            projects_owner = Project.objects.filter(owner=profile)
-            projects_members = Project.objects.filter(members=profile)
+            projects_owner = Project.objects.filter(owner=profile, status=True)
+            projects_members = Project.objects.filter(members=profile, status=True)
             projects = projects_owner.union(projects_members)
 
         return self.render_template(projects, profile, role)
