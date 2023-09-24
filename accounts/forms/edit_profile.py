@@ -20,7 +20,11 @@ class EditProfileForm(ModelForm):
         self.fields['zipcode'].widget.attrs.update({'class': 'form-control cep-input', 'required':'required'})
         self.fields['birth_date'] = forms.DateField(
             label='Data de nascimento',
-            widget=forms.DateInput(attrs={'class': 'form-control', 'required': 'required', 'type': 'date'})
+            widget=forms.DateInput(format=('%Y-%m-%d'),
+                                   attrs={'class': 'form-control',
+                                          'required': 'required',
+                                          'type': 'date'
+                                          })
         )
         
         self._my_errors = defaultdict(list)
