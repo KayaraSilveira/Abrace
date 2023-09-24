@@ -107,7 +107,7 @@ def logout_view(request):
 )
 class ProfileDetail(View):
 
-    def render_template(self, profile, categories, reviews):
+    def render_template(self, profile, categories):
         return render(
             self.request,
             'accounts/pages/profile.html',
@@ -116,7 +116,6 @@ class ProfileDetail(View):
                 'profile_page': True,
                 'profile_tab': True,
                 'categories': categories,
-                'reviews': reviews
             }
         )
 
@@ -124,8 +123,7 @@ class ProfileDetail(View):
 
         profile = CustomUser.objects.get(pk=request.user.pk)
         categories = Category.objects.all()
-        reviews = Review.objects.filter(reviewed_user=request.user.pk)
-        return self.render_template(profile, categories, reviews)
+        return self.render_template(profile, categories)
 
 @method_decorator(
     login_required(login_url='accounts:login', redirect_field_name='next'),
@@ -174,6 +172,7 @@ class ProfileEdit(View):
         messages.error(request, 'Há campos incorretos no formulário')
         return self.render_template(form, categories)
 
+@login_required(login_url='accounts:login', redirect_field_name='next')
 def save_categories(request):
     if not request.POST:
         raise Http404
@@ -232,58 +231,135 @@ class MyProjectsList(View):
 
         return self.render_template(projects, profile, role)
 
+@login_required(login_url='accounts:login', redirect_field_name='next')
 def review_view(request):
-    user = get_object_or_404(CustomUser, pk=request.user.pk)
-    reviews = Review.objects.filter(reviewed_user=user)
+    profile = get_object_or_404(CustomUser, pk=request.user.pk)
+    reviews = Review.objects.filter(reviewed_user=profile)
 
     return render(request, 'accounts/pages/reviews.html', {
-        'user': user,
-        'reviews': reviews
+        'profile': profile,
+        'reviews': reviews,
+        'profile_page': True,
+        'review_tab': True,
     })
     
+@method_decorator(
+    login_required(login_url='accounts:login', redirect_field_name='next'),
+    name='dispatch'
+) 
+class ReviewCreateView(View):
 
-def review_create_view(request):
+    def render_template(self, form, reviewed_user, project, author_user):
+        return render(self.request, 'accounts/pages/review_create.html', {
+            'form': form,
+            'reviewed_user': reviewed_user,
+            'project': project,
+            'user': author_user
+        })
 
-    review_form_data = request.session.get('review_form_data')
-    form = ReviewForm(review_form_data)
+    def get(self, request, reviewed_pk, project_pk):
 
-    project = get_object_or_404(Project, composite_pk=request.POST.get('project_composite_pk'))
-    reviewed_user = get_object_or_404(CustomUser, cpf=request.POST.get('reviewed_user_cpf'))
-    author_user = get_object_or_404(CustomUser, pk=request.user.pk)
+        author_user = CustomUser.objects.get(pk=request.user.pk)
+        reviewed_user = CustomUser.objects.get(pk=reviewed_pk)
+        project = Project.objects.get(composite_pk=project_pk)
+        form = ReviewForm()
 
-    return render(request, 'accounts/pages/review_create.html', {
-        'form': form,
-        'reviewed_user': reviewed_user,
-        'project': project,
-        'user': author_user
+        return self.render_template(form, reviewed_user, project, author_user)
+
+    def post(self, request, reviewed_pk, project_pk):
+
+        form = ReviewForm(request.POST)
+        project_pk = request.POST.get('project_composite_pk')
+        project = Project.objects.get(composite_pk=project_pk)
+
+        review = form.save(commit=False)
+
+        author_user = CustomUser.objects.get(pk=request.user.pk)
+        reviewed_user = CustomUser.objects.get(cpf=request.POST.get('reviewed_user_cpf'))
+
+        review.author_user = author_user
+        review.reviewed_user = reviewed_user
+        review.project = project
+
+        auto_id = Review.objects.filter(reviewed_user=reviewed_user, project=project)
+
+        if auto_id:
+            review.review_id = auto_id.last().review_id + 1
+        else:
+            review.review_id = 0
+
+        review.save()
+
+        messages.success(request, 'Sua avaliação foi enviada.')
+        return redirect (reverse('projects:members_list', args=[project_pk]))
+
+@method_decorator(
+    login_required(login_url='accounts:login', redirect_field_name='next'),
+    name='dispatch'
+)
+class ViewProfile(View):
+
+    def render_template(self, profile, categories):
+        return render(
+            self.request,
+            'accounts/pages/view_profile.html',
+            context={
+                'profile': profile,
+                'profile_tab': True,
+                'categories': categories,
+            }
+        )
+
+    def get(self, request, cpf):
+        profile = CustomUser.objects.get(cpf=cpf)
+        categories = Category.objects.all()
+        return self.render_template(profile, categories)
+    
+@method_decorator(
+    login_required(login_url='accounts:login', redirect_field_name='next'),
+    name='dispatch'
+)
+class ViewProfileProjects(View):
+
+    def render_template(self, projects, profile, role):
+        return render(
+            self.request,
+            'accounts/pages/view_profile_projects.html',
+            context={
+                'projects': projects,
+                'project_tab': True,
+                'profile': profile,
+                'role': role,
+            }
+        )
+
+    def get(self, request, cpf, role=None):
+
+        profile = CustomUser.objects.get(cpf=cpf)
+
+        if role:
+            if role == 'Dono':
+                projects = Project.objects.filter(owner=profile)
+            elif role == 'Moderador':
+                projects = Project.objects.filter(mods=profile)
+            else:
+                projects = Project.objects.filter(members=profile)
+        else:
+            projects_owner = Project.objects.filter(owner=profile)
+            projects_members = Project.objects.filter(members=profile)
+            projects = projects_owner.union(projects_members)
+
+        return self.render_template(projects, profile, role)
+
+@login_required(login_url='accounts:login', redirect_field_name='next')
+def view_profile_review(request, cpf):
+    profile = get_object_or_404(CustomUser, cpf=cpf)
+    reviews = Review.objects.filter(reviewed_user=profile)
+    user = CustomUser.objects.get(pk=request.user.pk)
+
+    return render(request, 'accounts/pages/view_reviews.html', {
+        'profile': profile,
+        'reviews': reviews,
+        'review_tab': True,
+        'user': user,
     })
-
-def send_review(request):
-    if not request.POST:
-        raise Http404
-
-    form = ReviewForm(request.POST)
-    project_pk = request.POST.get('project_composite_pk')
-    project = Project.objects.get(composite_pk=project_pk)
-
-    review = form.save(commit=False)
-
-    author_user = CustomUser.objects.get(pk=request.user.pk)
-    reviewed_user = CustomUser.objects.get(cpf=request.POST.get('reviewed_user_cpf'))
-
-    review.author_user = author_user
-    review.reviewed_user = reviewed_user
-    review.project = project
-
-    auto_id = Review.objects.filter(reviewed_user=reviewed_user)
-
-    if auto_id:
-        review.review_id = auto_id.last().review_id + 1
-    else:
-        review.review_id = 0
-
-    review.save()
-
-    messages.success(request, 'Sua avaliação foi enviada.')
-    return redirect (reverse('projects:members_list', args=[project_pk]))
-

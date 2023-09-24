@@ -3,9 +3,9 @@
         <a class="nav-link {% if profile_tab %}active{% endif %}" href="{% url 'accounts:profile' %}">Perfil</a>
     </li> 
     <li class="col-2 text-center">
-        <a class="nav-link {% if project_tab %}active{% endif %}" href="{% url 'accounts:my_projects' %}">Meus Projetos</a>
+        <a class="nav-link {% if project_tab %}active{% endif %}" href="{% url 'accounts:my_projects' %}">Projetos</a>
     </li>
     <li class="col-2 text-center">
-        <a class="nav-link {% if evaluation_tab %}active{% endif %}" href="{% url 'accounts:profile_reviews' %}">Avaliações</a>
+        <a class="nav-link {% if review_tab %}active{% endif %}" href="{% url 'accounts:profile_reviews' %}">Avaliações</a>
     </li>  
 </ul>

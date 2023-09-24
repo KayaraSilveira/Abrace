@@ -64,7 +64,7 @@ class Review(models.Model):
     def save(self, *args, **kwargs):
         reviewed_user_id = self.reviewed_user.cpf.replace('-', '')
         reviewed_user_id = reviewed_user_id.replace('.', '')
-        self.composite_pk = f"{reviewed_user_id}-{self.review_id}"
+        self.composite_pk = f"{reviewed_user_id}-{self.project.composite_pk}-{self.review_id}"
         super().save(*args, **kwargs)
 
     def __str__(self):

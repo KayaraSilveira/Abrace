@@ -15,7 +15,10 @@ urlpatterns = [
     path('profile/edit/categories', views.save_categories, name='save_categories'),
     path('profile/projects', views.MyProjectsList.as_view(), name='my_projects'),
     path('profile/reviews', views.review_view, name='profile_reviews'),
-    path('review/', views.review_create_view, name='review'),
-    path('review/create', views.send_review, name='send_review'),
+    path('profile/view/<str:cpf>/', views.ViewProfile.as_view(), name='view_profile'),
+    path('profile/view/<str:cpf>/reviews/', views.view_profile_review, name='view_profile_reviews'),
+    path('profile/view/<str:cpf>/projects/', views.ViewProfileProjects.as_view(), name='view_profile_projects'),
+    path('profile/view/<str:cpf>/projects/filter/<str:role>/', views.ViewProfileProjects.as_view(), name='view_profile_projects_filter'),
+    path('review/<str:reviewed_pk>/<str:project_pk>', views.ReviewCreateView.as_view(), name='review'),
     path('profile/projects/filter/<str:role>/', views.MyProjectsList.as_view(), name='my_projects_filter'),
 ]

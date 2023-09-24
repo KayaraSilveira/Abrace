@@ -1,0 +1,11 @@
+<ul class="d-flex horizontal-list justify-content-center my-4 align-items-center">
+    <li class="col-2 text-center">
+        <a class="nav-link {% if profile_tab %}active{% endif %}" href="{% url 'accounts:view_profile' profile.cpf %}">Perfil</a>
+    </li> 
+    <li class="col-2 text-center">
+        <a class="nav-link {% if project_tab %}active{% endif %}" href="{% url 'accounts:view_profile_projects' profile.cpf %}">Projetos</a>
+    </li>
+    <li class="col-2 text-center">
+        <a class="nav-link {% if review_tab %}active{% endif %}" href="{% url 'accounts:view_profile_reviews' profile.cpf %}">Avaliações</a>
+    </li>  
+</ul>

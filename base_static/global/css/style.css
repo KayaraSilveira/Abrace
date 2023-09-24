@@ -287,3 +287,27 @@ footer {
 .tags {
     font-size: 15px;
 }
+
+.review-profile-img {
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+}
+
+.review-body {
+    background-color: #eaeaeb;
+    border-radius: 15px;
+    padding: 10px;
+}
+
+.review-project-name {
+    font-size: 18px;
+}
+
+.star-gray {
+    color: #d6d7d8;
+}
+
+.star-yellow {
+    color:rgb(240, 197, 7);
+}

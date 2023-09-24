@@ -1,21 +1,18 @@
 {% extends 'global/base.html' %}
 
-{% block title %}Perfil - Projetos{% endblock title %}
+{% block title %}Perfil{% endblock title %}
 
 {% block content %}
 <div class="container">
-    {% include 'accounts/partials/nav-profile.html' %}
+    {% include 'accounts/partials/nav-view-profile.html' %}
     <div class="d-flex justify-content-between align-items-center my-2">
         <div>
-            <select class="form-select" id="filterSelectProfile">
+            <select class="form-select" id="filterSelectProfileView">
                 <option {% if not role %}selected{% endif %} value="Todos">Todos</option>
                 <option {% if role == 'Dono' %}selected{% endif %} value="Dono">Dono</option>
                 <option {% if role == 'Moderador' %}selected{% endif %} value="Moderador">Moderador</option>
                 <option {% if role == 'Membro' %}selected{% endif %} value="Membro">Membro</option>
             </select>
-        </div>
-        <div>
-            <a class="btn btn-outline-primary" href="{% url 'projects:project_new' %}"><i class="fa-solid fa-plus"></i> Criar Projeto</a>
         </div>
     </div>
     <div class="row justify-content-between my-1 h-100">
@@ -41,9 +38,8 @@
         </div>
     {% empty %} 
         <h4 class="text-center mt-5">
-            Você não possui projetos
+            Não foram encontrados projetos
         </h4>
-        <h5 class="text-center mb-5">Tente criar um novo projeto ou entrar em um projeto já existente</h5>
     {% endfor %}
     </div>
 
