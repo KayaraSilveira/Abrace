@@ -33,6 +33,7 @@ def testaCPF(strCPF):
         return True
     else:
         return False
+    
 class RegisterForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
@@ -89,8 +90,7 @@ class RegisterForm(ModelForm):
             'email': 'E-mail *',
             'password': 'Senha *'
         }
-
-    
+ 
     def clean_first_name(self):
         data = self.cleaned_data.get('first_name').strip()
 
@@ -141,12 +141,8 @@ class RegisterForm(ModelForm):
         cpfLimpo = data.replace('-', '')
         cpfLimpo = cpfLimpo.replace('.', '')
         
-        # valida = testaCPF(cpfLimpo)
-        # print(valida)
-        if testaCPF(cpfLimpo):
-            raise ValidationError(
-                'CPF inválido. Digite outro CPF.',
-            )
+        if not testaCPF(cpfLimpo):
+            raise ValidationError('CPF inválido. Confira o CPF digitado.')
         if exists:
             raise ValidationError(
                 'Já existe uma conta vinculada a este cpf', code='unique',
