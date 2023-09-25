@@ -70,7 +70,7 @@
     {% if is_member %}
     <div>
         <form></form>
-        <form action="{% url 'projects:send_post' %}"  method="POST">
+        <form class="post-form" action="{% url 'projects:send_post' %}"  method="POST">
             {% csrf_token %}
             <input type="hidden" name="project_composite_pk" value="{{project.composite_pk}}">
             {% for field in post_form %}

@@ -303,7 +303,13 @@ nav {
 
 .comment-form textarea.form-control {
     max-height: 40px;
+    min-height: 40px;
     border-radius: 20px;
+}
+
+.post-form textarea.form-control {
+    max-height: 100px;
+    min-height: 100px;
 }
 
 .comment-form .post-img {
