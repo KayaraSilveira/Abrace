@@ -25,8 +25,15 @@ class ProjectDashboard(View):
                 'form_categories': form_categories,
                 'project_active': project_active,
                 'project_img': project_img,
+                'return_page': self.get_return_page(),
             }
         )
+    
+    def get_return_page(self):
+        next_param = self.request.GET.get('next', None)
+        if not next_param:
+            next_param = "/"
+        return next_param
     
     def get_project(self, project_pk=None):
         project = None
@@ -142,7 +149,15 @@ class ProjectDetail(View):
                 'members': self.get_members(project),
                 'mods': self.get_mods(project),
                 'solicitation': self.get_solicitation(project),
+                'return_page': self.get_return_page(),
             })
+    
+    def get_return_page(self):
+        next_param = self.request.GET.get('next', None)
+        if not next_param:
+            next_param = "/"
+        return next_param
+    
     def get_solicitation(self, project):
         return project.solicitation.all()
 
@@ -212,8 +227,15 @@ class PostDetail(View):
                 'user': user,
                 'project': project,
                 'comment_form': CommentForm(),
-                'mods': self.get_mods(project)
+                'mods': self.get_mods(project),
+                'return_page': self.get_return_page(),
             })
+    
+    def get_return_page(self):
+        next_param = self.request.GET.get('next', None)
+        if not next_param:
+            next_param = "/"
+        return next_param
     
     def get_mods(self, project):
         return project.mods.all()
@@ -354,7 +376,14 @@ class MembersList(View):
                 'user': user,
                 'members': self.get_members(project),
                 'mods': self.get_mods(project),
+                'return_page': self.get_return_page(),
             })
+    
+    def get_return_page(self):
+        next_param = self.request.GET.get('next', None)
+        if not next_param:
+            next_param = "/"
+        return next_param
     
     def get_project(self, project_pk):
         project = get_object_or_404(Project, composite_pk=project_pk)
@@ -471,7 +500,14 @@ class Solicitation(View):
             context={
                 'project': project,
                 'solicitation': self.get_solicitation(project),
+                'return_page': self.get_return_page(),
             })
+    
+    def get_return_page(self):
+        next_param = self.request.GET.get('next', None)
+        if not next_param:
+            next_param = "/"
+        return next_param
     
     def get_project(self, project_pk):
         project = get_object_or_404(Project, composite_pk=project_pk)

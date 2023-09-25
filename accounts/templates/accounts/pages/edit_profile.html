@@ -5,7 +5,9 @@
 {% block content %}
 <div class="container">
     {% include 'accounts/partials/nav-profile.html' %}
-
+        <div class="my-3">
+            <a href="{{return_page}}" class="btn-back"><i class="fa-solid fa-chevron-left"></i> Voltar</a>
+        </div>
         <div class="row my-2 profile-detail">
             <div class="col-7">
                 <form></form>

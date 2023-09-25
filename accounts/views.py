@@ -141,8 +141,15 @@ class ProfileEdit(View):
                 'profile_page': True,
                 'profile_tab': True,
                 'user': profile,
+                'return_page': self.get_return_page(),
             }
         )
+    
+    def get_return_page(self):
+        next_param = self.request.GET.get('next', None)
+        if not next_param:
+            next_param = "/"
+        return next_param
 
     def get(self, request):
 
@@ -255,8 +262,15 @@ class ReviewCreateView(View):
             'form': form,
             'reviewed_user': reviewed_user,
             'project': project,
-            'user': author_user
+            'user': author_user,
+            'return_page': self.get_return_page(),
         })
+    
+    def get_return_page(self):
+        next_param = self.request.GET.get('next', None)
+        if not next_param:
+            next_param = "/"
+        return next_param
 
     def get(self, request, reviewed_pk, project_pk):
 

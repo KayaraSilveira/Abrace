@@ -4,6 +4,9 @@
 
 {% block content %}
 <div class="container">
+    <div class="my-3">
+        <a href="{{return_page}}" class="btn-back"><i class="fa-solid fa-chevron-left"></i> Voltar</a>
+    </div>
     {% if not project.status %}
     <div class="alert alert-danger" style="margin: 20px" role="alert">
         <p class="m-0"><b>Projeto Desativado</b></p>
@@ -21,7 +24,7 @@
                 {% if project.owner == user or user in mods %}
                     <div class="btn-group">
                         <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Membros
+                            Membros
                         </button>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="{% url 'projects:project_solicitation' project.composite_pk %}?next={{ request.path }}">Solicitações</a></li>
@@ -168,7 +171,7 @@
                 <h5 class="text-center">Torne-se membro para<br>visualizar e postar</h5>
             </div>
             <div class="col-4 text-left">
-                <a href="{% url 'projects:members_list' project.composite_pk %}?next={{ request.path }}"><h4 class="mb-3"><i class="fa-solid fa-users"></i> Membros</h4></a>
+                <a class="scale-hover" href="{% url 'projects:members_list' project.composite_pk %}?next={{ request.path }}"><h4 class="mb-3"><i class="fa-solid fa-users"></i> Membros</h4></a>
                 <div class="row justify-content-center">
                     <div class="col-2">
                         <img class="post-img" src="{{ project.owner.profile_picture.url }}" alt="Foto de perfil">

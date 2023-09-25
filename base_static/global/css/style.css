@@ -415,11 +415,26 @@ footer {
 }
 
 .btn-back {
-    border-radius: 5px;
-    padding: 10px 15px;
     font-size: 18px;
+    display: inline-block;
 }
 
 .btn-back:hover {
-    border: 1px solid #696d72;
+    transform: scale(1.1);
+}
+
+.fa-ellipsis-vertical {
+    display: inline-block;
+    padding: 10px 20px;
+}
+
+.fa-ellipsis-vertical:hover {
+    transform: scale(1.1);
+}
+.scale-hover {
+    display: inline-block;
+}
+
+.scale-hover:hover {
+    transform: scale(1.1);
 }

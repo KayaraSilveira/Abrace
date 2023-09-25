@@ -5,8 +5,8 @@
 {% block content %}
 <div class="container">
     <div>
-        <div class="my-3 back-project">
-            <a href="{% url 'projects:project_detail' project.composite_pk %}?next={{ request.path }}"><i class="fa-regular fa-circle-left"></i> Voltar ao Projeto</a>
+        <div class="my-3">
+            <a href="{{return_page}}" class="btn-back"><i class="fa-solid fa-chevron-left"></i> Voltar</a>
         </div>
         <div class="my-5">
             <div class="d-flex">
