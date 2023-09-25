@@ -4,8 +4,8 @@
 
 {% block content %}
 <div class="container">
-    <div class="my-3 back-project">
-        <a href="{% url 'projects:project_detail' project.composite_pk %}"><i class="fa-regular fa-circle-left"></i> Voltar ao Projeto</a>
+    <div class="my-3">
+        <a href="{{return_page}}" class="btn-back"><i class="fa-solid fa-chevron-left"></i> Voltar</a>
     </div>
     <div>
         <h4 class="mb-5 mt-4">Membros do Projeto</h4>
@@ -14,7 +14,7 @@
                 {% if member == user %}
                     <img class="post-img img-member" src="{{ project.owner.profile_picture.url }}" alt="Foto de perfil">
                 {% else %}
-                    <a href="{% url 'accounts:view_profile' project.owner.cpf %}"><img class="post-img img-member" src="{{ project.owner.profile_picture.url }}" alt="Foto de perfil"></a>
+                    <a href="{% url 'accounts:view_profile' project.owner.cpf %}?next={{ request.path }}"><img class="post-img img-member" src="{{ project.owner.profile_picture.url }}" alt="Foto de perfil"></a>
                 {% endif %}
             </div>
             <div class="col-11 d-flex flex-column justify-content-center">
@@ -22,7 +22,7 @@
                     {% if member == user %}
                         {{project.owner.first_name}} {{project.owner.last_name}}
                     {% else %}
-                        <a href="{% url 'accounts:view_profile' project.owner.cpf %}">{{project.owner.first_name}} {{project.owner.last_name}}</a>
+                        <a href="{% url 'accounts:view_profile' project.owner.cpf %}?next={{ request.path }}">{{project.owner.first_name}} {{project.owner.last_name}}</a>
                     {% endif %}
                 </h5>
                 <p class="m-0">Dono</p>
@@ -35,7 +35,7 @@
                 {% if member == user %}
                     <img class="post-img img-member" src="{{ member.profile_picture.url }}" alt="Foto de perfil">
                 {% else %}
-                    <a href="{% url 'accounts:view_profile' member.cpf %}"><img class="post-img img-member" src="{{ member.profile_picture.url }}" alt="Foto de perfil"></a>
+                    <a href="{% url 'accounts:view_profile' member.cpf %}?next={{ request.path }}"><img class="post-img img-member" src="{{ member.profile_picture.url }}" alt="Foto de perfil"></a>
                 {% endif %}
             </div>
             <div class="col-10 d-flex flex-column justify-content-center">
@@ -43,7 +43,7 @@
                     {% if member == user %}
                         {{member.first_name}} {{member.last_name}}
                     {% else %}
-                        <a href="{% url 'accounts:view_profile' member.cpf %}">{{member.first_name}} {{member.last_name}}</a>
+                        <a href="{% url 'accounts:view_profile' member.cpf %}?next={{ request.path }}">{{member.first_name}} {{member.last_name}}</a>
                     {% endif %}
                 </h5>
                 <p class="m-0">
@@ -72,7 +72,7 @@
                             <form>
                         </li>
                         {% endif %}
-                        <li><a class="dropdown-item" href="{% url 'accounts:review' member.pk project.composite_pk %}"><i class="fa-solid fa-star"></i> Avaliar</a></li>
+                        <li><a class="dropdown-item" href="{% url 'accounts:review' member.pk project.composite_pk %}?next={{ request.path }}"><i class="fa-solid fa-star"></i> Avaliar</a></li>
                         {% if is_owner %}
                             {% if member in mods %}
                             <li>

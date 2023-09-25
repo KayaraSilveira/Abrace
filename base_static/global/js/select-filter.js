@@ -8,7 +8,6 @@ document.addEventListener("DOMContentLoaded", function () {
             
             let url = '/accounts/profile/projects';
 
-            // Adicione o filtro como um parâmetro na URL
             if (selectedOption !== 'Todos') {
                 url += `/filter/${selectedOption}`;
             }
@@ -21,9 +20,8 @@ document.addEventListener("DOMContentLoaded", function () {
             const selectedOption = filterSelectView.options[filterSelectView.selectedIndex].value;
             
             let url = window.location.pathname;
-            url = url.substring(0, url.indexOf("/projects/") + "/projects/".length);
+            url = url.substring(0, url.indexOf("/filter/") + 1);
 
-            // Adicione o filtro como um parâmetro na URL
             if (selectedOption !== 'Todos') {
                 url += `filter/${selectedOption}`;
             }

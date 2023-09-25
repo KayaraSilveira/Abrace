@@ -4,6 +4,9 @@
 
 {% block content %}
 <div class="container">
+    <div class="my-3">
+        <a href="{{return_page}}" class="btn-back"><i class="fa-solid fa-chevron-left"></i> Voltar</a>
+    </div>
     {% if not project.status %}
     <div class="alert alert-danger" style="margin: 20px" role="alert">
         <p class="m-0"><b>Projeto Desativado</b></p>
@@ -21,18 +24,18 @@
                 {% if project.owner == user or user in mods %}
                     <div class="btn-group">
                         <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Membros
+                            Membros
                         </button>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="{% url 'projects:project_solicitation' project.composite_pk %}">Solicitações</a></li>
-                            <li><a href="{% url 'projects:members_list' project.composite_pk %}" class="dropdown-item">Todos Membros</a></li>
+                            <li><a class="dropdown-item" href="{% url 'projects:project_solicitation' project.composite_pk %}?next={{ request.path }}">Solicitações</a></li>
+                            <li><a href="{% url 'projects:members_list' project.composite_pk %}?next={{ request.path }}" class="dropdown-item">Todos Membros</a></li>
                         </ul>
                     </div>
                 {% elif is_member %}
-                    <a href="{% url 'projects:members_list' project.composite_pk %}" class="mx-2 btn btn-primary">Membros</a>
+                    <a href="{% url 'projects:members_list' project.composite_pk %}?next={{ request.path }}" class="mx-2 btn btn-primary">Membros</a>
                 {% endif %}
                 {% if project.owner == user %}
-                    <a class="btn btn-primary mx-2 " href="{% url 'projects:project_edit' project.composite_pk %}">Editar Projeto</a>
+                    <a class="btn btn-primary mx-2 " href="{% url 'projects:project_edit' project.composite_pk %}?next={{ request.path }}">Editar Projeto</a>
                 {% elif is_member %}
                 <form></form>
                 <form id="formLeaveProject" class="mx-2" action="{% url 'projects:project_leave' %}" method='POST'>
@@ -90,14 +93,14 @@
                         {% if post.autor == user %}
                             <img class="post-img" src="{{ post.autor.profile_picture.url }}" alt="Foto de perfil">
                         {% else %}
-                            <a href="{% url 'accounts:view_profile' post.autor.cpf %}"><img class="post-img" src="{{ post.autor.profile_picture.url }}" alt="Foto de perfil"></a>
+                            <a href="{% url 'accounts:view_profile' post.autor.cpf %}?next={{ request.path }}"><img class="post-img" src="{{ post.autor.profile_picture.url }}" alt="Foto de perfil"></a>
                         {% endif %}
                     </div>
                     <div class=col-10>
                         {% if post.autor == user %}
                             <h5 class="m-0">{{post.autor.first_name}} {{post.autor.last_name}}</h5>
                         {% else %}
-                            <a href="{% url 'accounts:view_profile' post.autor.cpf %}"><h5 class="m-0">{{post.autor.first_name}} {{post.autor.last_name}}</h5></a>
+                            <a href="{% url 'accounts:view_profile' post.autor.cpf %}?next={{ request.path }}"><h5 class="m-0">{{post.autor.first_name}} {{post.autor.last_name}}</h5></a>
                         {% endif %}
                         <div>
                             {% if project.owner == post.autor %}
@@ -137,7 +140,7 @@
                 </div>
                 
                 <div class="footer-post">
-                    <i class="fa-regular fa-comment"></i> <a href="{% url 'projects:post_detail' post.composite_pk %}">Comentários</a>
+                    <i class="fa-regular fa-comment"></i> <a href="{% url 'projects:post_detail' post.composite_pk %}?next={{ request.path }}">Comentários</a>
                 </div>
                 <hr>
             </div>
@@ -168,7 +171,7 @@
                 <h5 class="text-center">Torne-se membro para<br>visualizar e postar</h5>
             </div>
             <div class="col-4 text-left">
-                <a href="{% url 'projects:members_list' project.composite_pk %}"><h4 class="mb-3"><i class="fa-solid fa-users"></i> Membros</h4></a>
+                <a class="scale-hover" href="{% url 'projects:members_list' project.composite_pk %}?next={{ request.path }}"><h4 class="mb-3"><i class="fa-solid fa-users"></i> Membros</h4></a>
                 <div class="row justify-content-center">
                     <div class="col-2">
                         <img class="post-img" src="{{ project.owner.profile_picture.url }}" alt="Foto de perfil">

@@ -141,8 +141,15 @@ class ProfileEdit(View):
                 'profile_page': True,
                 'profile_tab': True,
                 'user': profile,
+                'return_page': self.get_return_page(),
             }
         )
+    
+    def get_return_page(self):
+        next_param = self.request.GET.get('next', None)
+        if not next_param:
+            next_param = "/"
+        return next_param
 
     def get(self, request):
 
@@ -255,8 +262,15 @@ class ReviewCreateView(View):
             'form': form,
             'reviewed_user': reviewed_user,
             'project': project,
-            'user': author_user
+            'user': author_user,
+            'return_page': self.get_return_page(),
         })
+    
+    def get_return_page(self):
+        next_param = self.request.GET.get('next', None)
+        if not next_param:
+            next_param = "/"
+        return next_param
 
     def get(self, request, reviewed_pk, project_pk):
 
@@ -300,7 +314,9 @@ class ReviewCreateView(View):
 )
 class ViewProfile(View):
 
-    def render_template(self, profile, categories):
+    def render_template(self, profile, categories, projects, role):
+        reviews = Review.objects.filter(reviewed_user=profile)
+        user = CustomUser.objects.get(pk=self.request.user.pk)
         return render(
             self.request,
             'accounts/pages/view_profile.html',
@@ -308,34 +324,15 @@ class ViewProfile(View):
                 'profile': profile,
                 'profile_tab': True,
                 'categories': categories,
-            }
-        )
-
-    def get(self, request, cpf):
-        profile = CustomUser.objects.get(cpf=cpf)
-        categories = Category.objects.all()
-        return self.render_template(profile, categories)
-    
-@method_decorator(
-    login_required(login_url='accounts:login', redirect_field_name='next'),
-    name='dispatch'
-)
-class ViewProfileProjects(View):
-
-    def render_template(self, projects, profile, role):
-        return render(
-            self.request,
-            'accounts/pages/view_profile_projects.html',
-            context={
+                'reviews': reviews,
+                'user': user,
                 'projects': projects,
-                'project_tab': True,
-                'profile': profile,
                 'role': role,
+                'return_page': self.get_return_page(),
             }
         )
-
-    def get(self, request, cpf, role=None):
-
+    
+    def get_projects(self, cpf, role=None):
         profile = CustomUser.objects.get(cpf=cpf)
 
         if role:
@@ -350,17 +347,17 @@ class ViewProfileProjects(View):
             projects_members = Project.objects.filter(members=profile, status=True)
             projects = projects_owner.union(projects_members)
 
-        return self.render_template(projects, profile, role)
+        return projects
+    
+    def get_return_page(self):
+        next_param = self.request.GET.get('next', None)
+        if not next_param:
+            next_param = "/"
+        return next_param
 
-@login_required(login_url='accounts:login', redirect_field_name='next')
-def view_profile_review(request, cpf):
-    profile = get_object_or_404(CustomUser, cpf=cpf)
-    reviews = Review.objects.filter(reviewed_user=profile)
-    user = CustomUser.objects.get(pk=request.user.pk)
-
-    return render(request, 'accounts/pages/view_reviews.html', {
-        'profile': profile,
-        'reviews': reviews,
-        'review_tab': True,
-        'user': user,
-    })
+    def get(self, request, cpf, role=None):
+        profile = CustomUser.objects.get(cpf=cpf)
+        categories = Category.objects.all()
+        projects = self.get_projects(cpf, role)
+        return self.render_template(profile, categories, projects, role)
+    

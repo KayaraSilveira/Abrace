@@ -4,6 +4,9 @@
 
 {% block content %}
 <div class="container">
+        <div class="my-3">
+            <a href="{{return_page}}" class="btn-back"><i class="fa-solid fa-chevron-left"></i> Voltar</a>
+        </div>
         <div class="my-2">
             <h1 class="my-3 text-center">Avaliação</h1>
             <h5> Avaliação de {{ reviewed_user.first_name }} no {{ project.name }}</h5>

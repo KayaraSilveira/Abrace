@@ -117,6 +117,12 @@ nav {
     width: 32%;
  }
 
+ .view-profile-project-box {
+    background-color: #eaeaeb;
+    width: 47%;
+ }
+
+
  .profile-project-cover {
     max-width: 100%;
     border-radius: 15px;
@@ -125,6 +131,10 @@ nav {
  .profile-project-box h3 {
     font-size: 18px;
  }
+
+ .view-profile-project-box h3 {
+    font-size: 15px;
+}
 
  .profile-project-box p {
     margin-bottom: 0;
@@ -288,10 +298,18 @@ footer {
     font-size: 15px;
 }
 
+.view-profile-project-box .tags {
+    font-size: 13px;
+}
+
+.review-project-name span {
+    font-weight: 500;
+}
+
 .review-profile-img {
     border-radius: 50%;
-    width: 120px;
-    height: 120px;
+    width: 60px;
+    height: 60px;
 }
 
 .review-body {
@@ -300,8 +318,20 @@ footer {
     padding: 10px;
 }
 
+.review-body p {
+    margin-bottom: 0;
+}
+
 .review-project-name {
-    font-size: 18px;
+    font-size: 15px;
+}
+
+.review-profile-name {
+    font-size: 15px;
+}
+
+.review-profile-body {
+    font-size: 15px;
 }
 
 .star-gray {
@@ -368,4 +398,43 @@ footer {
 .imgPhoto-cover:hover{
     background-color: rgb(180, 180, 180);
     border: 4px solid #b3b5b8;
+}
+
+.tag-bg {
+    margin-right: 5px;
+    margin-left: 0;
+    font-size: 14px;
+    white-space: nowrap;
+    padding: 0;
+}
+
+.tag-bg p {
+    background-color: #dbe9f8;
+    border-radius: 5px;
+    padding: 2px 8px;
+}
+
+.btn-back {
+    font-size: 18px;
+    display: inline-block;
+}
+
+.btn-back:hover {
+    transform: scale(1.1);
+}
+
+.fa-ellipsis-vertical {
+    display: inline-block;
+    padding: 10px 20px;
+}
+
+.fa-ellipsis-vertical:hover {
+    transform: scale(1.1);
+}
+.scale-hover {
+    display: inline-block;
+}
+
+.scale-hover:hover {
+    transform: scale(1.1);
 }
