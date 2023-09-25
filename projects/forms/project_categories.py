@@ -15,10 +15,18 @@ class ProjectCategoriesForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['categories'].queryset = Category.objects.all() 
+        self.fields['categories'] = forms.ModelMultipleChoiceField(
+            queryset=Category.objects.all() , 
+            widget=forms.SelectMultiple(attrs={'class': 'js-choice form-control'}),
+            required=False,
+            label='Categorias',
+        )
 
     class Meta:
         model = Project
         fields = [
             'categories',
         ]
+        widgets = {
+            'categories': forms.SelectMultiple()
+        }

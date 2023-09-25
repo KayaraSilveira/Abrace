@@ -7,12 +7,12 @@
     {% include 'accounts/partials/nav-profile.html' %}
 
     <div class="row my-5 align-items-center ">
-        <div class="col-10 row align-items-center justify-content-between">
+        <div class="col-9 row align-items-center justify-content-between">
             <img class="profile-img" src="{{ profile.profile_picture.url }}" alt="Imagem de Perfil">
             <h2 class="col-9">{{profile.first_name}} {{profile.last_name}}</h2>
         </div>
-        <div class="col-2">
-            <a class="btn btn-info" href="{% url 'accounts:profile_edit' %}?next={{ request.path }}">Editar</a>
+        <div class="col-3">
+            <a class="btn btn-primary" href="{% url 'accounts:profile_edit' %}?next={{ request.path }}"><i class="fa-solid fa-pen-to-square"></i> Editar Perfil</a>
         </div>
     </div>
 

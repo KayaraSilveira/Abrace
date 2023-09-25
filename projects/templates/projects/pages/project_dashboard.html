@@ -8,9 +8,13 @@
             <a href="{{return_page}}" class="btn-back"><i class="fa-solid fa-chevron-left"></i> Voltar</a>
         </div>
         <div class="my-2">
+            {% if not project_pk %}
             <h1 class="mt-5 mb-1 text-center">Projeto</h1>
             <h3 class="mb-2 text-center">Preencha com as informações do seu Projeto</h3>
+            {% endif %}
+            
             <div class="row">
+                {% comment "" %}
                 {% if project_pk %}
                     <div class="col-3">
                         <form></form>
@@ -21,51 +25,76 @@
                                 {{ form_categories }}
                             </div>
                             <div class="form-group-submit text-center my-4">
-                                <button class="btn btn-info" type="submit">Salvar Categorias</button>
+                                <button class="btn btn-primary" type="submit">Salvar Categorias</button>
                             </div>
                         </form>
                     </div>
                 {% endif %}
+                {% endcomment %}
                 <div class="col">
                     {% if project_pk %}
-                    <h5>Informações Gerais</h5>
+                    <h5 class="mt-4">Informações Gerais</h5>
                     {% endif %}
                     <form></form>
                     <form method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
-                        {% for field in form %}
-                            <div class="my-3">
-                                {% if field.label == 'Imagem de capa *' %}
-                                <div class="max-width-cover text-center">
-                                    <label class="form-label" for="{{ field.id_for_label }}">{{field.label}}</label>
-                                    <div class="imageContainer">
-                                        <img class="imgPhoto-cover" {% if project_pk %}src="{{ project_img.url }}"{% else %}src="{% static 'global/img/bg-default.jpg' %}"{% endif %} alt="Selecione uma imagem" id="imgPhoto">
+                        <div class="row">
+                            <div class="col-md-6">
+                                {% for field in form %}
+                                    {% if field.label != 'Imagem de capa *' %}
+                                        <div class="my-3">
+                                            <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                            {{ field }}
+                                            <div class="error-list">
+                                                {{ field.errors }}
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                            <div class="col-md-6">
+                                <div class="my-3">
+                                    <label class="form-label" for="{{ form.cover_photo.id_for_label }}">{{ form.cover_photo.label }}</label>
+                                    <div class="max-width-cover text-center">
+                                        <div class="imageContainer">
+                                            <img class="imgPhoto-cover" {% if project_pk %}src="{{ project_img.url }}"{% else %}src="{% static 'global/img/bg-default.jpg' %}"{% endif %} alt="Selecione uma imagem" id="imgPhoto">
+                                        </div>
+                                    </div>
+                                    <input class="d-none" type="file" name="{{ form.cover_photo.name }}" id="{{ form.cover_photo.id_for_label }}" {% if project_pk %}value="{{ project_img.url }}"{% endif %}/>
+                                    <div class="error-list">
+                                        {{ form.cover_photo.errors }}
                                     </div>
                                 </div>
-                                <input class="d-none" type="file" name="{{ form.cover_photo.name }}" id="{{ form.cover_photo.id_for_label }}" {% if project_pk %}value="{{ project_img.url }}"{% endif %}/>
-                                {% else %}
-                                    <label class="form-label" for="{{ field.id_for_label }}">{{field.label}}</label>
-                                    {{field}}
-                                {% endif %}
-                                <div class="error-list">
-                                    {{field.errors}}
-                                </div>
                             </div>
-                        {% endfor %}
-                        <div class="form-group-submit mt-5 mb-5 text-center">
-                            <button class="btn btn-info" type="submit">{% if project_pk %}Salvar Informações{% else %}Próximo{% endif %}</button>
+                        </div>
+                        <div class="form-group-submit mt-5 mb-5 text-end">
+                            <button class="btn btn-primary" type="submit">{% if project_pk %}Salvar Informações{% else %}Próximo <i class="fa-solid fa-chevron-right"></i>{% endif %}</button>
                         </div>
                     </form>
-                    <hr>
+                    
+                    
                     {% if project_pk %}
-                    <h5 class="mt-3">Desativação e Exclusão do Projeto</h5>
+                    <hr>
+                    <h5 class="mt-3">Categorias do Projeto</h5>
+                    <form></form>
+                        <form method="post" action="{% url 'projects:save_categories' project_pk %}" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            {% for field in form_categories %}
+                                {{field}}
+                            {% endfor %}
+                            <div class="form-group-submit text-end my-4">
+                                <button class="btn btn-primary" type="submit">Salvar Categorias</button>
+                            </div>
+                        </form>
+                    <hr>
+                    <h5 class="mt-3">Desativação e Exclusão</h5>
                     <div class="mt-4 mb-5">
                         <div class="d-flex justify-content-between align-items-center my-4">
                             <div>
                                 <p class="my-0">Ativar/Desativar projeto </p>
                                 <span class="form-text m-b-none">Ative para publicar seu projeto. Desative caso queira deixar o projeto inacessível.</span>
                             </div>
-                            <input {% if project_active %}checked{% endif %} onchange="switchActive()" id="input-switch" type="checkbox" data-toggle="switchbutton" data-onlabel="Ativo" data-offlabel="Desativado" data-onstyle="success" data-offstyle="danger">
+                            <input class="custom-switch" {% if project_active %}checked{% endif %} onchange="switchActive()" id="input-switch" type="checkbox" data-toggle="switchbutton" data-onlabel="Ativo" data-offlabel="Desativado" data-onstyle="primary" data-offstyle="danger">
                         </div>
                         <div class="d-flex justify-content-between align-items-center my-4">
                             <div>

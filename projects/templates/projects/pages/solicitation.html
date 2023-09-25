@@ -15,25 +15,25 @@
             <div class="col-1">
                 <a href="{% url 'accounts:view_profile' user.cpf %}?next={{ request.path }}"><img class="post-img img-member" src="{{ user.profile_picture.url }}" alt="Foto de perfil"></a>
             </div>
-            <div class="col-7 d-flex flex-column justify-content-center">
+            <div class="col-6 d-flex flex-column justify-content-center">
                 <a href="{% url 'accounts:view_profile' user.cpf %}?next={{ request.path }}"><h5 class="m-0">
                     {{user.first_name}} {{user.last_name}}
                 </h5></a>
             </div>
-            <div class="col-4 row justify-content-around align-items-center">
+            <div class="col-5 row justify-content-around align-items-center">
                 <form></form>
                 <form class="col-5" action="{% url 'projects:solicitation_accept' %}" method='POST'>
                     {% csrf_token %}
                     <input type="hidden" name="project_composite_pk" value="{{project.composite_pk}}">
                     <input type="hidden" name="user" value="{{user.cpf}}">
-                    <button type="submit" class="btn btn-success">Aceitar</button>
+                    <button type="submit" class="btn btn-success"><i class="fa-solid fa-user-plus"></i> Aceitar</button>
                 <form> 
                     <form></form>
-                <form class="col-5" action="{% url 'projects:solicitation_reject' %}" method='POST'>
+                <form class="col-6" action="{% url 'projects:solicitation_reject' %}" method='POST'>
                     {% csrf_token %}
                     <input type="hidden" name="project_composite_pk" value="{{project.composite_pk}}">
                     <input type="hidden" name="user" value="{{user.cpf}}">
-                    <button type="submit" class="btn btn-danger">Recusar</button>
+                    <button type="submit" class="btn btn-danger"><i class="fa-solid fa-user-xmark"></i> Recusar</button>
                 <form> 
             </div>
         </div>   
