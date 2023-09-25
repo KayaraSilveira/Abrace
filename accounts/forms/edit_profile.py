@@ -11,7 +11,7 @@ class EditProfileForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['profile_picture'].widget.attrs.update({'class': 'form-control-file'})
+        self.fields['profile_picture'].widget.attrs.update({'class': 'form-control-file d-none', 'required':'required', 'id': 'flImage'})
         self.fields['first_name'].widget.attrs.update({'class': 'form-control', 'required':'required'})
         self.fields['last_name'].widget.attrs.update({'class': 'form-control', 'required':'required'})
         self.fields['city'].widget.attrs.update({'class': 'form-control', 'required':'required'})

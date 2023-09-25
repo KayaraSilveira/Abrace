@@ -15,7 +15,7 @@ from django.http import Http404
 )
 class ProjectDashboard(View):
 
-    def render_template(self, form, project_pk, form_categories, project_active=False):
+    def render_template(self, form, project_pk, form_categories, project_active=False, project_img=False):
         return render(
             self.request,
             'projects/pages/project_dashboard.html',
@@ -24,6 +24,7 @@ class ProjectDashboard(View):
                 'project_pk': project_pk,
                 'form_categories': form_categories,
                 'project_active': project_active,
+                'project_img': project_img,
             }
         )
     
@@ -41,12 +42,14 @@ class ProjectDashboard(View):
         form = ProjectForm(instance=project)
         form_categories = None
         project_active = False
+        project_img = False
 
         if project_pk:
             form_categories = ProjectCategoriesForm(instance=project)
             project_active = project.status
+            project_img = project.cover_photo
 
-        return self.render_template(form, project_pk, form_categories, project_active)
+        return self.render_template(form, project_pk, form_categories, project_active, project_img)
 
     def post(self, request, project_pk=None):
 
@@ -81,12 +84,14 @@ class ProjectDashboard(View):
 
         project_active = False
         form_categories = None
+        project_img = False
         if project_pk:
             form_categories = ProjectCategoriesForm(instance=project)
             project_active = project.status
+            project_img = project.cover_photo
 
         messages.error(request, 'Há campos incorretos no formulário')
-        return self.render_template(form, project_pk, form_categories, project_active)
+        return self.render_template(form, project_pk, form_categories, project_active, project_img)
 
 
 @login_required(login_url='accounts:login', redirect_field_name='next')    

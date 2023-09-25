@@ -103,3 +103,24 @@ ul.errorlist li {
 .form-control.has-error {
     border-color: #FF5733; /* Cor da borda para campos com erros */
 }
+
+.max-width {
+    margin: 0px auto;;
+    max-width: 150px;
+    width: 100%;
+}
+
+#imgPhoto {
+    margin-top: 10%;
+    width: 150px;
+    height: 150px;
+    background-color: #eee;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background .3s;
+}
+
+#imgPhoto:hover{
+    background-color: rgb(180, 180, 180);
+    border: 4px solid #6294f1;
+}

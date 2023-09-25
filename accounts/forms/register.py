@@ -11,7 +11,7 @@ class RegisterForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['profile_picture'].widget.attrs.update({'class': 'form-control-file', 'required':'required'})
+        self.fields['profile_picture'].widget.attrs.update({'class': 'form-control-file d-none', 'required':'required', 'id': 'flImage'})
         self.fields['cpf'].widget.attrs.update({'class': 'form-control cpf-input', 'required':'required'})
         self.fields['first_name'].widget.attrs.update({'class': 'form-control', 'required':'required'})
         self.fields['last_name'].widget.attrs.update({'class': 'form-control', 'required':'required'})

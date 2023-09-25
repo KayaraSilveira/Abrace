@@ -80,8 +80,8 @@ nav {
 
 .profile-img {
     border-radius: 50%;
-    width: 150px;
-    height: 110px;
+    width: 200px;
+    height: 180px;
 }
 
 .category-box {
@@ -327,4 +327,45 @@ footer {
 
 .star-yellow {
     color:rgb(240, 197, 7) !important;
+}
+
+.max-width-profile {
+    margin: 0px auto;;
+    max-width: 150px;
+    width: 100%;
+}
+
+.imgPhoto-profile {
+    margin-top: 10%;
+    width: 150px;
+    height: 150px;
+    background-color: #eee;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background .3s;
+}
+
+.imgPhoto-profile:hover{
+    background-color: rgb(180, 180, 180);
+    border: 4px solid #b3b5b8;
+}
+
+.max-width-cover {
+    margin: 25px auto;;
+    max-width: 600px;
+    width: 100%;
+}
+
+.imgPhoto-cover {
+    width: 600px;
+    height: 300px;
+    background-color: #eee;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background .3s;
+}
+
+.imgPhoto-cover:hover{
+    background-color: rgb(180, 180, 180);
+    border: 4px solid #b3b5b8;
 }

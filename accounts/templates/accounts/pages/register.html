@@ -31,7 +31,15 @@
                 {% csrf_token %}
                 {% for field in form %}
                     <div class="form-group">
-                        <label class="form-label" for="{{ field.id_for_label }}">{{field.label}}</label>
+                        {% if field.label == 'Foto de Perfil' %}
+                            <div class="max-width text-center">
+                                <div class="imageContainer">
+                                    <img src="{% static 'global/img/user.jpg' %}" alt="Selecione uma imagem" id="imgPhoto">
+                                </div>
+                            </div>
+                        {% else %}
+                            <label class="form-label" for="{{ field.id_for_label }}">{{field.label}}</label>
+                        {% endif %}
                          {{field}}
             
                         <div class="error-list">
@@ -50,7 +58,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/0.9.0/jquery.mask.min.js" integrity="sha512-oJCa6FS2+zO3EitUSj+xeiEN9UTr+AjqlBZO58OPadb2RfqwxHpjTU8ckIC8F4nKvom7iru2s8Jwdo+Z8zm0Vg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
+    <script src="{% static 'accounts/js/img-input.js' %}"></script>
     <script>
         $(document).ready(function () {
             $('.cpf-input').mask('000.000.000-00');
