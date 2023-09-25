@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.forms import ModelForm
 from django.core.exceptions import ValidationError
 from accounts.models import CustomUser
+from datetime import date, timedelta
 
 #testa o cpf
 def testaCPF(strCPF):
@@ -149,6 +150,20 @@ class RegisterForm(ModelForm):
             )
 
         return data
+    
+    def clean_birth_date(self):
+        birth_date = self.cleaned_data.get('birth_date')
+        min_birth_date = date.today() - timedelta(days=150*365)  
+
+        if birth_date >= date.today() or birth_date <= min_birth_date:
+            raise ValidationError(
+                'Digite uma data de nascimento válida.',
+                code='invalid',
+            )
+
+        return birth_date
+
+
 
     def clean(self, *args, **kwargs):
         super_clean = super().clean(*args, **kwargs)

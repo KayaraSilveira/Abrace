@@ -86,6 +86,25 @@ a:hover {
     color: inherit;
 }
 
+/* Estilos para a lista de erros */
+ul.errorlist {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    color: #FF5733; /* Cor para os erros de formulário */
+}
+
+/* Estilos para cada item da lista de erros */
+ul.errorlist li {
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+/* Estilos para os campos de entrada com erros */
+.form-control.has-error {
+    border-color: #FF5733; /* Cor da borda para campos com erros */
+}
+
 .toast-success {
     background-color: var(--color-green);
     color: #fff;
