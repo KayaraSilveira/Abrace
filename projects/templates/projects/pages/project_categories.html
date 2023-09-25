@@ -9,15 +9,14 @@
         <h3 class="mb-5 text-center">Selecione as Categorias do seu Projeto</h3>
         <div class="mx-auto w-50">
             <form></form>
-            <form method="post" action="{% url 'projects:save_categories' project_pk %}" enctype="multipart/form-data">
-                <label class="d-block form-label text-center">Categorias</label>
-                <div class="category-box category-box-edit">
+                <form method="post" action="{% url 'projects:save_categories' project_pk %}" enctype="multipart/form-data">
                     {% csrf_token %}
-                    {{ form_categories }}
-                </div>
-                <div class="form-group-submit text-center my-4">
-                    <button class="btn btn-primary" type="submit"><i class="fa-solid fa-check"></i> Criar Projeto</button>
-                </div>
+                    {% for field in form_categories %}
+                        {{field}}
+                    {% endfor %}
+                    <div class="form-group-submit text-end my-4">
+                        <button class="btn btn-primary" type="submit"><i class="fa-solid fa-check"></i> Criar Projeto</button>
+                    </div>
             </form>
         </div>
     </div>
