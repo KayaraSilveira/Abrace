@@ -6,7 +6,33 @@ from django.forms import ModelForm
 from django.core.exceptions import ValidationError
 from accounts.models import CustomUser
 
+#testa o cpf
+def testaCPF(strCPF):
+      # Calcula o primeiro dígito verificador
+    soma = 0
+    for i in range(9):
+        soma += int(strCPF[i]) * (10 - i)
+    resto = soma % 11
+    if resto < 2:
+        digito1 = 0
+    else:
+        digito1 = 11 - resto
 
+    # Calcula o segundo dígito verificador
+    soma = 0
+    for i in range(10):
+        soma += int(strCPF[i]) * (11 - i)
+    resto = soma % 11
+    if resto < 2:
+        digito2 = 0
+    else:
+        digito2 = 11 - resto
+
+    # Verifica se os dígitos verificadores calculados correspondem aos dígitos reais
+    if int(strCPF[9]) == digito1 and int(strCPF[10]) == digito2:
+        return True
+    else:
+        return False
 class RegisterForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
@@ -64,8 +90,7 @@ class RegisterForm(ModelForm):
             'password': 'Senha *'
         }
 
-
-
+    
     def clean_first_name(self):
         data = self.cleaned_data.get('first_name').strip()
 
@@ -109,11 +134,19 @@ class RegisterForm(ModelForm):
             )
 
         return data
-    
+
     def clean_cpf(self):
         data = self.cleaned_data.get('cpf', '')
         exists = CustomUser.objects.filter(cpf=data).exists()
-
+        cpfLimpo = data.replace('-', '')
+        cpfLimpo = cpfLimpo.replace('.', '')
+        
+        # valida = testaCPF(cpfLimpo)
+        # print(valida)
+        if testaCPF(cpfLimpo):
+            raise ValidationError(
+                'CPF inválido. Digite outro CPF.',
+            )
         if exists:
             raise ValidationError(
                 'Já existe uma conta vinculada a este cpf', code='unique',
