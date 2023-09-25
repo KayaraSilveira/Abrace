@@ -2,8 +2,8 @@
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container">
         <div class="d-flex align-items-center justify-content-between w-100">
-            <a class="navbar-brand" href="{% url 'projects:projects' %}"><img src="{% static 'global/img/logo.png' %}" alt="Abrace" class="logo"></a>
-            <ul class="navbar-nav">
+            <a class="navbar-brand" href="{% url 'projects:projects' %}"><img src="{% static 'global/img/logo.png' %}" alt="Abrace" class="logo"> Abrace</a>
+            <ul class="navbar-nav nav-header">
                 <li class="nav-item">
                     <a class="nav-link {% if projects_page %}active{% endif %}" href="{% url 'projects:projects' %}">Projetos</a>
                 </li>
@@ -15,7 +15,7 @@
             <div>
                 <form  action="{% url 'accounts:logout' %}" method='POST'>
                     {% csrf_token %}
-                    <button type="submit" class="btn btn-danger">Sair</button>
+                    <button type="submit" class="btn btn-primary">Sair <i class="fa-solid fa-power-off"></i></button>
                 <form>
             </div>
         </div>

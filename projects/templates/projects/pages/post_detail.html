@@ -82,33 +82,35 @@
             <hr>
         </div>
         {% for comment in comments %}
-            <div class="d-flex comment-box">
-                <div class="pr-2">
-                    {% if comment.autor == user %}
-                        <img class="post-img" src="{{ comment.autor.profile_picture.url }}" alt="Foto de perfil">
-                    {% else %}
-                        <a href="{% url 'accounts:view_profile' comment.autor.cpf %}?next={{ request.path }}"><img class="post-img" src="{{ comment.autor.profile_picture.url }}" alt="Foto de perfil"></a>
-                    {% endif %}
-                </div>
-                <div>
-                    {% if comment.autor == user %}
-                        <h5 class="m-0">{{comment.autor.first_name}} {{comment.autor.last_name}}</h5>
-                    {% else %}
-                        <a href="{% url 'accounts:view_profile' comment.autor.cpf %}?next={{ request.path }}"><h5 class="m-0">{{comment.autor.first_name}} {{comment.autor.last_name}}</h5></a>
-                    {% endif %}
-                    <div>
-                        {% if project.owner == comment.autor %}
-                            <p>Dono</p>
+            <div class="my-5">
+                <div class="d-flex comment-box mb-0">
+                    <div class="pr-2">
+                        {% if comment.autor == user %}
+                            <img class="post-img" src="{{ comment.autor.profile_picture.url }}" alt="Foto de perfil">
                         {% else %}
-                            <p>Membro</p>
+                            <a href="{% url 'accounts:view_profile' comment.autor.cpf %}?next={{ request.path }}"><img class="post-img" src="{{ comment.autor.profile_picture.url }}" alt="Foto de perfil"></a>
                         {% endif %}
                     </div>
+                    <div>
+                        {% if comment.autor == user %}
+                            <h5 class="m-0">{{comment.autor.first_name}} {{comment.autor.last_name}}</h5>
+                        {% else %}
+                            <a href="{% url 'accounts:view_profile' comment.autor.cpf %}?next={{ request.path }}"><h5 class="m-0">{{comment.autor.first_name}} {{comment.autor.last_name}}</h5></a>
+                        {% endif %}
+                        <div>
+                            {% if project.owner == comment.autor %}
+                                <p>Dono</p>
+                            {% else %}
+                                <p>Membro</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="my-0">
+                    <p>{{comment.text}}</p>
                 </div>
             </div>
-            <div class="my-0">
-                <p>{{comment.text}}</p>
-            </div>
-            <hr>
+            
             {% empty %}
             <p class="text-center my-4">Ainda não há comentários nessa postagem</p>
         {% endfor %}

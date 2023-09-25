@@ -1,4 +1,72 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600;700;800&display=swap');
+:root {
+    --primary-color: #a4cde0;
+    --secondary-color: #738ce6;
+    --other-blue:  #7ec5e6;
+    --color-red: #ef6666;
+    --color-green: rgb(41, 139, 79);
+    --light-gray: #eaeaeb;
+
+}
+
+
+.navbar-brand {
+    color: white;
+    font-size: 15px;
+    text-transform: uppercase;
+    letter-spacing: 0.2rem;
+    font-weight: 700;
+}
+
+.navbar-brand:hover {
+    color: white;
+}
+
+.btn-primary {
+    background-color: var(--secondary-color);
+    border: 1x solid var(--secondary-color);
+    font-weight: 500;
+}
+
+.btn-primary:hover, .btn-primary:active {
+    background-color: #5676e7;
+}
+
+.btn-danger {
+    background-color: var(--color-red);
+    border: 1x solid var(--color-red);
+    font-weight: 500;
+}
+
+.btn-danger:hover {
+    background-color: #ee5555;
+}
+
+.btn-success {
+    background-color: var(--color-green);
+    border: 1x solid var(--color-green);
+    font-weight: 500;
+}
+
+.btn-outline-primary {
+    border: 1px solid var(--secondary-color);
+    color: var(--secondary-color);
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--secondary-color);
+    border: 1px solid var(--secondary-color);
+}
+
+.btn-outline-danger {
+    border: 1px solid var(--color-red);
+    color: var(--color-red);
+}
+
+.btn-outline-danger:hover {
+    background-color: var(--color-red);
+    border: 1px solid var(--color-red);
+}
 
 * {
     font-family: 'Montserrat', sans-serif;
@@ -19,7 +87,7 @@ a:hover {
 }
 
 .toast-success {
-    background-color: #4CAF50;
+    background-color: var(--color-green);
     color: #fff;
 }
 
@@ -33,25 +101,22 @@ a:hover {
 }
 
 nav {
-    background-color: #7CBFD8;
-    font-weight: 600;
+    background: linear-gradient(to right, var(--primary-color), var(--other-blue));
+    font-weight: 500;
+}
+
+.nav-header .nav-item .nav-link {
+    color: white;
+}
+
+.nav-header .nav-item .nav-link:hover {
+    font-weight: 700;
 }
 
 .btn {
     font-weight: 500;
     border-radius: 25px;
-    padding: 5px 40px;
-}
-
-.btn-info {
-    background-color: #62b7d6;
-    border: none;
-    color: white;
-}
-
-.btn-info:hover {
-    background-color: #86cee9;
-    color: white;
+    padding: 7px 40px;
 }
 
 .horizontal-list {
@@ -71,21 +136,25 @@ nav {
 }
 
 .profile-detail .form-control {
-    background-color: #ECECEC;
+    background-color: var(--light-gray);
     border: none;
     border-radius: 20px;
     font-size: 18px;
     width: 80%;
 }
 
+.category-profile i.fa-square-check {
+    color: var(--secondary-color);
+}
+
 .profile-img {
     border-radius: 50%;
     width: 200px;
-    height: 180px;
+    height: 170px;
 }
 
 .category-box {
-    background-color: #ECECEC;
+    background-color: var(--light-gray);
     padding: 25px;
     border-radius: 15px;
     max-height: 300px;
@@ -111,14 +180,14 @@ nav {
  }
 
  .profile-project-box {
-    background-color: #d6d7d8;
+    background-color: var(--light-gray);
     padding: 25px;
     border-radius: 15px;
     width: 32%;
  }
 
  .view-profile-project-box {
-    background-color: #eaeaeb;
+    background-color: var(--light-gray);
     width: 47%;
  }
 
@@ -146,11 +215,11 @@ nav {
  }
 
  i.member {
-    color: rgb(40, 122, 65);
+    color: var(--color-green);
  }
 
  i.mod {
-    color: rgb(88, 158, 238);
+    color: var(--secondary-color);
  }
 
  .project-detail-img {
@@ -160,7 +229,7 @@ nav {
  }
 
  .project-box {
-    background-color: #eaeaeb;
+    background: linear-gradient(to top, #f2f3fa, #dde3fc);
     padding: 25px;
     margin: 20px;
     border-radius: 15px;
@@ -202,9 +271,6 @@ nav {
     padding: 5px 10px;
 }
 
-textarea.form-control {
-    max-height: 100px;
-}
 
 .back-project a {
     color: inherit;
@@ -280,11 +346,11 @@ footer {
 }
 
 .category-item  a:hover{
-    color: #62b7d6;
+    color: var(--secondary-color);
 }
 
 .category-item  a.active{
-    color: #62b7d6;
+    color: var(--secondary-color);
     font-weight: 500;
 }
 
@@ -313,7 +379,7 @@ footer {
 }
 
 .review-body {
-    background-color: #eaeaeb;
+    background-color: var(--light-gray);
     border-radius: 15px;
     padding: 10px;
 }
@@ -381,14 +447,18 @@ footer {
 }
 
 .max-width-cover {
-    margin: 25px auto;;
+    margin: 0px auto;;
     max-width: 600px;
     width: 100%;
 }
 
+textarea.form-control {
+    min-height: 200px;
+}
+
 .imgPhoto-cover {
     width: 600px;
-    height: 300px;
+    height: 340px;
     background-color: #eee;
     border-radius: 10px;
     cursor: pointer;
@@ -437,4 +507,28 @@ footer {
 
 .scale-hover:hover {
     transform: scale(1.1);
+}
+
+.tag-project-detail {
+    
+    padding-right: 20px;
+    white-space: nowrap;
+}
+
+.choices__list--multiple .choices__item {
+    border-radius: 15px;
+    padding: 2px 15px;
+    font-size: 14px;
+    font-weight: 500;
+    background-color: var(--secondary-color);
+    border: 1px solid var(--secondary-color);
+    color: #fff;
+}
+
+.switch {
+    width: 200px !important; 
+}
+
+.switch-off.btn, .switch-on.btn {
+    padding: 8px 0;
 }

@@ -6,7 +6,7 @@
     {% include 'accounts/partials/nav-profile.html' %}
     <div class="my-5">
         {% for review in reviews %}
-        <div class="review-box row my-4">
+        <div class="review-box row my-5">
             <div class="col-2 text-center">
                 <a {% if not profile == review.author_user %}href="{% url 'accounts:view_profile' review.author_user.cpf %}?next={{ request.path }}"{% endif %} >
                     <img class="review-profile-img" src="{{ review.author_user.profile_picture.url }}" alt="Imagem de Autor">
