@@ -15,6 +15,7 @@
     />
     <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap-switch-button@1.1.0/css/bootstrap-switch-button.min.css" rel="stylesheet"/>
     <link rel="stylesheet" href="{% static 'global/css/style.css' %}">
+    <link rel="icon" href="{% static 'global/img/logo.png' %}" type="image/x-icon">
     <title>{% block title %}{% endblock title %}</title>
 </head>
 
@@ -56,7 +57,9 @@
             $('.cpf-input').mask('000.000.000-00');
             $('.cep-input').mask('00000-000');
             const elementChoice = document.querySelector('.js-choice');
-            const choices = new Choices(elementChoice);
+            if (elementChoice) {
+                const choices = new Choices(elementChoice);
+            }
         });
     </script>
     
