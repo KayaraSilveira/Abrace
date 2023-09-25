@@ -1,44 +1,130 @@
 {% extends 'global/base.html' %}
 
-{% block title %}Perfil - {{profile.first_name}}{% endblock title %}
+{% block title %}{{profile.first_name}} - Perfil{% endblock title %}
 
 {% block content %}
 <div class="container">
-    {% include 'accounts/partials/nav-view-profile.html' %}
-
-    <div class="row my-5 align-items-center ">
-        <div class="col-10 row align-items-center justify-content-between">
-            <img class="profile-img" src="{{ profile.profile_picture.url }}" alt="Imagem de Perfil">
-            <h2 class="col-9">{{profile.first_name}} {{profile.last_name}}</h2>
+    <div class="my-3">
+    <a href="{{return_page}}" class="btn-back"><i class="fa-solid fa-chevron-left"></i> Voltar</a>
+    </div>
+    <div class="text-center mx-auto w-50 row align-items-center justify-content-between my-5">
+        <img class="profile-img" src="{{ profile.profile_picture.url }}" alt="Imagem de Perfil">
+        <div class="col-7">
+            <h2>{{profile.first_name}} {{profile.last_name}}</h2>
+            <p class="my-0"><i class="fa-solid fa-location-dot"></i> {{profile.city}}, {{profile.state}}</p>
+            <p class="my-0"><i class="fa-solid fa-envelope"></i> {{profile.email}}</p>
+            <div class="m-0 row">
+                {% for category in profile.categories.all %}
+                <div class="col my-1 tag-bg"><p class="m-0"><i class="fa-solid fa-tag"></i> {{ category }}</p></div>
+                {% endfor %}
+            </div>
         </div>
     </div>
-
-    <div class="row my-2 profile-detail">
-        <div class="col-7">
-            <div class="my-3">
-                <label class="form-label">Estado</label>
-                <div class="form-control">{{profile.state}}</div>
-            </div>
-            <div class="my-3">
-                <label class="form-label">Cidade</label>
-                <div class="form-control">{{profile.city}}</div>
-            </div>
-            <div class="my-3">
-                <label class="form-label">Email para Contato</label>
-                <div class="form-control">{{profile.email}}</div>
-            </div>
-        </div>
-        <div class="col-4">
-            <label class="d-block form-label text-center">Projetos de Interesse</label>
-            <div class="category-box">
-            {% for category in profile.categories.all %}
-                <div class="category-profile">
-                    <i class="fa-solid fa-tag"></i> {{ category }}
+    <hr>
+    <div class="row my-5 justify-content-between">
+        <div class="col-6">
+            <h5>Avaliações</h5>
+            {% for review in reviews %}
+            <div class="review-box row my-5">
+                <div class="col-2 text-center">
+                    <a {% if not user == review.author_user %}href="{% url 'accounts:view_profile' review.author_user.cpf %}?next={{ request.path }}"{% endif %}>
+                        <img class="review-profile-img" src="{{ review.author_user.profile_picture.url }}" alt="Imagem de Autor">
+                        
+                    </a>
                 </div>
+                <div class="col-9">
+                    <div class="d-flex justify-content-between mb-2">
+                        <div class="review-project-name">
+                            <span>{{review.author_user.first_name}}</span> - {{review.project}}
+                        </div>
+                        <div class="review-project-name">
+                            {% if review.review_value == 1 %}
+                                <i class="fa-solid fa-star star-yellow"></i>
+                                <i class="fa-solid fa-star star-gray"></i>
+                                <i class="fa-solid fa-star star-gray"></i>
+                                <i class="fa-solid fa-star star-gray"></i>
+                                <i class="fa-solid fa-star star-gray"></i>
+                            {% elif review.review_value == 2 %}
+                                <i class="fa-solid fa-star star-yellow"></i>
+                                <i class="fa-solid fa-star star-yellow"></i>
+                                <i class="fa-solid fa-star star-gray"></i>
+                                <i class="fa-solid fa-star star-gray"></i>
+                                <i class="fa-solid fa-star star-gray"></i>
+                            {% elif review.review_value == 3 %}
+                                <i class="fa-solid fa-star star-yellow"></i>
+                                <i class="fa-solid fa-star star-yellow"></i>
+                                <i class="fa-solid fa-star star-yellow"></i>
+                                <i class="fa-solid fa-star star-gray"></i>
+                                <i class="fa-solid fa-star star-gray"></i>
+                            {% elif review.review_value == 4 %}
+                                <i class="fa-solid fa-star star-yellow"></i>
+                                <i class="fa-solid fa-star star-yellow"></i>
+                                <i class="fa-solid fa-star star-yellow"></i>
+                                <i class="fa-solid fa-star star-yellow"></i>
+                                <i class="fa-solid fa-star star-gray"></i>
+                            {% elif review.review_value == 5 %}
+                                <i class="fa-solid fa-star star-yellow"></i>
+                                <i class="fa-solid fa-star star-yellow"></i>
+                                <i class="fa-solid fa-star star-yellow"></i>
+                                <i class="fa-solid fa-star star-yellow"></i>
+                                <i class="fa-solid fa-star star-yellow"></i>
+                            {% endif %}                        
+                        </div>
+                    </div>
+                    <div class="review-body review-profile-body">
+                        <p>{{review.review_body}}</p>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <p class="text-center mt-5">
+                O usuário ainda não possui avaliações
+            </p>
+            {% endfor %}
+        </div>
+        <div class="col-6">
+            <div class="d-flex justify-content-between align-items-center">
+                <h5>Projetos</h5>
+                <div>
+                    <select class="form-select" id="filterSelectProfileView">
+                        <option {% if not role %}selected{% endif %} value="Todos">Todos</option>
+                        <option {% if role == 'Dono' %}selected{% endif %} value="Dono">Dono</option>
+                        <option {% if role == 'Moderador' %}selected{% endif %} value="Moderador">Moderador</option>
+                        <option {% if role == 'Membro' %}selected{% endif %} value="Membro">Membro</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row justify-content-between">
+            {% for project in projects %}
+                <div class="my-3 view-profile-project-box profile-project-box col-6">
+                    <a href="{% url 'projects:project_detail' project.composite_pk %}?next={{ request.path }}">
+                        <img class="profile-project-cover" src="{{ project.cover_photo.url }}" alt="Capa do Projeto">
+                        <h3 class="mt-3">Projeto - {{project.name}}</h3>
+                        <p class="tags">
+                            {% if project.categories.all %}<i class="fa-solid fa-tags"></i> {% endif %}
+                            {% for category in project.categories.all %}
+                                {{category.title}}{% if not forloop.last %};{% endif %} 
+                            {% endfor %}
+                        </p>
+                        {% if profile == project.owner %}
+                            <p class="small-text"><i class="fa-solid fa-circle owner"></i> Dono </p>
+                        {% elif profile in project.mods.all %}
+                            <p class="small-text"><i class="fa-solid fa-circle mod"></i> moderador</p>
+                        {% else %}
+                            <p class="small-text"><i class="fa-solid fa-circle member"></i> Membro</p>
+                        {% endif %}
+                    </a>
+                </div>
+            {% empty %} 
+                <p class="text-center mt-5">
+                    Não foram encontrados projetos
+                </p>
             {% endfor %}
             </div>
         </div>
     </div>
+
+    
 
 </div>
 

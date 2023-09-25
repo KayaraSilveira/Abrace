@@ -5,7 +5,7 @@
 {% block content %}
 <div class="container">
     <div class="text-end mt-5 mb-0">
-        <a class="btn btn-outline-primary" href="{% url 'projects:project_new' %}"><i class="fa-solid fa-plus"></i> Criar Projeto</a>
+        <a class="btn btn-outline-primary" href="{% url 'projects:project_new' %}?next={{ request.path }}"><i class="fa-solid fa-plus"></i> Criar Projeto</a>
     </div>
     <div class="row">
         <div class="col-3">
@@ -21,10 +21,10 @@
             {% if recommendations %}
             <div>
                 <h2 class="mt-3">Recomendações</h2>
-                <div class="row justify-content-between my-1">
+                <div class="row justify-content-start my-1">
                 {% for project in recommendations %}
-                    <div class="my-3 profile-project-box">
-                        <a href="{% url 'projects:project_detail' project.composite_pk %}">
+                    <div class="my-3 mx-1 profile-project-box">
+                        <a href="{% url 'projects:project_detail' project.composite_pk %}?next={{ request.path }}">
                             <img class="profile-project-cover" src="{{ project.cover_photo.url }}" alt="Capa do Projeto">
                             <h3 class="mt-3">Projeto - {{project.name}}</h3>
                             <p class="tags">
@@ -47,10 +47,10 @@
             {% endif %}
             <div>
                 <h2 class="mt-3">Projetos</h2>
-                <div class="row justify-content-between my-1">
+                <div class="row justify-content-start my-1">
                 {% for project in projects %}
-                    <div class="my-3 profile-project-box">
-                        <a href="{% url 'projects:project_detail' project.composite_pk %}">
+                    <div class="my-3 mx-1 profile-project-box">
+                        <a href="{% url 'projects:project_detail' project.composite_pk %}?next={{ request.path }}">
                             <img class="profile-project-cover" src="{{ project.cover_photo.url }}" alt="Capa do Projeto">
                             <h3 class="mt-3">Projeto - {{project.name}}</h3>
                             <p class="tags">

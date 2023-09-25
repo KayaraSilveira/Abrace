@@ -8,7 +8,7 @@
         {% for review in reviews %}
         <div class="review-box row my-4">
             <div class="col-2 text-center">
-                <a {% if not profile == review.author_user %}href="{% url 'accounts:view_profile' review.author_user.cpf %}"{% endif %} >
+                <a {% if not profile == review.author_user %}href="{% url 'accounts:view_profile' review.author_user.cpf %}?next={{ request.path }}"{% endif %} >
                     <img class="review-profile-img" src="{{ review.author_user.profile_picture.url }}" alt="Imagem de Autor">
                     <p class="mt-2">{{review.author_user.first_name}} {{review.author_user.last_name}}</p>
                 </a>
