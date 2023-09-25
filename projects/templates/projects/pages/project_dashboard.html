@@ -1,12 +1,12 @@
 {% extends 'global/base.html' %}
-
+{% load static %}
 {% block title %}Projeto{% endblock title %}
 
 {% block content %}
 <div class="container">
         <div class="my-2">
             <h1 class="mt-5 mb-1 text-center">Projeto</h1>
-            <h3 class="mb-5 text-center">Preencha com as informações do seu Projeto</h3>
+            <h3 class="mb-2 text-center">Preencha com as informações do seu Projeto</h3>
             <div class="row">
                 {% if project_pk %}
                     <div class="col-3">
@@ -32,8 +32,18 @@
                         {% csrf_token %}
                         {% for field in form %}
                             <div class="my-3">
-                                <label class="form-label" for="{{ field.id_for_label }}">{{field.label}}</label>
-                                {{field}}
+                                {% if field.label == 'Imagem de capa *' %}
+                                <div class="max-width-cover text-center">
+                                    <label class="form-label" for="{{ field.id_for_label }}">{{field.label}}</label>
+                                    <div class="imageContainer">
+                                        <img class="imgPhoto-cover" {% if project_pk %}src="{{ project_img.url }}"{% else %}src="{% static 'global/img/bg-default.jpg' %}"{% endif %} alt="Selecione uma imagem" id="imgPhoto">
+                                    </div>
+                                </div>
+                                <input class="d-none" type="file" name="{{ form.cover_photo.name }}" id="{{ form.cover_photo.id_for_label }}" {% if project_pk %}value="{{ project_img.url }}"{% endif %}/>
+                                {% else %}
+                                    <label class="form-label" for="{{ field.id_for_label }}">{{field.label}}</label>
+                                    {{field}}
+                                {% endif %}
                                 <div class="error-list">
                                     {{field.errors}}
                                 </div>

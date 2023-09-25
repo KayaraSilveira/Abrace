@@ -16,8 +16,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const formReview = document.getElementById('formReview');
     const reviewValueInput = document.getElementById('review_value');
-    reviewValueInput.removeAttribute('required');
     if (formReview) {
+        reviewValueInput.removeAttribute('required');
         formReview.addEventListener('submit', function (event) {
         event.preventDefault();
         

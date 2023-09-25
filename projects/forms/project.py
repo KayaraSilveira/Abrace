@@ -10,7 +10,7 @@ class ProjectForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['cover_photo'].widget.attrs.update({'class': 'form-control-file'})
+        self.fields['cover_photo'].widget.attrs.update({'class': 'form-control-file d-none', 'id': 'flImage'})
         self.fields['name'].widget.attrs.update({'class': 'form-control', 'required':'required'})
         self.fields['description'].widget.attrs.update({'class': 'form-control', 'required':'required'})
         self._my_errors = defaultdict(list)
@@ -18,9 +18,9 @@ class ProjectForm(ModelForm):
     class Meta:
         model = Project
         fields = [
+            'cover_photo',
             'name',
             'description',
-            'cover_photo',
         ]
         labels = {
             'name': 'Nome *',

@@ -1,5 +1,5 @@
 {% extends 'global/base.html' %}
-
+{% load static %}
 {% block title %}Editar Perfil{% endblock title %}
 
 {% block content %}
@@ -13,8 +13,17 @@
                     {% csrf_token %}
                     {% for field in form %}
                         <div class="my-3">
-                            <label class="form-label" for="{{ field.id_for_label }}">{{field.label}}</label>
-                            {{field}}
+                            {% if field.label == 'Foto de Perfil' %}
+                            <div class="max-width-profile text-center">
+                                <div class="imageContainer">
+                                    <img class="imgPhoto-profile" src="{{user.profile_picture.url}}" alt="Selecione uma imagem" id="imgPhoto">
+                                </div>
+                            </div>
+                            <input class="d-none" type="file" name="{{ form.profile_picture.name }}" id="{{ form.profile_picture.id_for_label }}" value="{{ user.profile_picture.url }}"/>
+                            {% else %}
+                                <label class="form-label" for="{{ field.id_for_label }}">{{field.label}}</label>
+                                {{field}}
+                            {% endif %}
                             <div class="error-list">
                                 {{field.errors}}
                             </div>

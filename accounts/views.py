@@ -131,7 +131,7 @@ class ProfileDetail(View):
 ) 
 class ProfileEdit(View):
 
-    def render_template(self, form, categories):
+    def render_template(self, form, categories, profile):
         return render(
             self.request,
             'accounts/pages/edit_profile.html',
@@ -140,6 +140,7 @@ class ProfileEdit(View):
                 'form_categories': categories,
                 'profile_page': True,
                 'profile_tab': True,
+                'user': profile,
             }
         )
 
@@ -149,7 +150,7 @@ class ProfileEdit(View):
         form = EditProfileForm(instance=profile)
         categories = ProfileCategoriesForm(instance=profile)
 
-        return self.render_template(form, categories)
+        return self.render_template(form, categories, profile)
 
     def post(self, request):
 
@@ -170,7 +171,7 @@ class ProfileEdit(View):
 
         categories = ProfileCategoriesForm(instance=profile)
         messages.error(request, 'Há campos incorretos no formulário')
-        return self.render_template(form, categories)
+        return self.render_template(form, categories, profile)
 
 @login_required(login_url='accounts:login', redirect_field_name='next')
 def save_categories(request):
