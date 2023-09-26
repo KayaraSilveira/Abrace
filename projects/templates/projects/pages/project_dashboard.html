@@ -5,7 +5,11 @@
 {% block content %}
 <div class="container">
         <div class="my-3">
-            <a href="{{return_page}}" class="btn-back"><i class="fa-solid fa-chevron-left"></i> Voltar</a>
+            <a href="{% if project_pk %}
+                {% url 'projects:project_detail' project_pk %}
+            {% else %}
+                {{return_page}}
+            {% endif %}" class="btn-back"><i class="fa-solid fa-chevron-left"></i> Voltar</a>
         </div>
         <div class="my-2">
             {% if not project_pk %}

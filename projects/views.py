@@ -607,7 +607,8 @@ def deactivate(request, project_pk):
     project.status = not project.status 
     project.save()
 
-    return redirect(reverse('projects:project_edit', args=[project_pk]))
+    messages.success(request, 'As informações foram salvas')
+    return redirect(reverse('projects:project_detail', args=[project_pk]))
 
 def home(request):
     return render (request,'projects/pages/home.html')

@@ -111,7 +111,7 @@ ul.errorlist li {
 }
 
 .toast-error {
-    background-color: #FF5733;
+    background-color: var(--color-red);
     color: #fff;
 }
 
