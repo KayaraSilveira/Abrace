@@ -271,7 +271,7 @@ class ReviewCreateView(View):
         if not next_param:
             next_param = "/"
         return next_param
-
+    
     def get(self, request, reviewed_pk, project_pk):
 
         author_user = CustomUser.objects.get(pk=request.user.pk)
