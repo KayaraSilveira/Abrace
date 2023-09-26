@@ -20,7 +20,7 @@
     </div>
     <div class="row justify-content-start my-1 h-100">
     {% for project in projects %}
-        <div class="mx-1 my-3 profile-project-box">
+        <div class="mx-1 my-3 profile-project-box" data-aos="fade-up" data-aos-duration="800">
             <a href="{% url 'projects:project_detail' project.composite_pk %}?next={{ request.path }}">
                 <img class="profile-project-cover" src="{{ project.cover_photo.url }}" alt="Capa do Projeto">
                 <h3 class="mt-3">Projeto - {{project.name}}</h3>

@@ -10,8 +10,8 @@
     <div>
         <h4 class="mb-5 mt-4">Solicitações</h4>
         {% for user in solicitation %}
-        <hr>
-        <div class="row justify-content-center">
+        
+        <div class="row justify-content-center my-4">
             <div class="col-1">
                 <a href="{% url 'accounts:view_profile' user.cpf %}?next={{ request.path }}"><img class="post-img img-member" src="{{ user.profile_picture.url }}" alt="Foto de perfil"></a>
             </div>
@@ -36,7 +36,9 @@
                     <button type="submit" class="btn btn-danger"><i class="fa-solid fa-user-xmark"></i> Recusar</button>
                 <form> 
             </div>
-        </div>   
+            
+        </div>  
+         <hr>
         {% empty %} 
         <h5 class="my-5 text-center">Não há solicitações de novos membros no momento</h5>  
         {% endfor %}

@@ -92,7 +92,7 @@
         {% if is_member %}
         <h4>Postagens</h4>
         {% for post in posts %}
-            <div class="my-5">
+            <div class="my-5" data-aos="fade-up" data-aos-duration="800">
                 <div class="d-flex">
                     <div class="pr-2 col-1">
                         {% if post.autor == user %}
@@ -169,7 +169,7 @@
             <h5 class="text-center my-5">Ainda não há postagens nesse projeto</h5>
             {% endfor %}
         {% else %}
-        <div class="my-5 row">
+        <div class="my-5 row" data-aos="fade-up" data-aos-duration="800">
             <div class="col-8">
                 <h4>Postagens</h4>
                 <h1 class="text-center"><i class="fa-solid fa-lock"></i></h1>
