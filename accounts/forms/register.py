@@ -162,6 +162,17 @@ class RegisterForm(ModelForm):
             )
 
         return birth_date
+    
+    def clean_profile_picture(self):
+        profile_picture = self.cleaned_data.get('profile_picture')
+
+        if not profile_picture:
+            raise ValidationError(
+                'A foto de perfil é obrigatória',
+                code='required',
+            )
+
+        return profile_picture
 
 
 

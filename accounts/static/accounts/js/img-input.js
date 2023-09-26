@@ -8,6 +8,7 @@ if (photo) {
 }
 
 if (file){
+    file.required = false;
     file.addEventListener('change', () => {
 
         if (file.files.length <= 0) {
