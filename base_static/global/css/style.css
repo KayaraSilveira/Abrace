@@ -414,11 +414,17 @@ footer {
 }
 
 .review-project-name {
-    font-size: 15px;
+    font-size: 17px;
+    font-weight: 500;
 }
 
 .review-profile-name {
     font-size: 15px;
+}
+
+.review-project-profile-name {
+    font-size: 15px;
+    font-weight: 400;
 }
 
 .review-profile-body {
@@ -566,6 +572,22 @@ textarea.form-control {
     margin: 20px 0 0 auto;
 }
 
+.text-blue {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.role-box {
+    background-color: var(--primary-color);
+    padding: 5px 20px;
+    display: inline-block;
+    border-radius: 5px;
+}
+
+.role-box p {
+    margin-bottom: 0;
+}
+
 .search-input {
     width: 100%;
     padding: 10px 40px 10px 10px;
@@ -579,4 +601,9 @@ textarea.form-control {
     top: 50%;
     transform: translateY(-50%);
     cursor: pointer;
+}
+
+.link-footer:hover {
+    color: var(--secondary-color);
+    font-weight: 500;
 }

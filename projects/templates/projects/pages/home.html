@@ -1,0 +1,63 @@
+{% extends 'global/base.html' %}
+{% load static %}
+{% block title %}Inicial{% endblock title %}
+
+{% block content %}
+<div class="container">
+    <h3 class="mt-5">
+        Bem-vindo ao <span class="text-blue">ABRACE</span>
+    </h3>
+    <p style="font-size: 18px">
+        Somos uma equipe incrível que desenvolveu uma ideia para aproximar voluntários dedicados a fazer a diferença em nossas comunidades e no mundo. Acreditamos no poder da ação voluntária e no impacto positivo que ela pode ter em nossas vidas e naqueles que ajudamos. Nossa organização foi fundada com a missão de inspirar, capacitar e mobilizar indivíduos a se envolverem em atividades voluntárias significativas e gratificantes.
+    </p>
+    <h3 class="my-5">
+        Nossa equipe ✨
+    </h3>
+    <div class="row text-center">
+        <div class="col-4 my-3">
+            <img class="w-50" src="{% static 'global/img/gabriele.JPG' %}" alt="Abrace">
+            <h5>Gabriele Lucas</h5>
+            <div class="role-box">
+                <p>Tech Lead / QA</p>
+            </div>
+        </div>
+        <div class="col-4 my-3">
+            <img class="w-50" src="{% static 'global/img/diulia.JPG' %}" alt="Abrace">
+            <h5>Diulia Deon</h5>
+            <div class="role-box">
+                <p>UX / UI</p>
+            </div>
+        </div>
+        <div class="col-4 my-3">
+            <img class="w-50" src="{% static 'global/img/kayara.JPG' %}" alt="Abrace">
+            <h5>Kayara Silveira</h5>
+            <div class="role-box">
+                <p>Desenvolvedor</p>
+            </div>
+        </div>
+        <div class="col-4 my-3">
+            <img class="w-50" src="{% static 'global/img/frederico.JPG' %}" alt="Abrace">
+            <h5>Frederico dal Soglio</h5>
+            <div class="role-box">
+                <p>Desenvolvedor</p>
+            </div>
+        </div>
+        <div class="col-4 my-3">
+            <img class="w-50" src="{% static 'global/img/copes.JPG' %}" alt="Abrace">
+            <h5>Rafael Copes</h5>
+            <div class="role-box">
+                <p>Desenvolvedor</p>
+            </div>
+        </div>
+        <div class="col-4 my-3">
+            <img class="w-50" src="{% static 'global/img/italo.JPG' %}" alt="Abrace">
+            <h5>Italo Silveira</h5>
+            <div class="role-box">
+                <p>Desenvolvedor</p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock content %}

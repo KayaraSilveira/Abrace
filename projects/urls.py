@@ -5,7 +5,8 @@ from . import views
 app_name = 'projects'
 
 urlpatterns = [
-    path('', views.ProjectsList.as_view(), name='projects'),
+    path('', views.home, name='home'),
+    path('projects', views.ProjectsList.as_view(), name='projects'),
     path('filter/category/<str:category>/', views.ProjectsList.as_view(), name='projects_filter'),
     path('project/new', views.ProjectDashboard.as_view(), name='project_new'),
     path('project/edit/categories/set/<str:project_pk>', views.set_categories, name='set_categories'),

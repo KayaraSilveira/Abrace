@@ -607,7 +607,10 @@ def deactivate(request, project_pk):
     project.status = not project.status 
     project.save()
 
-    return redirect (reverse('projects:project_edit', args=[project_pk]))
+    return redirect(reverse('projects:project_edit', args=[project_pk]))
+
+def home(request):
+    return render (request,'projects/pages/home.html')
 
 def search_project(request):
     query = request.GET.get('query', '')
