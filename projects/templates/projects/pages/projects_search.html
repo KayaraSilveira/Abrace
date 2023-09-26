@@ -1,0 +1,48 @@
+{% extends 'global/base.html' %}
+
+{% block title %}Projetos{% endblock title %}
+
+{% block content %}
+<div class="container">
+    <form></form>
+    <form action="{% url 'projects:search_project' %}" method="GET">
+    <div class="search-container">
+        <input type="text" name="query" class="search-input" placeholder="Pesquisar">
+        <span class="search-icon" onclick="submitForm()"><i class="fa-solid fa-magnifying-glass"></i></span>
+    </div>
+    </form>
+    <div class="row">
+        <div class="col">
+            <div>
+                <div class="row justify-content-start my-1">
+                {% for project in projects %}
+                    <div class="my-3 mx-1 profile-project-box" data-aos="fade-up" data-aos-duration="800">
+                        <a href="{% url 'projects:project_detail' project.composite_pk %}?next={{ request.path }}">
+                            <img class="profile-project-cover" src="{{ project.cover_photo.url }}" alt="Capa do Projeto">
+                            <h3 class="mt-3">Projeto - {{project.name}}</h3>
+                            <p class="tags">
+                                {% if project.categories.all %}<i class="fa-solid fa-tags"></i> {% endif %}
+                                {% for category in project.categories.all %}
+                                    {{category.title}}; 
+                                {% endfor %}
+                            </p>
+                            {% if user == project.owner %}
+                                <p class="small-text"><i class="fa-solid fa-circle owner"></i> Dono </p>
+                            {% elif user in project.mods.all %}
+                                <p class="small-text"><i class="fa-solid fa-circle mod"></i> moderador</p>
+                            {% elif user in project.members.all %}
+                                <p class="small-text"><i class="fa-solid fa-circle member"></i> Membro</p>
+                            {% endif %}
+                        </a>
+                    </div>
+                {%empty%}
+                    <h5 class="text-center my-5">Poxa <i class="fa-regular fa-face-frown"></i> <br>
+                        Infelizmente não encontramos resultado para sua busca <h5>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock content %}

@@ -8,6 +8,7 @@ from projects.forms import ProjectForm, PostForm, CommentForm, ProjectCategories
 from django.urls import reverse
 from accounts.models import CustomUser, Category
 from django.http import Http404
+from django.db.models import Q
 
 @method_decorator(
     login_required(login_url='accounts:login', redirect_field_name='next'),
@@ -601,3 +602,21 @@ def deactivate(request, project_pk):
     project.save()
 
     return redirect (reverse('projects:project_edit', args=[project_pk]))
+
+def search_project(request):
+    query = request.GET.get('query', '')
+    user = CustomUser.objects.get(pk=request.user.pk)
+    
+    projects = Project.objects.filter(
+        Q(name__icontains=query) | Q(categories__title__icontains=query) | Q(description__icontains=query),
+        status=True
+        ).distinct()
+    
+    return render(
+        request,
+        'projects/pages/projects_search.html',
+        context={
+            'projects': projects,
+            'user': user,
+        }
+    )
