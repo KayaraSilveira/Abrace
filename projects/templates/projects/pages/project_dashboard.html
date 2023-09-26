@@ -101,11 +101,7 @@
                                 <p class="my-0">Exclusão do projeto</p>
                                 <span class="form-text m-b-none">Exclua definitivamente esse projeto e todas as informações presentes nele.</span>
                             </div>
-                            <form id="formDeleteProject" action="{% url 'projects:project_delete' %}" method='POST'>
-                                {% csrf_token %}
-                                <input type="hidden" name="project_composite_pk" value="{{project_pk}}">
-                                <button id="btnConfirmDeleteProject" type="submit" class="btn btn-danger">Excluir Projeto</button>
-                            <form>
+                            <button data-bs-toggle="modal" data-bs-target="#confirmDeleteProjectModal" class="btn btn-danger">Excluir Projeto</button>
                         </div>
                     </div>
                     {% endif %}
@@ -114,22 +110,31 @@
         </div>
 </div>
 
-<div class="modal fade" id="confirmDeleteProjectModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="confirmDeleteProjectModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Tem certeza que deseja excluir o Projeto?</h5>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmDeleteModalLabel">Confirme a Exclusão</h5>
+            </div>
+            <div class="modal-body">
+                <p>Isso excluirá o projeto e todas as informações relacionadas a ele. Essa ação é irreversível.</p>
+                <form action="{% url 'projects:project_delete' %}" method="post" >
+                    {% csrf_token %}
+                    <input type="hidden" name="project_composite_pk" value="{{project_pk}}">
+                    <div class="form-group">
+                        <label for="password">Para confirmar a exclusão digite sua senha:</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                    </div>
+                    <div class="text-center my-3">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-danger">Confirmar Exclusão</button>
+                    </div>
+                </form>
+            </div>
         </div>
-        <div class="modal-body">
-          Todas as informações relacionadas ao projeto serão excluídas. Essa ação é definitiva.
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-          <button id="modalButtonDeleteProject" type="button" class="btn btn-danger">Excluir</button>
-        </div>
-      </div>
     </div>
 </div>
+
 
 <script>
     function switchActive() {

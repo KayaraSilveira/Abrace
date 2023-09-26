@@ -418,15 +418,21 @@ def delete_project(request):
     
     project_pk = request.POST.get('project_composite_pk')
     project = Project.objects.get(composite_pk=project_pk)
+    password = request.POST.get('password')
     user = CustomUser.objects.get(pk=request.user.pk)
 
     if not project.owner == user:
         messages.error(request, 'Você não tem permissão para excluir este Projeto.')
         return redirect (reverse('projects:project_detail', args=[project_pk]))
     
-    project.delete()
-    messages.success(request, 'O projeto foi excluído com sucesso')
-    return redirect (reverse('projects:projects'))
+    if user.check_password(password):
+        project.delete()
+        messages.success(request, 'O projeto foi excluído com sucesso')
+        return redirect (reverse('projects:projects'))
+    
+    else:
+        messages.error(request, 'Senha incorreta. O projeto não foi excluído.')
+        return redirect (reverse('projects:project_edit', args=[project_pk]))
 
 
 @login_required(login_url='accounts:login', redirect_field_name='next')
