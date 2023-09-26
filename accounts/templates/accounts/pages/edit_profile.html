@@ -48,8 +48,36 @@
                     </div>
                 </form>
             </div>
+            <div class="my-5 text-center">
+                <button data-bs-toggle="modal" data-bs-target="#confirmDeleteAccountModal" class="btn btn-danger">Excluir Conta</button>
+            </div>
         </div>
 
 </div>
+
+<div class="modal fade" id="confirmDeleteAccountModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmDeleteModalLabel">Confirme a Exclusão</h5>
+            </div>
+            <div class="modal-body">
+                <p>Isso excluirá todos os dados da sua conta e todos os projetos que você criou. Essa ação é irreversível.</p>
+                <form action="{% url 'accounts:profile_delete' %}" method="post" >
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="password">Para confirmar a exclusão digite sua senha:</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                    </div>
+                    <div class="text-center my-3">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-danger">Confirmar Exclusão</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 {% endblock content %}

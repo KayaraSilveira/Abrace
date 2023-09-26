@@ -361,3 +361,19 @@ class ViewProfile(View):
         projects = self.get_projects(cpf, role)
         return self.render_template(profile, categories, projects, role)
     
+
+def profile_delete(request):
+    if request.method == 'POST':
+        password = request.POST.get('password')
+        user = request.user
+
+        if user.check_password(password):
+            user.delete()
+            logout(request)
+
+            messages.success(request, 'Sua conta foi excluída com sucesso.')
+            return redirect (reverse('accounts:login'))
+        else:
+            messages.error(request, 'Senha incorreta. A conta não foi excluída.')
+
+    return redirect (reverse('accounts:profile_edit'))

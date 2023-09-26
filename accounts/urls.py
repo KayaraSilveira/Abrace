@@ -12,6 +12,7 @@ urlpatterns = [
     path('logout', views.logout_view, name='logout'),
     path('profile/', views.ProfileDetail.as_view(), name='profile'),
     path('profile/edit', views.ProfileEdit.as_view(), name='profile_edit'),
+    path('profile/delete', views.profile_delete, name='profile_delete'),
     path('profile/edit/categories', views.save_categories, name='save_categories'),
     path('profile/projects', views.MyProjectsList.as_view(), name='my_projects'),
     path('profile/reviews', views.review_view, name='profile_reviews'),
