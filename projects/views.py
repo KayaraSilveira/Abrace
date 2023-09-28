@@ -610,9 +610,11 @@ def deactivate(request, project_pk):
     messages.success(request, 'As informações foram salvas')
     return redirect(reverse('projects:project_detail', args=[project_pk]))
 
+@login_required(login_url='accounts:login', redirect_field_name='next')
 def home(request):
     return render (request,'projects/pages/home.html')
 
+@login_required(login_url='accounts:login', redirect_field_name='next')
 def search_project(request):
     query = request.GET.get('query', '')
     user = CustomUser.objects.get(pk=request.user.pk)
